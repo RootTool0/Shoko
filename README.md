@@ -2,12 +2,31 @@
   <h1>Shoko - Compile-time UI Framework</h1>
 </div>
 
-<div style="display: flex; align-items: center; ">
-  <div style="width: 50%; background-color: lightblue;">
-    <h3>"С помощью этого блокнота мы сможем общаться. Давайте будем друзьями"</h3>
-  </div>
+<img src="ReadMeAssets/1.png" width="30%" align="right" hspace="25">
 
-  <div style="width: 50%; background-color: lightblue;">
-    <img src="ReadMeAssets/1.png" width="80vw" style="margin-right: 50px;">
-  </div>
+<br>
+
+<h3>
+"С помощью этого блокнота мы сможем общаться. Давайте будем друзьями"
+</h3>
+
+<br clear="right">
+
+---
+
+<div align="center">
+<h1>Экспериментальный UI-фреймворк на C++17, где интерфейс строится и валидируется во время компиляции</h1>
+<p>
+  <a href="#-чтоэто">Что это?</a> •
+  <a href="#-особенности">Особенности</a> •
+  <a href="#-философия">Философия</a> •
+  <a href="#-архитектура">Архитектура</a> •
+  <a href="#-быстрый-старт">Быстрый старт</a> •
+  <a href="#-примеры">Примеры</a> •
+  <a href="#-статус">Статус</a>
+</p>
 </div>
+
+---
+
+## Что это?
