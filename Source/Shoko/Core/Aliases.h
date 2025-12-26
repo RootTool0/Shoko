@@ -18,4 +18,6 @@ namespace Shoko
     using float64 = double;
 
     using size_t = std::size_t;
+
+    using GUTID_t = uint8_t;
 }

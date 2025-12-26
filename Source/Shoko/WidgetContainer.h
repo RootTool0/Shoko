@@ -11,11 +11,13 @@ namespace Shoko
     template<typename... TChildWidgets>
     class SWidgetContainer : public SWidget<SWidgetContainer<TChildWidgets...>>
     {
+        SHOKO_GENERATED_BODY()
+        
         SHOKO_STATIC_ASSERT((Meta::IsWidget<TChildWidgets> && ...),
             "Похоже, что не все дети в контейнере (SWidgetContainer) являются виджетами (SWidget)\n"
             "Простите, но думаю вы случайно добавили что-то неподходящее..\n"
             "Проверьте - все-ли элементы унаследованы от SWidget?..");
-    
+        
     public:
         std::tuple<TChildWidgets...> ChildWidgets;
         
@@ -54,32 +56,15 @@ namespace Shoko
             return std::get<Index>(ChildWidgets);
         }
         
-        constexpr const void* GetWidgetAt(int16 InMouseX, int16 InMouseY) const
+        constexpr const FWidgetBase* GetWidgetAt(int16 InMouseX, int16 InMouseY) const
         {
-            if (!this->HitTest(InMouseX, InMouseY))
-                return nullptr;
+            if(!this->HitTest(InMouseX, InMouseY)) return nullptr;
 
-            const void* found = nullptr;
-
-            // РџСЂРѕРІРµСЂСЏРµРј РІСЃРµС… РґРµС‚РµР№
-            std::apply([&](const auto&... child){
-                // РџСЂРѕРІРµСЂСЏРµРј РґРµС‚РµР№ РІ РѕР±СЂР°С‚РЅРѕРј РїРѕСЂСЏРґРєРµ (РїРѕСЃР»РµРґРЅРёР№ РґРѕР±Р°РІР»РµРЅРЅС‹Р№ - СЃРІРµСЂС…Сѓ)
-                auto checkChild = [&](const auto& widget) {
-                    if (auto* result = widget.GetWidgetAt(InMouseX, InMouseY)) {
-                        found = result;
-                        return true; // РќР°С€Р»Рё
-                    }
-                    return false;
-                };
-        
-                // РџСЂРѕРІРµСЂСЏРµРј РґРѕ РїРµСЂРІРѕРіРѕ РЅР°Р№РґРµРЅРЅРѕРіРѕ
-                (checkChild(child) || ...);
-            }, ChildWidgets);
-
-            // Р’РђР–РќРћ: РљРѕРЅС‚РµР№РЅРµСЂ РќРРљРћР“Р”Рђ РЅРµ РІРѕР·РІСЂР°С‰Р°РµС‚ СЃРµР±СЏ!
-            // РўРѕР»СЊРєРѕ РґРѕС‡РµСЂРЅРёРµ РІРёРґР¶РµС‚С‹ РёР»Рё nullptr
-            return found;
+            const FWidgetBase* FoundWidget = nullptr;
+            std::apply([&](const auto&... child) { ((FoundWidget = child.GetWidgetAt(InMouseX, InMouseY)) || ...); }, ChildWidgets);
+            return FoundWidget ? FoundWidget : static_cast<const FWidgetBase*>(this);
         }
+        
         void Render(SDL_Renderer* InRenderer) const
         {
             std::apply([&](const auto&... child) {

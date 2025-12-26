@@ -1,5 +1,6 @@
 ﻿#include <SDL.h>
 #include <iostream>
+#include <string>
 
 #include "Shoko/BoxWidget.h"
 #include "Shoko/Button.h"
@@ -9,78 +10,51 @@
 
 using namespace Shoko;
 
-// РџСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ РјРµС‚РѕРґР° CallOnHover
-template<typename T, typename = void>
-struct HasCallOnHover : std::false_type {};
+/*
+*static_assert(has_method_Draw<T>, R"(
+[Shoko]
+Похоже, ваш виджет не умеет рисоваться...
+Не забыли ли вы реализовать метод Draw()?
+)");
 
-template<typename T>
-struct HasCallOnHover<T, std::void_t<decltype(std::declval<T>().CallOnHover())>> : std::true_type {};
-
-// РџСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ РјРµС‚РѕРґР° CallOnUnhover
-template<typename T, typename = void>
-struct HasCallOnUnhover : std::false_type {};
-
-template<typename T>
-struct HasCallOnUnhover<T, std::void_t<decltype(std::declval<T>().CallOnUnhover())>> : std::true_type {};
-
-template<typename T>
-void CallHoverIfExists(const void* widgetPtr)
-{
-    if (!widgetPtr) return;
-
-    const T* w = static_cast<const T*>(widgetPtr);
-    if constexpr (HasCallOnHover<T>::value)
-        w->CallOnHover();
-}
-
-template<typename T>
-void CallUnhoverIfExists(const void* widgetPtr)
-{
-    if (!widgetPtr) return;
-
-    const T* w = static_cast<const T*>(widgetPtr);
-    if constexpr (HasCallOnUnhover<T>::value)
-        w->CallOnUnhover();
-}
-
-class TestLMAO
-{
-};
+static_assert(is_constexpr_constructible<T>, R"(
+[Shoko]
+Ваш виджет не может быть создан на этапе компиляции...
+Проверьте, все ли его поля инициализируются constexpr?
+)");
+*/
 
 template<typename TRootWidget>
 class TestUIManager
 {
-    const TRootWidget* RootWidget;
-    const void* LastHovered = nullptr;
+    const TRootWidget* RootWidget = nullptr;
+    const FWidgetBase* LastHovered = nullptr;
     
+    /* нормальный шаблон-функция */
+    template<typename T>
+    static const T* TryCast(const FWidgetBase* ptr)
+    {
+        if (!ptr) return nullptr;
+        return (ptr->LocalGUTID == T::GUTID) ? static_cast<const T*>(ptr) : nullptr;
+    }
+
 public:
-    TestUIManager(const TRootWidget& root) 
-        : RootWidget(&root) 
-    {}
+    explicit TestUIManager(const TRootWidget& root) : RootWidget(&root) {}
     
     void UpdateHover(int16 MouseX, int16 MouseY)
     {
-        const auto* currentHovered = RootWidget->GetWidgetAt(MouseX, MouseY);
+        const FWidgetBase* currentHovered = RootWidget->GetWidgetAt(MouseX, MouseY);
         
-        if (currentHovered == LastHovered)
-            return;
-        
+        if (currentHovered == LastHovered) return;
+
         if (LastHovered)
-        {
-            if (auto* oldButton = TryCast<SButton>(LastHovered))
-            {
-                oldButton->CallOnUnhover();
-            }
-        }
-        
+            if (auto* old = TryCast<SButton>(LastHovered))
+                old->CallOnUnhover();
+
         if (currentHovered)
-        {
-            if (auto* newButton = TryCast<SButton>(currentHovered))
-            {
-                newButton->CallOnHover();
-            }
-        }
-        
+            if (auto* cur = TryCast<SButton>(currentHovered))
+                cur->CallOnHover();
+
         LastHovered = currentHovered;
     }
     
@@ -88,16 +62,7 @@ public:
     {
         RootWidget->Render(renderer);
     }
-    
-private:
-    template<typename T>
-    static const T* TryCast(const void* ptr)
-    {
-        if (!ptr) return nullptr;
-        return static_cast<const T*>(ptr);
-    }
 };
-
 
 void TestOnHover1()
 {
@@ -119,7 +84,7 @@ void TestOnUnhover2()
     printf("[2] Unhover\n");
 }
 
-int main(int argc, char* argv[])
+int main()
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
@@ -154,7 +119,7 @@ int main(int argc, char* argv[])
             .OnHover(&TestOnHover1)
             .OnUnhover(&TestOnUnhover1)
             .SetColor(FColor(255, 50, 50)),
-
+            
         SNew<SButton>()
             .SetPosition(400, 200)
             .SetSize(200, 200)
@@ -163,14 +128,29 @@ int main(int argc, char* argv[])
             .SetColor(FColor(50, 50, 255)),
 
         SNew<SBoxWidget>()
-            .SetPosition(250, 200)
-            .SetSize(200, 200)
+            .SetPosition(300, 200)
+            .SetSize(100, 100)
             .SetColor(FColor(255, 255, 255))
     );
     
+    /*
+    std::cout << std::to_string(RootWidget.GUTID) << '\n';
+    std::cout << std::to_string(RootWidget.GetChildByIndex<0>().GUTID) << '\n';
+    std::cout << std::to_string(RootWidget.GetChildByIndex<1>().GUTID) << '\n';
+    std::cout << std::to_string(RootWidget.GetChildByIndex<2>().GUTID) << '\n';
+    */
+    
     auto& test = RootWidget.GetChildByIndex<2>();
     
-    // static_assert(RootWidget.GetChildByIndex<0>().GetColor() == FColor(255, 50, 50), "Test");
+    const SButton* btn = &RootWidget.GetChildByIndex<0>();
+    std::cout << std::to_string(btn->GUTID) << '\n';
+    std::cout << std::to_string(btn->LocalGUTID) << '\n';
+
+    std::cout << "=====\n";
+    
+    const GUTID_t pId = static_cast<const FWidgetBase*>(btn)->LocalGUTID;
+    std::cout << std::to_string(pId) << '\n';
+    
     
     TestUIManager ui(RootWidget);
     
@@ -185,7 +165,7 @@ int main(int argc, char* argv[])
         int MouseX = -1, MouseY = -1;
         SDL_GetMouseState(&MouseX, &MouseY);
         ui.UpdateHover(MouseX, MouseY);
-        
+
         // const auto* hovered = RootWidget.GetWidgetAt(MouseX, MouseY);
         // if (hovered) {
         //     std::cout << "Hovered widget at: " << MouseX << ", " << MouseY << std::endl;

@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "Core/Meta.h"
-#include "Core/Macros.h"
 
 namespace Shoko
 {
@@ -12,6 +11,11 @@ namespace Shoko
             "Кажется Вы пытаетесь создать виджет, о котором я не знаю...\n"
             "Скорее всего он просто не унаследован от базового класса SWidget\n"
             "Может, расскажете мне, что это за виджет?");
+        
+        SHOKO_STATIC_ASSERT(Meta::HasGUTID<TWidget>,
+            "Кажется Вы забыли макрос SHOKO_GENERATED_BODY() внутри класса виджета.\n"
+            "Стесняюсь рассказывать Вам всю магию этого макроса, задуманным моим создателем...\n"
+            "Просто добавьте макрос SHOKO_GENERATED_BODY() в свой виджет и продолжим!");
         
         return TWidget();
     }
@@ -24,27 +28,42 @@ namespace Shoko
             "Скорее всего он просто не унаследован от базового класса SWidget\n"
             "Может, расскажете мне, что это за виджет?");
         
+        SHOKO_STATIC_ASSERT(Meta::HasGUTID<TWidget>,
+            "Кажется Вы забыли макрос SHOKO_GENERATED_BODY() внутри класса виджета.\n"
+            "Стесняюсь рассказывать Вам всю магию этого макроса, задуманным моим создателем...\n"
+            "Просто добавьте макрос SHOKO_GENERATED_BODY() в свой виджет и продолжим!");
+        
         return TWidget(Meta::Forward<TArgs>(Args)...);
     }
-
+    
     template<template<typename> class TWidgetWrapper, typename TChildWidget>
     constexpr auto SNew(TChildWidget&& ChildWidget)
     {
-        SHOKO_STATIC_ASSERT(Meta::IsWidget<TChildWidget>,
+        SHOKO_STATIC_ASSERT(Meta::IsWidget<TWidgetWrapper<TChildWidget>> && Meta::IsWidget<TChildWidget>,
             "Кажется Вы пытаетесь создать виджет, о котором я не знаю...\n"
             "Скорее всего он просто не унаследован от базового класса SWidget\n"
             "Может, расскажете мне, что это за виджет?");
         
+        SHOKO_STATIC_ASSERT(Meta::HasGUTID<TWidgetWrapper<TChildWidget>> && Meta::HasGUTID<TChildWidget>,
+            "Кажется Вы забыли макрос SHOKO_GENERATED_BODY() внутри класса виджета.\n"
+            "Стесняюсь рассказывать Вам всю магию этого макроса, задуманным моим создателем...\n"
+            "Просто добавьте макрос SHOKO_GENERATED_BODY() в свой виджет и продолжим!");
+        
         return TWidgetWrapper<Meta::Decay<TChildWidget>>(Meta::Forward<TChildWidget>(ChildWidget));
     }
-
+    
     template<template<typename...> class TWidgetContainer, typename... TChildWidgets>
     constexpr auto SNew(TChildWidgets&&... ChildWidgets)
     {
-        SHOKO_STATIC_ASSERT((Meta::IsWidget<TChildWidgets> && ...),
+        SHOKO_STATIC_ASSERT(Meta::IsWidget<TWidgetContainer<Meta::Decay<TChildWidgets>...>> && (Meta::IsWidget<TChildWidgets> && ...),
             "Кажется Вы пытаетесь создать виджет, о котором я не знаю...\n"
             "Скорее всего он просто не унаследован от базового класса SWidget\n"
             "Может, расскажете мне, что это за виджет?");
+        
+        SHOKO_STATIC_ASSERT(Meta::HasGUTID<TWidgetContainer<Meta::Decay<TChildWidgets>...>> && (Meta::HasGUTID<TChildWidgets> && ...),
+            "Кажется Вы забыли макрос SHOKO_GENERATED_BODY() внутри класса виджета.\n"
+            "Стесняюсь рассказывать Вам всю магию этого макроса, задуманным моим создателем...\n"
+            "Просто добавьте макрос SHOKO_GENERATED_BODY() в свой виджет и продолжим!");
         
         return TWidgetContainer<Meta::Decay<TChildWidgets>...>(Meta::Move(ChildWidgets)...);
     }

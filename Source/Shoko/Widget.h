@@ -1,18 +1,28 @@
 ﻿#pragma once
 
 #include "Core/Aliases.h"
+#include "Core/Macros.h"
 
 struct SDL_Renderer;
 
 namespace Shoko
 {
-    template<typename TDerivedWidget>
-    class SWidget
+    class FWidgetBase
     {
+    public:
+        GUTID_t LocalGUTID = 0;
+
+        constexpr FWidgetBase(GUTID_t InGUTID) : LocalGUTID(InGUTID) {}
+    };
+    
+    template<typename TDerivedWidget>
+    class SWidget : public FWidgetBase
+    {
+        SHOKO_GENERATED_BODY()
         
     public:
-        constexpr SWidget() = default;
-    
+        constexpr SWidget() : FWidgetBase(TDerivedWidget::GUTID) {}
+        
         constexpr TDerivedWidget& SetSize(const int16 InWidth, const int16 InHeight)
         {
             Width = InWidth; 
@@ -35,9 +45,9 @@ namespace Shoko
         void Render(SDL_Renderer* InRenderer) const { static_cast<const TDerivedWidget*>(this)->Render(InRenderer); }
 
         constexpr bool HitTest(int16 InX, int16 InY) const { return InX >= X && InX <= X + Width && InY >= Y && InY <= Y + Height; }
-        constexpr const void* GetWidgetAt(int16 InMouseX, int16 InMouseY) const
+        constexpr const FWidgetBase* GetWidgetAt(int16 InMouseX, int16 InMouseY) const
         {
-            return HitTest(InMouseX, InMouseY) ? static_cast<const void*>(this) : nullptr;
+            return HitTest(InMouseX, InMouseY) ? static_cast<const FWidgetBase*>(this) : nullptr;
         }
         
     protected:

@@ -11,10 +11,11 @@ namespace Shoko
     
     class SButton : public SWidget<SButton>
     {
+        SHOKO_GENERATED_BODY()
         
     public:
         constexpr SButton() = default;
-
+        
         constexpr FColor GetColor() const { return Color; }
         constexpr SButton& SetColor(FColor InColor)
         {

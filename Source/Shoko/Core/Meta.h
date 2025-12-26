@@ -6,6 +6,8 @@ namespace Shoko
 {
     namespace Meta
     {
+        template<typename...> using Void = void;
+        
         struct TrueType
         {
             static constexpr bool Value = true;
@@ -139,6 +141,10 @@ namespace Shoko
         template<typename Base, typename Derived> inline constexpr bool IsBaseOf = IsBaseOfPrivate<Base, Derived>::Value;
         
         template<typename T> inline constexpr bool IsWidget = IsBaseOf<SWidget<Decay<T>>, Decay<T>>;
+
+        template<typename T, typename = void> struct HasGUTIDPrivate                              : FalseType {};
+        template<typename T>                  struct HasGUTIDPrivate<T, Void<decltype(T::GUTID)>> : TrueType  {};
+        template<typename T> inline constexpr bool HasGUTID = HasGUTIDPrivate<Decay<T>>::Value && Decay<T>::GUTID != SWidget<Decay<T>>::GUTID;
         
         template<typename T> constexpr RemoveReference<T>&& Move(T&& InValue) noexcept { return static_cast<Meta::RemoveReference<T>&&>(InValue); }
         
