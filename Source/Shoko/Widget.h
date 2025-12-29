@@ -50,7 +50,7 @@ namespace Shoko
             return HitTest(InMouseX, InMouseY) ? static_cast<const FWidgetBase*>(this) : nullptr;
         }
         
-    protected:
+    // protected:
         int16 X = 0;
         int16 Y = 0;
         int16 Width = 100;

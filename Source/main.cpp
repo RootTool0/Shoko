@@ -22,6 +22,11 @@ static_assert(is_constexpr_constructible<T>, R"(
 Ваш виджет не может быть создан на этапе компиляции...
 Проверьте, все ли его поля инициализируются constexpr?
 )");
+static_assert(
+    !Meta::IsContainer<TWidget> || Meta::HasChildren<TWidget>,
+    "Контейнер без детей — одиночество, которому мы не можем помочь."
+);
+
 */
 
 template<typename TRootWidget>
@@ -30,14 +35,6 @@ class TestUIManager
     const TRootWidget* RootWidget = nullptr;
     const FWidgetBase* LastHovered = nullptr;
     
-    /* нормальный шаблон-функция */
-    template<typename T>
-    static const T* TryCast(const FWidgetBase* ptr)
-    {
-        if (!ptr) return nullptr;
-        return (ptr->LocalGUTID == T::GUTID) ? static_cast<const T*>(ptr) : nullptr;
-    }
-
 public:
     explicit TestUIManager(const TRootWidget& root) : RootWidget(&root) {}
     
@@ -48,11 +45,11 @@ public:
         if (currentHovered == LastHovered) return;
 
         if (LastHovered)
-            if (auto* old = TryCast<SButton>(LastHovered))
+            if (auto* old = Cast<SButton>(LastHovered))
                 old->CallOnUnhover();
-
+        
         if (currentHovered)
-            if (auto* cur = TryCast<SButton>(currentHovered))
+            if (auto* cur = Cast<SButton>(currentHovered))
                 cur->CallOnHover();
 
         LastHovered = currentHovered;
@@ -108,7 +105,7 @@ int main()
         SDL_Quit();
         return 1;
     }
-
+    
     SDL_Event SDLEvent;
     
     constexpr auto RootWidget = SNew<SWidgetContainer>
@@ -140,7 +137,16 @@ int main()
     std::cout << std::to_string(RootWidget.GetChildByIndex<2>().GUTID) << '\n';
     */
     
-    auto& test = RootWidget.GetChildByIndex<2>();
+    //const int16* test = &RootWidget.GetChildByIndex<2>().X;
+    
+    /*
+    volatile constexpr int i = 32;
+    volatile int* p = (int*)&i;
+    *p = 64;
+    
+    std::cout << "i = " << i << '\n';
+    std::cout << "*p = " << *p << '\n';
+    */
     
     const SButton* btn = &RootWidget.GetChildByIndex<0>();
     std::cout << std::to_string(btn->GUTID) << '\n';
@@ -166,6 +172,12 @@ int main()
         SDL_GetMouseState(&MouseX, &MouseY);
         ui.UpdateHover(MouseX, MouseY);
 
+        const FWidgetBase* currentHovered = RootWidget.GetWidgetAt(MouseX, MouseY);
+        // std::cout << std::to_string(currentHovered->LocalGUTID) << '\n';
+        
+        int16* x = const_cast<int16*>(&RootWidget.GetChildByIndex<0>().Y);
+        *x = 200 + static_cast<int16>(40 * sin(SDL_GetTicks() / 100.0));
+        
         // const auto* hovered = RootWidget.GetWidgetAt(MouseX, MouseY);
         // if (hovered) {
         //     std::cout << "Hovered widget at: " << MouseX << ", " << MouseY << std::endl;
@@ -180,6 +192,6 @@ int main()
     SDL_DestroyRenderer(SDLRenderer);
     SDL_DestroyWindow(SDLWindow);
     SDL_Quit();
-
+    
     return 0;
 }
