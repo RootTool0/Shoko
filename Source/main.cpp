@@ -175,8 +175,8 @@ int main()
         const FWidgetBase* currentHovered = RootWidget.GetWidgetAt(MouseX, MouseY);
         // std::cout << std::to_string(currentHovered->LocalGUTID) << '\n';
         
-        int16* x = const_cast<int16*>(&RootWidget.GetChildByIndex<0>().Y);
-        *x = 200 + static_cast<int16>(40 * sin(SDL_GetTicks() / 100.0));
+        // int16* x = const_cast<int16*>(&RootWidget.GetChildByIndex<0>().Y);
+        // *x = 200 + static_cast<int16>(40 * sin(SDL_GetTicks() / 100.0));
         
         // const auto* hovered = RootWidget.GetWidgetAt(MouseX, MouseY);
         // if (hovered) {

@@ -191,7 +191,8 @@ constexpr auto RootWidget = SNew<SWidgetContainer>
 
 Если у вас есть вопросы, предложения или баги, то можете связаться со мной:
 
-- **Telegram (канал/блог)**: [RootTool Blog](https://t.me/RootToolBlog)
+- **Telegram (основной блог)**: [RootTool Blog](https://t.me/RootToolBlog)
+- **Telegram (блог фреймворка)**: [Shoko - UI Framework](https://t.me/Shoko_UI)
 - **Telegram (ЛС)**: [@RootTool28](https://t.me/RootTool28)
 - **Discord**: `.roottool` (или `RootTool#5776`)
 - **YouTube**: [RootTool](https://www.youtube.com/@RTEdits0)
