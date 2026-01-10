@@ -1,9 +1,7 @@
 ﻿#pragma once
 
-#include <SDL_render.h>
-
 #include "Widget.h"
-#include "Types/Color.h"
+#include "../Types/Color.h"
 
 namespace Shoko
 {
@@ -68,11 +66,9 @@ namespace Shoko
             if(OnUnhoverHandler) OnUnhoverHandler();
         }
         
-        void Render(SDL_Renderer* InRenderer) const
+        void Render() const
         {
-            SDL_SetRenderDrawColor(InRenderer, Color.R, Color.G, Color.B, Color.A);
-            SDL_Rect ButtonRect = {X, Y, Width, Height};
-            SDL_RenderFillRect(InRenderer, &ButtonRect);
+            FShokoRenderer::DrawRect(Geometry, Color);
         }
         
     private:

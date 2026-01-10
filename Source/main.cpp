@@ -1,12 +1,8 @@
-﻿#include <SDL.h>
+﻿
+#include <iomanip>
 #include <iostream>
-#include <string>
 
-#include "Shoko/BoxWidget.h"
-#include "Shoko/Button.h"
 #include "Shoko/Shoko.h"
-#include "Shoko/WidgetContainer.h"
-#include "Shoko/Types/Color.h"
 
 using namespace Shoko;
 
@@ -29,6 +25,7 @@ static_assert(
 
 */
 
+/*
 template<typename TRootWidget>
 class TestUIManager
 {
@@ -60,6 +57,27 @@ public:
         RootWidget->Render(renderer);
     }
 };
+*/
+
+template <typename T>
+void hexDump(const T& obj) {
+    // Используем std::uint8_t для работы с сырыми байтами
+    const auto* bytes = reinterpret_cast<const std::uint8_t*>(&obj);
+    const size_t size = sizeof(T);
+
+    std::cout << "--- Memory Dump ---" << std::endl;
+    std::cout << "Type: " << typeid(T).name() << "\n";
+    std::cout << "Size: " << size << " bytes" << "\n";
+    std::cout << "Data: ";
+
+    // Форматированный вывод HEX
+    for (size_t i = 0; i < size; ++i) {
+        std::cout << std::hex << std::setw(2) << std::setfill('0') 
+                  << static_cast<int>(bytes[i]) << " ";
+    }
+    
+    std::cout << std::dec << std::endl << "-------------------\n" << std::endl;
+}
 
 void TestOnHover1()
 {
@@ -81,54 +99,46 @@ void TestOnUnhover2()
     printf("[2] Unhover\n");
 }
 
+
+constexpr auto CachedWidget = SNew<SWidgetContainer>
+(
+    SNew<SButton>()
+        .SetPosition(100, 200)
+        .SetSize(200, 200)
+        .OnHover(&TestOnHover1)
+        .OnUnhover(&TestOnUnhover1)
+        .SetColor(FColor(255, 50, 50)),
+            
+    SNew<SButton>()
+        .SetPosition(400, 200)
+        .SetSize(200, 200)
+        .OnHover(&TestOnHover2)
+        .OnUnhover(&TestOnUnhover2)
+        .SetColor(FColor(50, 50, 255)),
+
+    SNew<SBoxWidget>()
+        .SetPosition(300, 200)
+        .SetSize(100, 100)
+        .SetColor(FColor(255, 255, 255)) //,
+
+    // SNew<SOpenGLContext>()
+    //     .SetPosition(300, 300)
+    //     .SetSize(100, 100)
+);
+
 int main()
 {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
-    {
-        std::cerr << "SDL_Init error: " << SDL_GetError() << '\n';
-        return 1;
-    }
+    auto RootWidget = CachedWidget;
 
-    SDL_Window* SDLWindow = SDL_CreateWindow("Hi, Shoko!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-    if (!SDLWindow)
-    {
-        std::cerr << "SDL_CreateWindow error: " << SDL_GetError() << '\n';
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Renderer* SDLRenderer = SDL_CreateRenderer(SDLWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (!SDLRenderer)
-    {
-        std::cerr << "SDL_CreateRenderer error: " << SDL_GetError() << std::endl;
-        SDL_DestroyWindow(SDLWindow);
-        SDL_Quit();
-        return 1;
-    }
+    hexDump(RootWidget);
+    hexDump(RootWidget.GetChildByIndex<0>());
     
-    SDL_Event SDLEvent;
+    auto& test = RootWidget.GetChildByIndex<2>();
     
-    constexpr auto RootWidget = SNew<SWidgetContainer>
-    (
-        SNew<SButton>()
-            .SetPosition(100, 200)
-            .SetSize(200, 200)
-            .OnHover(&TestOnHover1)
-            .OnUnhover(&TestOnUnhover1)
-            .SetColor(FColor(255, 50, 50)),
-            
-        SNew<SButton>()
-            .SetPosition(400, 200)
-            .SetSize(200, 200)
-            .OnHover(&TestOnHover2)
-            .OnUnhover(&TestOnUnhover2)
-            .SetColor(FColor(50, 50, 255)),
-
-        SNew<SBoxWidget>()
-            .SetPosition(300, 200)
-            .SetSize(100, 100)
-            .SetColor(FColor(255, 255, 255))
-    );
+    hexDump(RootWidget.GetChildByIndex<1>());
+    hexDump(RootWidget.GetChildByIndex<2>());
+    
+    // static_assert(sizeof(RootWidget) == -1);
     
     /*
     std::cout << std::to_string(RootWidget.GUTID) << '\n';
@@ -148,6 +158,7 @@ int main()
     std::cout << "*p = " << *p << '\n';
     */
     
+    /*
     const SButton* btn = &RootWidget.GetChildByIndex<0>();
     std::cout << std::to_string(btn->GUTID) << '\n';
     std::cout << std::to_string(btn->LocalGUTID) << '\n';
@@ -156,23 +167,38 @@ int main()
     
     const GUTID_t pId = static_cast<const FWidgetBase*>(btn)->LocalGUTID;
     std::cout << std::to_string(pId) << '\n';
+    */
     
     
-    TestUIManager ui(RootWidget);
+    // TestUIManager ui(RootWidget);
+    FShokoRenderer::Initialize();
     
-    bool bRunning = true;
-    while(bRunning)
+    const char* VS = R"(
+    #version 120
+    void main()
     {
-        while(SDL_PollEvent(&SDLEvent))
-        {
-            if(SDLEvent.type == SDL_QUIT) bRunning = false;
-        }
-        
-        int MouseX = -1, MouseY = -1;
-        SDL_GetMouseState(&MouseX, &MouseY);
-        ui.UpdateHover(MouseX, MouseY);
+        gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+    }
+    )";
 
-        const FWidgetBase* currentHovered = RootWidget.GetWidgetAt(MouseX, MouseY);
+    const char* FS = R"(
+    #version 120
+    void main()
+    {
+        gl_FragColor = gl_Color;
+    }
+    )";
+    
+    // GLuint Program = FShokoRenderer::CreateGLSLProgram(VS, FS);
+    // glUseProgram(Program);
+    
+    while(FShokoRenderer::MainLoop())
+    {
+        // int MouseX = -1, MouseY = -1;
+        // SDL_GetMouseState(&MouseX, &MouseY);
+        // ui.UpdateHover(MouseX, MouseY);
+
+        // const FWidgetBase* currentHovered = RootWidget.GetWidgetAt(MouseX, MouseY);
         // std::cout << std::to_string(currentHovered->LocalGUTID) << '\n';
         
         // int16* x = const_cast<int16*>(&RootWidget.GetChildByIndex<0>().Y);
@@ -183,15 +209,15 @@ int main()
         //     std::cout << "Hovered widget at: " << MouseX << ", " << MouseY << std::endl;
         // }
         
-        SDL_SetRenderDrawColor(SDLRenderer, 30, 30, 120, 255);
-        SDL_RenderClear(SDLRenderer);
-        ui.RenderAll(SDLRenderer);
-        SDL_RenderPresent(SDLRenderer);
+        // test.SetColor(FColor(128 + sin(SDL_GetTicks() / 100.f) * 128, 0, 0));
+        
+        FShokoRenderer::PreRender();
+        RootWidget.Render();
+        FShokoRenderer::PostRender();
+        // ui.RenderAll(SDLRenderer);
     }
-    
-    SDL_DestroyRenderer(SDLRenderer);
-    SDL_DestroyWindow(SDLWindow);
-    SDL_Quit();
+
+    FShokoRenderer::Deinitialize();
     
     return 0;
 }

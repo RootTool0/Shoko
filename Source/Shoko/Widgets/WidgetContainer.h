@@ -3,8 +3,8 @@
 #include <tuple>
 
 #include "Widget.h"
-#include "Core/Meta.h"
-#include "Core/Macros.h"
+#include "../Core/Meta.h"
+#include "../Core/Macros.h"
 
 namespace Shoko
 {
@@ -21,18 +21,7 @@ namespace Shoko
     public:
         std::tuple<TChildWidgets...> ChildWidgets;
         
-        explicit constexpr SWidgetContainer(TChildWidgets&&... InChildWidgets) : ChildWidgets(Meta::Move(InChildWidgets)...)
-        {
-            SWidget<SWidgetContainer<TChildWidgets...>>::X = 0;
-            SWidget<SWidgetContainer<TChildWidgets...>>::Y = 0;
-            SWidget<SWidgetContainer<TChildWidgets...>>::Width = 800;
-            SWidget<SWidgetContainer<TChildWidgets...>>::Height = 600;
-        }
-
-        /*
-        template <size_t Index>
-        constexpr auto& GetChildByIndex() { return std::get<Index>(ChildWidgets); }
-        */
+        explicit constexpr SWidgetContainer(TChildWidgets&&... InChildWidgets) : ChildWidgets(Meta::Move(InChildWidgets)...) {}
 
         template <size_t Index>
         constexpr auto& GetChildByIndex() &
@@ -65,11 +54,9 @@ namespace Shoko
             return FoundWidget ? FoundWidget : static_cast<const FWidgetBase*>(this);
         }
         
-        void Render(SDL_Renderer* InRenderer) const
+        void Render() const
         {
-            std::apply([&](const auto&... child) {
-                (child.Render(InRenderer), ...);  // Fold expression!
-            }, ChildWidgets);
+            std::apply([&](const auto&... child) { (child.Render(), ...); }, ChildWidgets);
         }
         
         /*
