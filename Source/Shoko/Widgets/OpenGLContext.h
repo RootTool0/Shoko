@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Widget.h"
-#include "../Renderer/Renderer.h"
 
 namespace Shoko
 {
@@ -11,7 +10,7 @@ namespace Shoko
 
     public:
         
-#ifdef __gl_h_
+#if SHOKO_RENDERER == SHOKO_RENDERER_OpenGL
         constexpr SOpenGLContext& SetShader(GLuint InShaderProgram)
         {
             ShaderProgram = InShaderProgram;

@@ -8,7 +8,7 @@
 
 namespace Shoko
 {
-    class FShokoOpenGLRenderer
+    class FShokoOpenGLPlatformRenderer
     {
     public:
         static bool Initialize();
@@ -35,5 +35,5 @@ namespace Shoko
         static void SetupShaders();
     };
 
-    using FShokoRenderer = FShokoOpenGLRenderer;
+    using FShokoRenderer = FShokoOpenGLPlatformRenderer;
 }

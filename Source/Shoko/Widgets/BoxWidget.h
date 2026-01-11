@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Widget.h"
-#include "../Renderer/Renderer.h"
+#include "../Renderer.h"
 
 namespace Shoko
 {

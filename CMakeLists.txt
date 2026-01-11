@@ -10,41 +10,46 @@ find_package(OpenGL REQUIRED)
 find_package(glad CONFIG REQUIRED)
 
 # Source
-add_executable(Shoko
-	Source/Shoko/Core/Aliases.h
-	Source/Shoko/Core/Macros.h
-	Source/Shoko/Core/Meta.h
-	Source/Shoko/Core/New.h
-	
-	Source/Shoko/Renderer/Renderer.h
-	
-	Source/Shoko/Renderer/Backends/OpenGL/ShokoOpenGLRenderer.h
-	Source/Shoko/Renderer/Backends/OpenGL/ShokoOpenGLRenderer.cpp
-	Source/Shoko/Renderer/Backends/OpenGL/Shaders/Rect.frag
-	Source/Shoko/Renderer/Backends/OpenGL/Shaders/Rect.vert
-	
-	Source/Shoko/Renderer/Backends/SDL2/ShokoSDL2Renderer.h
-	Source/Shoko/Renderer/Backends/SDL2/ShokoSDL2Renderer.cpp
-	
-	Source/Shoko/Types/Color.h
-	Source/Shoko/Types/Geometry.h
-	Source/Shoko/Types/StaticArray.h
-	Source/Shoko/Types/Vector2D.h
-	
-	Source/Shoko/Widgets/Border.h
-	Source/Shoko/Widgets/BoxWidget.h
-	Source/Shoko/Widgets/Button.h
-    Source/Shoko/Widgets/OpenGLContext.h
-    Source/Shoko/Widgets/Widget.h
-    Source/Shoko/Widgets/WidgetBase.h
-    Source/Shoko/Widgets/WidgetContainer.h
-    Source/Shoko/Widgets/WidgetWrapper.h
-	
-	Source/Shoko/Shoko.h
-	Source/Shoko/Widgets.h
-	
-	Source/main.cpp
-)
+file(GLOB_RECURSE ALL_FILES "Source/*")
+add_executable(Shoko ${ALL_FILES})
+
+
+# add_executable(Shoko
+# 	Source/Shoko/Core/Aliases.h
+# 	Source/Shoko/Core/Macros.h
+# 	Source/Shoko/Core/Meta.h
+# 	Source/Shoko/Core/New.h
+# 	
+# 	Source/Shoko/Renderer/Renderer.h
+# 	
+# 	Source/Shoko/Renderer/Backends/OpenGL/ShokoOpenGLRenderer.h
+# 	Source/Shoko/Renderer/Backends/OpenGL/ShokoOpenGLRenderer.cpp
+# 	Source/Shoko/Renderer/Backends/OpenGL/Shaders/Rect.frag
+# 	Source/Shoko/Renderer/Backends/OpenGL/Shaders/Rect.vert
+# 	
+# 	Source/Shoko/Renderer/Backends/SDL2/ShokoSDL2Renderer.h
+# 	Source/Shoko/Renderer/Backends/SDL2/ShokoSDL2Renderer.cpp
+# 	
+# 	Source/Shoko/Types/Color.h
+# 	Source/Shoko/Types/Geometry.h
+# 	Source/Shoko/Types/StaticArray.h
+# 	Source/Shoko/Types/Vector2D.h
+# 	
+# 	Source/Shoko/Widgets/Border.h
+# 	Source/Shoko/Widgets/BoxWidget.h
+# 	Source/Shoko/Widgets/Button.h
+#     Source/Shoko/Widgets/OpenGLContext.h
+#     Source/Shoko/Widgets/Widget.h
+#     Source/Shoko/Widgets/WidgetBase.h
+#     Source/Shoko/Widgets/WidgetContainer.h
+#     Source/Shoko/Widgets/WidgetWrapper.h
+# 	
+# 	Source/Shoko/Shoko.h
+# 	Source/Shoko/Widgets.h
+# 	
+# 	Source/main.cpp
+# )
+
 target_link_libraries(Shoko PRIVATE
     SDL2::SDL2
     glfw

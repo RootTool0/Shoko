@@ -7,23 +7,17 @@
 
 namespace Shoko
 {
-    class FShokoSDL2Renderer
+    class FShokoSDL2PlatformRenderer
     {
     public:
-        static bool Initialize();
-        static void Deinitialize();
-
-        static bool MainLoop();
+        // static bool MainLoop();
         static void PreRender();
         static void PostRender();
         
         static void DrawRect(FGeometry Geometry, FColor Color);
         
-    private:
-        static SDL_Window* SDLWindow;
         static SDL_Renderer* SDLRenderer;
-        static bool bRunning;
     };
     
-    using FShokoRenderer = FShokoSDL2Renderer;
+    using FShokoPlatformRenderer = FShokoSDL2PlatformRenderer;
 }

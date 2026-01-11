@@ -99,8 +99,7 @@ void TestOnUnhover2()
     printf("[2] Unhover\n");
 }
 
-
-constexpr auto CachedWidget = SNew<SWidgetContainer>
+constexpr auto RootWidget = SNew<SWidgetContainer>
 (
     SNew<SButton>()
         .SetPosition(100, 200)
@@ -119,24 +118,39 @@ constexpr auto CachedWidget = SNew<SWidgetContainer>
     SNew<SBoxWidget>()
         .SetPosition(300, 200)
         .SetSize(100, 100)
-        .SetColor(FColor(255, 255, 255)) //,
+        .SetColor(FColor(255, 255, 255))
+);
 
-    // SNew<SOpenGLContext>()
-    //     .SetPosition(300, 300)
-    //     .SetSize(100, 100)
+constexpr auto CustomWidget = SNew<SWidgetContainer>
+(
+    SNew<SButton>()
+        .SetPosition(50, 100)
+        .SetSize(300, 100)
+        .OnHover(&TestOnHover1)      
+        .OnUnhover(&TestOnUnhover1)
+        .SetColor(FColor(255, 100, 100)),
+
+    SNew<SButton>()
+        .SetPosition(400, 300)
+        .SetSize(250, 80)
+        .OnHover(&TestOnHover2)
+        .OnUnhover(&TestOnUnhover2)
+        .SetColor(FColor(100, 100, 255)),
+
+    SNew<SBoxWidget>()
+        .SetPosition(275, 500)
+        .SetSize(200, 200)
+        .SetColor(FColor(200, 200, 255))
 );
 
 int main()
 {
-    auto RootWidget = CachedWidget;
-
+    
     hexDump(RootWidget);
     hexDump(RootWidget.GetChildByIndex<0>());
-    
-    auto& test = RootWidget.GetChildByIndex<2>();
-    
     hexDump(RootWidget.GetChildByIndex<1>());
     hexDump(RootWidget.GetChildByIndex<2>());
+    
     
     // static_assert(sizeof(RootWidget) == -1);
     
@@ -171,29 +185,19 @@ int main()
     
     
     // TestUIManager ui(RootWidget);
-    FShokoRenderer::Initialize();
-    
-    const char* VS = R"(
-    #version 120
-    void main()
-    {
-        gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-    }
-    )";
-
-    const char* FS = R"(
-    #version 120
-    void main()
-    {
-        gl_FragColor = gl_Color;
-    }
-    )";
     
     // GLuint Program = FShokoRenderer::CreateGLSLProgram(VS, FS);
     // glUseProgram(Program);
+    auto TestWindow1 = SWindow().SetTitle("Test Window 1");
+    auto TestWindow2 = SWindow().SetTitle("Test Window 2");
     
-    while(FShokoRenderer::MainLoop())
+    SDL_Event SDLEvent;
+    while(true)
     {
+        while(SDL_PollEvent(&SDLEvent))
+            if(SDLEvent.type == SDL_QUIT)
+                break;
+        
         // int MouseX = -1, MouseY = -1;
         // SDL_GetMouseState(&MouseX, &MouseY);
         // ui.UpdateHover(MouseX, MouseY);
@@ -210,14 +214,22 @@ int main()
         // }
         
         // test.SetColor(FColor(128 + sin(SDL_GetTicks() / 100.f) * 128, 0, 0));
-        
+
+        TestWindow1.ActivateRenderContext();
         FShokoRenderer::PreRender();
         RootWidget.Render();
         FShokoRenderer::PostRender();
+        
+        TestWindow2.ActivateRenderContext();
+        FShokoRenderer::PreRender();
+        CustomWidget.Render();
+        FShokoRenderer::PostRender();
+        
         // ui.RenderAll(SDLRenderer);
     }
 
-    FShokoRenderer::Deinitialize();
-    
+    TestWindow1.Deinitialize();
+    TestWindow2.Deinitialize();
+
     return 0;
 }

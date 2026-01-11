@@ -1,4 +1,4 @@
-#include "ShokoOpenGLRenderer.h"
+#include "OpenGLPlatformRenderer.h"
 
 #include <fstream>
 #include <iostream>
@@ -6,15 +6,15 @@
 
 using namespace Shoko;
 
-GLFWwindow* FShokoOpenGLRenderer::Window = nullptr;
+GLFWwindow* FShokoOpenGLPlatformRenderer::Window = nullptr;
 
-GLuint FShokoOpenGLRenderer::VAO = 0;
-GLuint FShokoOpenGLRenderer::VBO = 0;
-GLuint FShokoOpenGLRenderer::EBO = 0;
+GLuint FShokoOpenGLPlatformRenderer::VAO = 0;
+GLuint FShokoOpenGLPlatformRenderer::VBO = 0;
+GLuint FShokoOpenGLPlatformRenderer::EBO = 0;
 
-GLuint FShokoOpenGLRenderer::RectShader = 0;
+GLuint FShokoOpenGLPlatformRenderer::RectShader = 0;
 
-bool FShokoOpenGLRenderer::Initialize()
+bool FShokoOpenGLPlatformRenderer::Initialize()
 {
     if (!glfwInit())
     {
@@ -59,7 +59,7 @@ bool FShokoOpenGLRenderer::Initialize()
     return true;
 }
 
-void FShokoOpenGLRenderer::Deinitialize()
+void FShokoOpenGLPlatformRenderer::Deinitialize()
 {
     if(Window)
     {
@@ -69,25 +69,25 @@ void FShokoOpenGLRenderer::Deinitialize()
     glfwTerminate();
 }
 
-bool FShokoOpenGLRenderer::MainLoop()
+bool FShokoOpenGLPlatformRenderer::MainLoop()
 {
     return !glfwWindowShouldClose(Window);
 }
 
-void FShokoOpenGLRenderer::PreRender()
+void FShokoOpenGLPlatformRenderer::PreRender()
 {
     glClearColor(30.0f/255.0f, 30.0f/255.0f, 120.0f/255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void FShokoOpenGLRenderer::PostRender()
+void FShokoOpenGLPlatformRenderer::PostRender()
 {
     glfwSwapBuffers(Window);
     glfwPollEvents();
 }
 
 /*
-void FShokoOpenGLRenderer::DrawRect(FGeometry Geometry, FColor Color)
+void FShokoOpenGLPlatformRenderer::DrawRect(FGeometry Geometry, FColor Color)
 {
     if (!RectShader) return;
 
@@ -128,7 +128,7 @@ void FShokoOpenGLRenderer::DrawRect(FGeometry Geometry, FColor Color)
 */
 
 /*
-void FShokoOpenGLRenderer::DrawRect(FGeometry Geometry, FColor Color)
+void FShokoOpenGLPlatformRenderer::DrawRect(FGeometry Geometry, FColor Color)
 {
     float windowWidth = 800;
     float windowHeight = 600;
@@ -157,7 +157,7 @@ void FShokoOpenGLRenderer::DrawRect(FGeometry Geometry, FColor Color)
 }
 */
 
-void FShokoOpenGLRenderer::DrawRect(FGeometry Geometry, FColor Color)
+void FShokoOpenGLPlatformRenderer::DrawRect(FGeometry Geometry, FColor Color)
 {
     if (!RectShader) return;
 
@@ -225,7 +225,7 @@ GLuint CompileShader(GLenum Type, const char* Source)
     return Shader;
 }
 
-GLuint FShokoOpenGLRenderer::CreateGLSLProgram(const char* VertexSource, const char* FragmentSource)
+GLuint FShokoOpenGLPlatformRenderer::CreateGLSLProgram(const char* VertexSource, const char* FragmentSource)
 {
     GLuint VertexShader   = CompileShader(GL_VERTEX_SHADER, VertexSource);
     GLuint FragmentShader = CompileShader(GL_FRAGMENT_SHADER, FragmentSource);
@@ -257,7 +257,7 @@ GLuint FShokoOpenGLRenderer::CreateGLSLProgram(const char* VertexSource, const c
     return Program;
 }
 
-void FShokoOpenGLRenderer::SetupQuad()
+void FShokoOpenGLPlatformRenderer::SetupQuad()
 {
     float Vertices[] = {
         0.0f, 0.0f,
@@ -289,7 +289,7 @@ void FShokoOpenGLRenderer::SetupQuad()
     glBindVertexArray(0);
 }
 
-void FShokoOpenGLRenderer::SetupShaders()
+void FShokoOpenGLPlatformRenderer::SetupShaders()
 {
     RectShader = CreateGLSLProgram(
         #include "Shaders/Rect.vert"

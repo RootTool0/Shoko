@@ -3,6 +3,7 @@
 #include "Core/Meta.h"
 #include "Core/New.h"
 #include "Widgets.h"
+#include "Window.h"
 
 namespace Shoko
 {
