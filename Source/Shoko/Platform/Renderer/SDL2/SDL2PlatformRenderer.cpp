@@ -1,3 +1,6 @@
+#include "../../../Config.h"
+#if SHOKO_RENDERER == SHOKO_RENDERER_SDL2
+
 #include "SDL2PlatformRenderer.h"
 
 #include <iostream>
@@ -40,3 +43,5 @@ void FShokoSDL2PlatformRenderer::DrawRect(FGeometry Geometry, FColor Color)
     SDL_Rect Rect = {Geometry.Location.X, Geometry.Location.Y, Geometry.Size.X, Geometry.Size.Y};
     SDL_RenderFillRect(SDLRenderer, &Rect);
 }
+
+#endif

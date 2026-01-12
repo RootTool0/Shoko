@@ -1,9 +1,7 @@
 ﻿#pragma once
 
-#include <SDL_render.h>
-
 #include "WidgetWrapper.h"
-#include "Types/Color.h"
+#include "../Types/Color.h"
 
 namespace Shoko
 {
@@ -47,9 +45,9 @@ namespace Shoko
             return *this;
         }
         
-        constexpr void Render(SDL_Renderer* InRenderer) const
+        constexpr void Render() const
         {
-            ChildWidget.Render(InRenderer);
+            /*ChildWidget.Render(InRenderer);
 
             SDL_SetRenderDrawColor(InRenderer, Color.R, Color.G, Color.B, Color.A);
             auto Draw = [&](const SDL_Rect& R)
@@ -83,7 +81,7 @@ namespace Shoko
                     Draw({ ChildWidget.GetX() + ChildWidget.GetWidth() - HalfThickness, ChildWidget.GetY() + HalfThickness, Thickness, ChildWidget.GetHeight() - Thickness });
                     break;
                 }
-            }
+            }*/
         }
     };
 }

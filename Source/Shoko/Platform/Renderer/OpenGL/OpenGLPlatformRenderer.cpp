@@ -1,3 +1,6 @@
+#include "../../../Config.h"
+#if SHOKO_RENDERER == SHOKO_RENDERER_OpenGL
+
 #include "OpenGLPlatformRenderer.h"
 
 #include <fstream>
@@ -297,3 +300,5 @@ void FShokoOpenGLPlatformRenderer::SetupShaders()
         #include "Shaders/Rect.frag"
     );
 }
+
+#endif

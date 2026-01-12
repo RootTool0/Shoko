@@ -13,6 +13,7 @@ namespace Shoko
         T R, G, B, A;
         
         constexpr TColor() : R(0), G(0), B(0), A(255) {}
+        constexpr TColor(const T InScalar) : R(InScalar), G(InScalar), B(InScalar), A(InScalar) {}
         constexpr TColor(const T InR, const T InG, const T InB) : R(InR), G(InG), B(InB), A(255) {}
         constexpr TColor(const T InR, const T InG, const T InB, const T InA) : R(InR), G(InG), B(InB), A(InA) {}
         
@@ -91,17 +92,17 @@ namespace Shoko
         static FColor Gray;
         
         static FColor Error;
+        uint16 ToRGB565() const { return ((R >> 3) << 11) | ((G >> 2) << 5) | (B >> 3); }
     };
     
-    inline FColor FColor::Red     = FColor(255, 0  , 0  );
-    inline FColor FColor::Green   = FColor(0  , 255, 0  );
-    inline FColor FColor::Blue    = FColor(0  , 0  , 255);
+    inline FColor FColor::Red     = FColor(255,   0,   0);
+    inline FColor FColor::Green   = FColor(  0, 255,   0);
+    inline FColor FColor::Blue    = FColor(  0,   0, 255);
     inline FColor FColor::White   = FColor(255, 255, 255);
-    inline FColor FColor::Black   = FColor(0  , 0  , 0  );
-    inline FColor FColor::Yellow  = FColor(255, 255, 0  );
-    inline FColor FColor::Cyan    = FColor(0  , 255, 255);
-    inline FColor FColor::Magenta = FColor(255, 0  , 255);
+    inline FColor FColor::Black   = FColor(  0,   0,   0);
+    inline FColor FColor::Yellow  = FColor(255, 255,   0);
+    inline FColor FColor::Cyan    = FColor(  0, 255, 255);
+    inline FColor FColor::Magenta = FColor(255,   0, 255);
     inline FColor FColor::Gray    = FColor(128, 128, 128);
-    
-    inline FColor FColor::Error   = FColor(255, 0  , 255);
+    inline FColor FColor::Error   = FColor(255,   0, 255);
 }

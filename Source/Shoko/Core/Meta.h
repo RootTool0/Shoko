@@ -4,6 +4,9 @@
 
 namespace Shoko
 {
+    template<typename TDerivedWidget>
+    class SWidget;
+    
     namespace Meta
     {
         template<typename...> using Void = void;

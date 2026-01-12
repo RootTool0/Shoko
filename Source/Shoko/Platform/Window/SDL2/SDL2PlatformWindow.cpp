@@ -1,3 +1,6 @@
+#include "../../../Config.h"
+#if SHOKO_WINDOW == SHOKO_WINDOW_SDL2
+
 #include "SDL2PlatformWindow.h"
 
 #include <iostream>
@@ -39,3 +42,5 @@ void FShokoSDL2PlatformWindow::Deinitialize() const
     SDL_DestroyWindow(SDLWindow);
     SDL_Quit();
 }
+
+#endif
