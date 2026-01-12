@@ -1,4 +1,4 @@
-#include "SDL2PlatformWindow.h"
+#include "SDL2PlatformInput.h"
 
 #include <iostream>
 

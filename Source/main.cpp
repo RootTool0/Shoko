@@ -99,7 +99,7 @@ void TestOnUnhover2()
     printf("[2] Unhover\n");
 }
 
-constexpr auto RootWidget = SNew<SWidgetContainer>
+constexpr auto RootWi1dget = SNew<SWidgetContainer>
 (
     SNew<SButton>()
         .SetPosition(100, 200)
@@ -190,6 +190,28 @@ int main()
     // glUseProgram(Program);
     auto TestWindow1 = SWindow().SetTitle("Test Window 1");
     auto TestWindow2 = SWindow().SetTitle("Test Window 2");
+
+    constexpr auto RootWidget = SNew<SWidgetContainer>
+    (
+        SNew<SButton>()
+            .SetPosition(100, 200)
+            .SetSize(200, 200)
+            .OnHover(&TestOnHover1)
+            .OnUnhover(&TestOnUnhover1)
+            .SetColor(FColor(255, 50, 50)),
+                
+        SNew<SButton>()
+            .SetPosition(400, 200)
+            .SetSize(200, 200)
+            .OnHover(&TestOnHover2)
+            .OnUnhover(&TestOnUnhover2)
+            .SetColor(FColor(50, 50, 255)),
+
+        SNew<SBoxWidget>()
+            .SetPosition(300, 200)
+            .SetSize(100, 100)
+            .SetColor(FColor(255, 255, 255))
+    );
     
     SDL_Event SDLEvent;
     while(true)
@@ -227,9 +249,6 @@ int main()
         
         // ui.RenderAll(SDLRenderer);
     }
-
-    TestWindow1.Deinitialize();
-    TestWindow2.Deinitialize();
-
+    
     return 0;
 }

@@ -145,6 +145,10 @@ namespace Shoko
         template<typename T, typename = void> struct HasGUTIDPrivate                              : FalseType {};
         template<typename T>                  struct HasGUTIDPrivate<T, Void<decltype(T::GUTID)>> : TrueType  {};
         template<typename T> inline constexpr bool HasGUTID = HasGUTIDPrivate<Decay<T>>::Value && Decay<T>::GUTID != SWidget<Decay<T>>::GUTID;
+
+        template<typename T, typename = void> struct IsDefinedPrivate             : FalseType {};
+        template<typename T>                  struct IsDefinedPrivate<T, Void<T>> : TrueType  {};
+        template<typename T> inline constexpr bool IsDefined = IsDefinedPrivate<Decay<T>>::Value;
         
         template<typename T> constexpr RemoveReference<T>&& Move(T&& InValue) noexcept { return static_cast<Meta::RemoveReference<T>&&>(InValue); }
         

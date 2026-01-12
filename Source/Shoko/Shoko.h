@@ -20,7 +20,6 @@ namespace Shoko
             "Стесняюсь рассказывать Вам всю магию этого макроса, задуманным моим создателем...\n"
             "Просто добавьте макрос SHOKO_GENERATED_BODY() в свой виджет и продолжим!");
         
-        if(!InPointer) return nullptr;
-        return InPointer->LocalGUTID == TWidget::GUTID ? static_cast<const TWidget*>(InPointer) : nullptr;
+        return InPointer && InPointer->LocalGUTID == TWidget::GUTID ? static_cast<const TWidget*>(InPointer) : nullptr;
     }
 }

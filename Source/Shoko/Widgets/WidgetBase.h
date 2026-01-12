@@ -6,7 +6,6 @@ namespace Shoko
 {
     class FWidgetBase
     {
-        
     public:
         GUTID_t LocalGUTID = 0;
 

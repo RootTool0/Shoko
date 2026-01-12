@@ -11,3 +11,5 @@
 #include "Backends/OpenGL/ShokoOpenGLWindow.h"
 #endif
 */
+
+SHOKO_CHECK_ALIAS_EXISTS(FShokoPlatformWindow);
