@@ -10,15 +10,7 @@ namespace Shoko
     class FShokoSDL2PlatformInput
     {
     public:
-        bool Initialize();
-        void Deinitialize() const;
-
-        void SetTitle(const char* NewTitle) const { SDL_SetWindowTitle(SDLWindow, NewTitle); }
-        void SetSize(FUIntVector2D Size) const { SDL_SetWindowSize(SDLWindow, Size.X, Size.Y); }
-        
-        SDL_Renderer* SDLRenderer = nullptr;
-    private:
-        SDL_Window* SDLWindow = nullptr;
+		
     };
     
     using FShokoPlatformInput = FShokoSDL2PlatformInput;
