@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "../../../Config.h"
+#include "Config.h"
 #if SHOKO_RENDERER == SHOKO_RENDERER_LCDShield
 #include "LCDShieldPlatformRenderer.h"
 

@@ -4,6 +4,8 @@ namespace Shoko
 {
     class FShokoOpenGLPlatformWindow
     {
+#include "../WindowDeclaration.h"
+        
         
     };
 

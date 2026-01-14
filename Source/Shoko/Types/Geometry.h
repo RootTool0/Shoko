@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Vector2D.h"
-#include "../Core/Aliases.h"
+#include "Core/Aliases.h"
 
 namespace Shoko
 {

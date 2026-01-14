@@ -37,6 +37,7 @@ namespace Shoko
 
         constexpr void ActivateRenderContext() const
         {
+            FShokoPlatformRenderer::SDLRenderer = PlatformWindow.SDLRenderer;
             // TODO: FShokoPlatformRenderer::SDLRenderer = PlatformWindow.SDLRenderer;
         }
         

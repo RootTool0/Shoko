@@ -3,8 +3,8 @@
 #include <tuple>
 
 #include "Widget.h"
-#include "../Core/Meta.h"
-#include "../Core/Macros.h"
+#include "Core/Meta.h"
+#include "Core/Macros.h"
 
 namespace Shoko
 {

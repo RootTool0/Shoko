@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../Config.h"
+#include "Config.h"
 
 #if SHOKO_WINDOW == SHOKO_WINDOW_NONE
-#include "Window/None.h"
+#include "Window/None/None.h"
 #endif
 
 #if SHOKO_WINDOW == SHOKO_WINDOW_SDL2

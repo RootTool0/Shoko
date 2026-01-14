@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../Config.h"
+#include "Config.h"
 
 #if SHOKO_RENDERER == SHOKO_RENDERER_NONE
-#include "Renderer/None.h"
+#include "Renderer/None/None.h"
 #endif
 
 #if SHOKO_RENDERER == SHOKO_RENDERER_SDL2

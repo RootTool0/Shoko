@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Core/Aliases.h"
-#include "../Core/Meta.h"
+#include "Core/Aliases.h"
+#include "Core/Meta.h"
  
 namespace Shoko
 {

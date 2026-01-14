@@ -4,8 +4,7 @@ namespace Shoko
 {
     class FShokoNonePlatformInput
     {
-    public:
-		
+#include "../InputDeclaration.h"
     };
     
     using FShokoPlatformInput = FShokoNonePlatformInput;

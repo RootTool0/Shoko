@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "Aliases.h"
-#include "../Widget.h"
+#include "Core/Aliases.h"
+#include "Widgets/Widget.h"
 
 namespace Shoko
 {

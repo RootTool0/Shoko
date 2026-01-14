@@ -1,4 +1,4 @@
-#include "../../../Config.h"
+#include "Config.h"
 #if SHOKO_RENDERER == SHOKO_RENDERER_SDL2
 
 #include "SDL2PlatformRenderer.h"
@@ -18,21 +18,24 @@ bool FShokoSDL2PlatformRenderer::MainLoop()
     return true;
 }
 */
-
-void FShokoSDL2PlatformRenderer::PreRender()
-{
-    if(!SDLRenderer) return;
-    
-    SDL_Event event;
-    SDL_SetRenderDrawColor(SDLRenderer, 30, 30, 120, 255);
-    SDL_RenderClear(SDLRenderer);
-}
+bool FShokoSDL2PlatformRenderer::Initialize() { return true; }
+void FShokoSDL2PlatformRenderer::Deinitialize() {}
+void FShokoSDL2PlatformRenderer::PreRender() {}
 
 void FShokoSDL2PlatformRenderer::PostRender()
 {
     if(!SDLRenderer) return;
     
     SDL_RenderPresent(SDLRenderer);
+}
+
+
+void FShokoSDL2PlatformRenderer::Fill(FColor Color)
+{
+    if(!SDLRenderer) return;
+    
+    SDL_SetRenderDrawColor(SDLRenderer, Color.R, Color.G, Color.B, Color.A);
+    SDL_RenderClear(SDLRenderer);
 }
 
 void FShokoSDL2PlatformRenderer::DrawRect(FGeometry Geometry, FColor Color)

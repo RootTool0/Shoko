@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "WidgetWrapper.h"
-#include "../Types/Color.h"
+#include "Types/Color.h"
 
 namespace Shoko
 {

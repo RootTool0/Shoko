@@ -1,4 +1,4 @@
-#include "../../../Config.h"
+#include "Config.h"
 #if SHOKO_INPUT == SHOKO_INPUT_SDL2
 
 #include "SDL2PlatformInput.h"

@@ -1,4 +1,4 @@
-#include "../../../Config.h"
+#include "Config.h"
 #if SHOKO_RENDERER == SHOKO_RENDERER_OpenGL
 
 #include "OpenGLPlatformRenderer.h"

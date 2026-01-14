@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "../Core/Aliases.h"
-#include "../Core/Macros.h"
-#include "../Types/Geometry.h"
+#include "Core/Aliases.h"
+#include "Core/Macros.h"
+#include "Types/Geometry.h"
 #include "WidgetBase.h"
 
 namespace Shoko

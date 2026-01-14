@@ -67,30 +67,24 @@ constexpr auto RootWidget = SNew<SWidgetContainer>
 #include <iostream>
 #include <chrono>
 
-size_t GetRAMUsageKB()
-{
-    std::ifstream status("/proc/self/status");
-    std::string line;
-    while (std::getline(status, line))
-    {
-        if (line.substr(0, 6) == "VmRSS:")
-        {
-            size_t kb = 0;
-            sscanf(line.c_str(), "VmRSS: %zu kB", &kb);
-            return kb;
-        }
-    }
-    return 0;
-}
-
 int main()
 {
     FShokoRenderer::Initialize();
     
-    auto lastTime = std::chrono::high_resolution_clock::now();
+    auto Window = SWindow()
+        .SetSize(FUIntVector2D(320, 480))
+        .SetTitle("Hello From Shoko! [SDL2]");
     
+    Window.ActivateRenderContext();
+    
+    auto lastTime = std::chrono::high_resolution_clock::now();
     while (true)
     {
+        SDL_Event event;
+        while(SDL_PollEvent(&event))
+            if(event.type == SDL_QUIT)
+                break;
+        
         auto startTime = std::chrono::high_resolution_clock::now();
         
         FShokoRenderer::PreRender();
@@ -103,11 +97,11 @@ int main()
         lastTime = endTime;
 
         float fps = 1.0f / delta.count();
-        size_t ramKB = GetRAMUsageKB();
-
-        printf("FPS: %.2f | RAM: %zu KB\r", fps, ramKB);
+        printf("FPS: %.2f\r", fps);
         fflush(stdout);
     }
+    
+    Window.Deinitialize();
     
     return 0;
 }
