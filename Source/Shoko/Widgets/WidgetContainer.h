@@ -1,10 +1,9 @@
 ﻿#pragma once
 
-#include <tuple>
-
 #include "Widget.h"
 #include "Core/Meta.h"
 #include "Core/Macros.h"
+#include "Types/Tuple.h"
 
 namespace Shoko
 {
@@ -19,54 +18,42 @@ namespace Shoko
             "Проверьте - все-ли элементы унаследованы от SWidget?..");
         
     public:
-        std::tuple<TChildWidgets...> ChildWidgets;
+        uint8 ChildWidgetsCount;
+        TTuple<TChildWidgets...> ChildWidgets;
         
-        explicit constexpr SWidgetContainer(TChildWidgets&&... InChildWidgets) : ChildWidgets(Meta::Move(InChildWidgets)...) {}
+        explicit constexpr SWidgetContainer(TChildWidgets&&... InChildWidgets) : ChildWidgetsCount(static_cast<uint8>(sizeof...(TChildWidgets))), ChildWidgets(Meta::Move(InChildWidgets)...) {}
 
         template <size_t Index>
-        constexpr auto& GetChildByIndex() &
+        constexpr auto& Get() &
         {
             SHOKO_STATIC_ASSERT(Index < sizeof...(TChildWidgets),
                 "Индекс вышел за пределы размера контейнера (SWidgetContainer)\n"
                 "Я думаю вы пытаетесь получить больше, чем то, что у меня есть..\n"
                 "Может в следующий раз стоит быть осторожнее и выбирать индексы поменьше?..");
             
-            return std::get<Index>(ChildWidgets);
+            return ChildWidgets.template Get<Index>;
         }
         
         template <size_t Index>
-        constexpr const auto& GetChildByIndex() const &
+        constexpr const auto& Get() const &
         {
             SHOKO_STATIC_ASSERT(Index < sizeof...(TChildWidgets),
                 "Индекс вышел за пределы размера контейнера (SWidgetContainer)\n"
                 "Я думаю вы пытаетесь получить больше, чем то, что у меня есть..\n"
                 "Может в следующий раз стоит быть осторожнее и выбирать индексы поменьше?..");
             
-            return std::get<Index>(ChildWidgets);
+            return ChildWidgets.template Get<Index>;
         }
         
-        constexpr const FWidgetBase* GetWidgetAt(int16 InMouseX, int16 InMouseY) const
+        constexpr const FWidgetBase* HitTest(int16 InMouseX, int16 InMouseY) const
         {
-            if(!this->HitTest(InMouseX, InMouseY)) return nullptr;
-
+            if(this->HitTest(InMouseX, InMouseY)) return nullptr;
+            
             const FWidgetBase* FoundWidget = nullptr;
-            std::apply([&](const auto&... child) { ((FoundWidget = child.GetWidgetAt(InMouseX, InMouseY)) || ...); }, ChildWidgets);
+            Meta::Apply([&](const auto&... Child) { ((FoundWidget = Child.HitTest(InMouseX, InMouseY), FoundWidget != nullptr) || ...); }, ChildWidgets);
             return FoundWidget ? FoundWidget : static_cast<const FWidgetBase*>(this);
         }
         
-        void Render() const
-        {
-            std::apply([&](const auto&... child) { (child.Render(), ...); }, ChildWidgets);
-        }
-        
-        /*
-        constexpr const TDerivedWidget* GetWidgetAt(int16 InMouseX, int16 InMouseY) const
-        {
-            if(!this->HitTest(InMouseX, InMouseY)) return nullptr;
-            
-            const TDerivedWidget* FoundWidget = nullptr;
-            std::apply([&](auto&... ChildWidget){ ((FoundWidget = ChildWidget.GetWidgetAt(InMouseX, InMouseY)) || ...); }, ChildWidgets);
-            return FoundWidget ? FoundWidget : static_cast<const TDerivedWidget*>(this);
-        }*/
+        constexpr void Render() const { Meta::Apply([&](const auto&... Child) { (Child.Render(), ...); }, ChildWidgets); }
     };
 }

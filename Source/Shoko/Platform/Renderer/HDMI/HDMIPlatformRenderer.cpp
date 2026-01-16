@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "Config.h"
+#include "Core/Math.h"
 #if SHOKO_RENDERER == SHOKO_RENDERER_HDMI
 #include "HDMIPlatformRenderer.h"
 
@@ -60,11 +61,11 @@ void FShokoHDMIPlatformRenderer::DrawRect(FGeometry Geometry, FColor Color)
     uint32_t RawColor = Color.ToARGB();
     
     uint16_t RGB565 = Color.ToRGB565();
-    uint16 x0 = std::max<short>(0, Geometry.Location.X);
-    uint16 y0 = std::max<short>(0, Geometry.Location.Y);
-    uint16 x1 = std::min<int>(ScreenWidth,  Geometry.Location.X + Geometry.Size.X);
-    uint16 y1 = std::min<int>(ScreenHeight, Geometry.Location.Y + Geometry.Size.Y);
-
+    uint16 x0 = FMath::Max<uint16>(0, Geometry.Location.X);
+    uint16 y0 = FMath::Max<uint16>(0, Geometry.Location.Y);
+    uint16 x1 = FMath::Min<uint16>(ScreenWidth,  Geometry.Location.X + Geometry.Size.X);
+    uint16 y1 = FMath::Min<uint16>(ScreenHeight, Geometry.Location.Y + Geometry.Size.Y);
+    
     for(int32_t y = y0; y < y1; ++y)
     {
         uint32_t row_offset = y * ScreenWidth;

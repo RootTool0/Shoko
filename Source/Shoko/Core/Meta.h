@@ -169,5 +169,13 @@ namespace Shoko
             A = Move(B);
             B = Move(Temp);
         }
+
+        template<size_t... Indices>           struct IndexSequence {};
+        template<size_t N, size_t... Indices> struct MakeIndexSequencePrivate : MakeIndexSequencePrivate<N - 1, N - 1, Indices...> {};
+        template<size_t... Indices>           struct MakeIndexSequencePrivate<0, Indices...> { using Type = IndexSequence<Indices...>; };
+        template<size_t N> using MakeIndexSequence = typename MakeIndexSequencePrivate<N>::Type;
+
+        template <typename Func, typename Tuple, size_t... Indices> constexpr decltype(auto) ApplyPrivate(Func&& InFunc, Tuple&& InTuple, IndexSequence<Indices...>) { return Forward<Func>(InFunc)(InTuple.template Get<Indices>()...); }
+        template <typename Func, typename Tuple> constexpr decltype(auto) Apply(Func&& InFunc, Tuple&& InTuple) { return ApplyPrivate(Forward<Func>(InFunc), Forward<Tuple>(InTuple), MakeIndexSequence<RemoveReference<Tuple>::Size>{} ); }
     }
 }

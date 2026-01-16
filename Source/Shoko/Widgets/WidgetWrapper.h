@@ -15,11 +15,11 @@ namespace Shoko
         
         explicit constexpr SWidgetWrapper(TChildWidget&& InChildWidget) : ChildWidget(Meta::Move(InChildWidget)) {}
         
-        constexpr const FWidgetBase* GetWidgetAt(int16 InMouseX, int16 InMouseY) const
+        constexpr const FWidgetBase* HitTest(int16 InMouseX, int16 InMouseY) const
         {
             if(!this->HitTest(InMouseX, InMouseY)) return nullptr;
 
-            const FWidgetBase* FoundWidget = ChildWidget.GetWidgetAt(InMouseX, InMouseY);
+            const FWidgetBase* FoundWidget = ChildWidget.HitTest(InMouseX, InMouseY);
             return FoundWidget ? FoundWidget : static_cast<const FWidgetBase*>(this);
         }
     };

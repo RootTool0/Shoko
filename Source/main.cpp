@@ -39,7 +39,7 @@ constexpr auto RootWidget = SNew<SWidgetContainer>
         .SetColor(FColor(50, 50, 255)),
     
     SNew<SBoxWidget>()
-        // .SetPosition(100, 200)
+        .SetPosition(100, 200)
         .SetSize(100, 100)
         .SetColor(FColor(255, 255, 255)),
     
@@ -67,9 +67,31 @@ constexpr auto RootWidget = SNew<SWidgetContainer>
 #include <iostream>
 #include <chrono>
 #include <cmath>
+#include <iomanip>
+
+template <typename T>
+void hexDump(const T& obj)
+{
+    const auto* Bytes = reinterpret_cast<const uint8*>(&obj);
+    const size_t Size = sizeof(T);
+
+    std::cout << "--- Memory Dump ---" << std::endl;
+    std::cout << "Type: " << typeid(T).name() << "\n";
+    std::cout << "Size: " << Size << " bytes" << "\n";
+    std::cout << "Data: ";
+    
+    for(size_t i = 0; i < Size; ++i)
+        std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(Bytes[i]) << " ";
+    
+    std::cout << std::dec << std::endl << "-------------------\n" << std::endl;
+}
 
 int main()
 {
+    std::cout << +RootWidget.ChildWidgetsCount << std::endl;
+    hexDump(RootWidget);
+    
+    /*
     auto TestWidget = RootWidget;
     FShokoRenderer::Initialize();
     
@@ -110,6 +132,7 @@ int main()
     }
     
     Window.Deinitialize();
+    */
     
     return 0;
 }
