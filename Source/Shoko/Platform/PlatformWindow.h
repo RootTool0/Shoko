@@ -3,7 +3,7 @@
 #include "Config.h"
 
 #if SHOKO_WINDOW == SHOKO_WINDOW_NONE
-#include "Window/None/None.h"
+#include "Window/None/NonePlatformWindow.h"
 #endif
 
 #if SHOKO_WINDOW == SHOKO_WINDOW_SDL2

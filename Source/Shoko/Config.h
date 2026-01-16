@@ -1,22 +1,24 @@
 #pragma once
 
 // *** RHI *** //
-#define SHOKO_RENDERER SHOKO_RENDERER_SDL2
+#define SHOKO_RENDERER SHOKO_RENDERER_HDMI
 
 // Available RHIs:
 #define SHOKO_RENDERER_NONE      0
 #define SHOKO_RENDERER_SDL2      1
 #define SHOKO_RENDERER_OpenGL    2
 #define SHOKO_RENDERER_LCDShield 3
+#define SHOKO_RENDERER_HDMI      4
 // *** RHI *** //
 
 
 // *** WINDOW *** //
-#define SHOKO_WINDOW SHOKO_WINDOW_SDL2
+#define SHOKO_WINDOW SHOKO_WINDOW_NONE
 
 // Available Windows:
-#define SHOKO_WINDOW_NONE 0
-#define SHOKO_WINDOW_SDL2 1
+#define SHOKO_WINDOW_NONE   0
+#define SHOKO_WINDOW_SDL2   1
+#define SHOKO_WINDOW_OpenGL 2
 // *** WINDOW *** //
 
 

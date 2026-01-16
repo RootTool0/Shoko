@@ -18,4 +18,8 @@
 #include "Renderer/LCDShield/LCDShieldPlatformRenderer.h"
 #endif
 
+#if SHOKO_RENDERER == SHOKO_RENDERER_HDMI
+#include "Renderer/HDMI/HDMIPlatformRenderer.h"
+#endif
+
 SHOKO_CHECK_ALIAS_EXISTS(FShokoPlatformRenderer);

@@ -93,6 +93,7 @@ namespace Shoko
         
         static FColor Error;
         uint16 ToRGB565() const { return ((R >> 3) << 11) | ((G >> 2) << 5) | (B >> 3); }
+        uint32 ToARGB() const { return (static_cast<uint32>(A) << 24) | (static_cast<uint32>(R) << 16) | (static_cast<uint32>(G) << 8)  | (static_cast<uint32>(B)); }
     };
     
     inline FColor FColor::Red     = FColor(255,   0,   0);

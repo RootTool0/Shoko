@@ -39,7 +39,7 @@ constexpr auto RootWidget = SNew<SWidgetContainer>
         .SetColor(FColor(50, 50, 255)),
     
     SNew<SBoxWidget>()
-        .SetPosition(100, 200)
+        // .SetPosition(100, 200)
         .SetSize(100, 100)
         .SetColor(FColor(255, 255, 255)),
     
@@ -49,56 +49,64 @@ constexpr auto RootWidget = SNew<SWidgetContainer>
         .SetColor(FColor(0, 0, 0)),
 
     SNew<SBoxWidget>()
-        .SetPosition(320-10, 0)
+        .SetPosition(1920-10, 0)
         .SetSize(10, 10)
         .SetColor(FColor(255, 0, 0)),
     
     SNew<SBoxWidget>()
-        .SetPosition(0, 480-10)
+        .SetPosition(0, 1080-10)
         .SetSize(10, 10)
         .SetColor(FColor(0, 255, 0)),
         
     SNew<SBoxWidget>()
-        .SetPosition(320-10, 480-10)
+        .SetPosition(1920-10, 1080-10)
         .SetSize(10, 10)
         .SetColor(FColor(255, 255, 0))
 );
 
 #include <iostream>
 #include <chrono>
+#include <cmath>
 
 int main()
 {
+    auto TestWidget = RootWidget;
     FShokoRenderer::Initialize();
     
     auto Window = SWindow()
-        .SetSize(FUIntVector2D(320, 480))
+        .SetSize(FUIntVector2D(1920, 1080))
         .SetTitle("Hello From Shoko! [SDL2]");
     
     Window.ActivateRenderContext();
     
     auto lastTime = std::chrono::high_resolution_clock::now();
+    uint64 Time = 0; 
     while (true)
     {
+#if SHOKO_RENDERER == SHOKO_RENDERER_SDL2
         SDL_Event event;
         while(SDL_PollEvent(&event))
             if(event.type == SDL_QUIT)
                 break;
+#endif
         
         auto startTime = std::chrono::high_resolution_clock::now();
         
         FShokoRenderer::PreRender();
         FShokoRenderer::Fill(FColor(30, 30, 120));
-        RootWidget.Render();
+        // RootWidget.Render();
+        TestWidget.GetChildByIndex<2>().SetPosition(static_cast<int16>(300.f + sin(static_cast<float>(Time) / 256.f) * 200.f), 400);
+        TestWidget.Render();
         FShokoRenderer::PostRender();
         
         auto endTime = std::chrono::high_resolution_clock::now();
         std::chrono::duration<float> delta = endTime - lastTime;
         lastTime = endTime;
-
-        float fps = 1.0f / delta.count();
-        printf("FPS: %.2f\r", fps);
+        
+        printf("FPS: %.2f\r", 1.0f / delta.count());
         fflush(stdout);
+
+        ++Time;
     }
     
     Window.Deinitialize();

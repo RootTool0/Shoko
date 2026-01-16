@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Types/Geometry.h"
+#include "Types/Color.h"
+
 namespace Shoko
 {
     class FShokoNonePlatformWindow

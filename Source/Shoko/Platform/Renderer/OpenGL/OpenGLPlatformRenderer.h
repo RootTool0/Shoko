@@ -5,6 +5,7 @@
 
 #include "Types/Geometry.h"
 #include "Types/Color.h"
+#include "Types/Vector2D.h"
 
 namespace Shoko
 {
