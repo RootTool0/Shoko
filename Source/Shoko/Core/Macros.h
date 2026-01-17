@@ -8,7 +8,6 @@ public: \
     friend Class GetClassByGUTIDPrivate(GUTIDReflectionFlag<StaticGUTID>); \
 private:
 
-#define SHOKO_GENERATED_BODY_TEMPLATE(TempVal)  \
 #define SHOKO_GENERATED_TEMPLATE_BODY()  \
 public: \
     static constexpr GUTID StaticGUTID = __COUNTER__; \
