@@ -6,7 +6,7 @@ namespace Shoko
 {
     class SOpenGLContext : public SWidget<SOpenGLContext>
     {
-        SHOKO_GENERATED_BODY(SOpenGLContext, 3)
+        SHOKO_GENERATED_BODY(SOpenGLContext)
 
     public:
         

@@ -9,7 +9,7 @@ namespace Shoko
     
     class SButton : public SWidget<SButton>
     {
-        SHOKO_GENERATED_BODY(SButton, 5)
+        SHOKO_GENERATED_BODY(SButton)
         
     public:
         constexpr SButton() = default;

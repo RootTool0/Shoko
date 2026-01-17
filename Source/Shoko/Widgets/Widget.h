@@ -10,10 +10,10 @@ namespace Shoko
     template<typename TDerivedWidget>
     class SWidget : public FWidgetBase
     {
-        SHOKO_GENERATED_BODY_TEMPLATE(1)
+        SHOKO_GENERATED_TEMPLATE_BODY()
         
     public:
-        constexpr SWidget() : FWidgetBase(TDerivedWidget::GUTID) {}
+        constexpr SWidget() : FWidgetBase(TDerivedWidget::StaticGUTID) {}
         
         constexpr TDerivedWidget& SetSize(const int16 InWidth, const int16 InHeight)
         {
@@ -21,7 +21,7 @@ namespace Shoko
             Geometry.Size.Y = InHeight;
             return static_cast<TDerivedWidget&>(*this);
         }
-    
+        
         constexpr TDerivedWidget& SetPosition(const int16 InX, const int16 InY)
         {
             Geometry.Location.X = InX;

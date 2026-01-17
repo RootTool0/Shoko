@@ -20,5 +20,5 @@ namespace Shoko
 
     using size_t = std::size_t;
 
-    using GUTID_t = uint8_t;
+    using GUTID = uint8_t;
 }

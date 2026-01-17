@@ -4,14 +4,15 @@
 
 namespace Shoko
 {
-    template<GUTID_t GUTID> struct GUTID_Tag {};
-    void GetClassByGUTID(...);
+    template<GUTID InGUTID> struct GUTIDReflectionFlag {};
+    void GetClassByGUTIDPrivate(...);
     
     class FWidgetBase
     {
+        
     public:
-        GUTID_t LocalGUTID = 0;
+        GUTID LocalGUTID = 0;
 
-        constexpr FWidgetBase(GUTID_t InGUTID) : LocalGUTID(InGUTID) {}
+        constexpr FWidgetBase(GUTID InGUTID) : LocalGUTID(InGUTID) {}
     };
 }

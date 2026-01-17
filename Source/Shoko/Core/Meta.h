@@ -156,9 +156,9 @@ namespace Shoko
         
         template<typename T> inline constexpr bool IsWidget = IsBaseOf<SWidget<Decay<T>>, Decay<T>>;
 
-        template<typename T, typename = void> struct HasGUTIDPrivate                              : FalseType {};
-        template<typename T>                  struct HasGUTIDPrivate<T, Void<decltype(T::GUTID)>> : TrueType  {};
-        template<typename T> inline constexpr bool HasGUTID = HasGUTIDPrivate<Decay<T>>::Value && Decay<T>::GUTID != SWidget<Decay<T>>::GUTID;
+        template<typename T, typename = void> struct HasGUTIDPrivate                                    : FalseType {};
+        template<typename T>                  struct HasGUTIDPrivate<T, Void<decltype(T::StaticGUTID)>> : TrueType  {};
+        template<typename T> inline constexpr bool HasGUTID = HasGUTIDPrivate<Decay<T>>::Value && Decay<T>::StaticGUTID != SWidget<Decay<T>>::StaticGUTID;
 
         template<typename T, typename = void> struct IsDefinedPrivate             : FalseType {};
         template<typename T>                  struct IsDefinedPrivate<T, Void<T>> : TrueType  {};
@@ -190,16 +190,12 @@ namespace Shoko
         template <typename Func, typename Tuple> constexpr decltype(auto) Apply(Func&& InFunc, Tuple&& InTuple) { return ApplyPrivate(Forward<Func>(InFunc), Forward<Tuple>(InTuple), MakeIndexSequence<RemoveReference<Tuple>::Size>{} ); }
 
         /*
-        template<int N = 0>
-        constexpr int NextID()
-        {
-            if constexpr (IsDefined<N>(0)) return NextID<N + 1>();
-            else return N;
-        }
+        template<typename T> struct IsTemplateSpec : std::false_type {};
+        template<template<typename...> class T, typename... Args>
+        struct IsTemplateSpec<T<Args...>> : std::true_type {};
+
+        template<typename T>
+        inline constexpr bool IsTemplateV = IsTemplateSpec<T>::value;
         */
-            
-        /*
-        
-        }*/
     }
 }

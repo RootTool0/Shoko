@@ -7,7 +7,7 @@ namespace Shoko
 {
     class SBoxWidget : public SWidget<SBoxWidget>
     {
-        SHOKO_GENERATED_BODY(SBoxWidget, 4)
+        SHOKO_GENERATED_BODY(SBoxWidget)
         
     public:        
         constexpr SBoxWidget() = default;

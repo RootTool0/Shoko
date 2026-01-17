@@ -108,8 +108,10 @@ void ThePerfectAlgorithm(const void* JustPointer)
         for(int i = 0; i < Container->ChildWidgetsCount; ++i)
         {
             while (WidgetBasePtr->LocalGUTID == 0) ++WidgetBasePtr;
+            
             Reflection::Call(WidgetBasePtr, [&](auto& Widget)
             {
+                std::cout << typeid(Widget).name() << '\n';
                 Widget.Render();
                 WidgetBasePtr += sizeof(decltype(Widget));
             });
@@ -119,6 +121,16 @@ void ThePerfectAlgorithm(const void* JustPointer)
 
 int main()
 {
+    std::cout << typeid(Reflection::GetClassByGUTID<0>()).name() << '\n';
+    std::cout << typeid(Reflection::GetClassByGUTID<1>()).name() << '\n';
+    std::cout << typeid(Reflection::GetClassByGUTID<2>()).name() << '\n';
+    std::cout << typeid(Reflection::GetClassByGUTID<3>()).name() << '\n';
+    std::cout << typeid(Reflection::GetClassByGUTID<4>()).name() << '\n';
+    std::cout << typeid(Reflection::GetClassByGUTID<5>()).name() << '\n';
+    std::cout << typeid(Reflection::GetClassByGUTID<6>()).name() << '\n';
+    std::cout << typeid(Reflection::GetClassByGUTID<7>()).name() << '\n';
+    std::cout << typeid(Reflection::GetClassByGUTID<8>()).name() << '\n';
+    
     hexDump(RootWidget);
     
     FShokoRenderer::Initialize();
