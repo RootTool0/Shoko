@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <iostream>
+
 #include "Widget.h"
 #include "Renderer.h"
 
@@ -22,6 +24,9 @@ namespace Shoko
         {
             FShokoRenderer::DrawRect(Geometry, Color);
         }
+
+        void CallOnHover() const { std::cout << "LOL\n"; }
+        void CallOnUnhover() const { std::cout << "KEK\n"; }
         
     protected:
         FColor Color = FColor(0, 0, 0, 0);

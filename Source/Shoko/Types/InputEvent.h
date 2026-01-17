@@ -46,29 +46,42 @@ namespace Shoko
         Letter_Y = 'Y',
         Letter_Z = 'Z',
         
-        Mouse_Left,
-        Mouse_Right,
-        Mouse_Middle,
-        
         Window_Close
+    };
+    
+    enum class EModifier : uint8
+    {
+        None = 0,
+        
+        LeftShift  = 1 << 0,
+        RightShift = 1 << 1,
+        
+        LeftCtrl  = 1 << 2,
+        RightCtrl = 1 << 3,
+        
+        LeftAlt  = 1 << 4,
+        RightAlt = 1 << 5,
+        
+        LeftCmd  = 1 << 6,
+        RightCmd = 1 << 7,
+        
+        AnyShift = LeftShift | RightShift,
+        AnyCtrl  = LeftCtrl  | RightCtrl,
+        AnyAlt   = LeftAlt   | RightAlt
+    };
+    
+    enum class EMouseButton : uint8
+    {
+        None     = 0,
+        Left     = 1 << 0,
+        Right    = 1 << 1,
+        Middle   = 1 << 2
     };
     
     struct FInputEvent
     {
         EKey Key;
-        
-        uint8 bLeftShift : 1;
-        uint8 bRightShift : 1;
-        uint8 bLeftAlt  : 1;
-        uint8 bRightAlt : 1;
-        uint8 bLeftCtrl : 1;
-        uint8 bRightCtrl : 1;
-        uint8 bLeftCmd : 1;
-        uint8 bRightCmd : 1;
-        
-        bool bShift() const { return bLeftShift || bRightShift; }
-        bool bAlt()   const { return bLeftAlt   || bRightAlt;   }
-        bool bCtrl()  const { return bLeftCtrl  || bRightCtrl;  }
-        bool bCmd()   const { return bLeftCmd   || bRightCmd;   }
+        uint8 Modifiers;
+        uint8 MouseButtons;
     };
 }

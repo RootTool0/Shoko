@@ -17,6 +17,9 @@ static bool GetRightCtrl();
 static bool GetLeftCmd();
 static bool GetRightCmd();
 
-static FIntVector2D GetMousePos();
+static FIntVector2D GetMousePosition();
+static bool GetMouseLeftButton();
+static bool GetMouseRightButton();
+static bool GetMouseMiddleButton();
 
 private:

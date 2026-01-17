@@ -11,8 +11,10 @@ namespace Shoko
 #include "../InputDeclaration.h"
 
     private:
-        static SDL_Keymod CurrentKeyMod;
+        static SDL_Keymod Keymod;
         static EKey Key;
+        static int MouseX, MouseY;
+        static uint32 MouseMask;
     };
     
     using FShokoPlatformInput = FShokoSDL2PlatformInput;

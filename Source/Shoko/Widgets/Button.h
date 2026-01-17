@@ -46,25 +46,10 @@ namespace Shoko
         }
         
         
-        constexpr void CallOnMouseDown() const
-        {
-            if(OnMouseDownHandler) OnMouseDownHandler();
-        }
-        
-        constexpr void CallOnMouseUp() const
-        {
-            if(OnMouseUpHandler) OnMouseUpHandler();
-        }
-        
-        constexpr void CallOnHover() const
-        {
-            if(OnHoverHandler) OnHoverHandler();
-        }
-        
-        constexpr void CallOnUnhover() const
-        {
-            if(OnUnhoverHandler) OnUnhoverHandler();
-        }
+        constexpr void CallOnMouseDown() const { if(OnMouseDownHandler) OnMouseDownHandler(); }
+        constexpr void CallOnMouseUp() const { if(OnMouseUpHandler) OnMouseUpHandler(); }
+        constexpr void CallOnHover() const { if(OnHoverHandler) OnHoverHandler(); }
+        constexpr void CallOnUnhover() const { if(OnUnhoverHandler) OnUnhoverHandler(); }
         
         void Render() const
         {

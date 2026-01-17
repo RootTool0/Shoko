@@ -13,6 +13,16 @@ void TestOnUnhover1()
     printf("[1] Unhover\n");
 }
 
+void TestOnMouseDown1()
+{
+    printf("[1] Mouse Down\n");
+}
+
+void TestOnMouseUp1()
+{
+    printf("[1] Mouse Up\n");
+}
+
 void TestOnHover2()
 {
     printf("[2] Hover\n");
@@ -23,6 +33,16 @@ void TestOnUnhover2()
     printf("[2] Unhover\n");
 }
 
+void TestOnMouseDown2()
+{
+    printf("[2] Mouse Down\n");
+}
+
+void TestOnMouseUp2()
+{
+    printf("[2] Mouse Up\n");
+}
+
 auto RootWidget = SNew<SWidgetContainer>
 (
     SNew<SButton>()
@@ -30,6 +50,8 @@ auto RootWidget = SNew<SWidgetContainer>
         .SetSize(200, 200)
         .OnHover(&TestOnHover1)
         .OnUnhover(&TestOnUnhover1)
+        .OnMouseDown(&TestOnMouseDown1)
+        .OnMouseUp(&TestOnMouseUp1)
         .SetColor(FColor(255, 50, 50)),
             
     SNew<SButton>()
@@ -37,6 +59,8 @@ auto RootWidget = SNew<SWidgetContainer>
         .SetSize(200, 200)
         .OnHover(&TestOnHover2)
         .OnUnhover(&TestOnUnhover2)
+        .OnMouseDown(&TestOnMouseDown2)
+        .OnMouseUp(&TestOnMouseUp2)
         .SetColor(FColor(50, 50, 255)),
     
     SNew<SBoxWidget>()
@@ -124,6 +148,9 @@ void ThePerfectAlgorithm(const void* JustPointer)
     }
 }
 
+FWidgetBase* HoveredWidget = nullptr;
+FWidgetBase* PressedWidget = nullptr;
+
 int main()
 {
     hexDump(RootWidget);
@@ -146,9 +173,57 @@ int main()
         if(InputEvent.Key == EKey::Window_Close) break;
         
         {
-            const FWidgetBase* Test = RootWidget.HitTest(FShokoInput::GetMousePosition());
+            FWidgetBase* CurrentWidget = RootWidget.HitTest(FShokoInput::GetMousePosition());
+            
+            if(HoveredWidget != CurrentWidget)
+            {
+                if(HoveredWidget)
+                    Reflection::Call(HoveredWidget, [&](auto& Widget)
+                    {
+                        Meta::TryCall(Widget, [](auto& CalledWidget) -> decltype(CalledWidget.CallOnUnhover()) { CalledWidget.CallOnUnhover(); });
+                    });
+                
+                HoveredWidget = CurrentWidget;
+                
+                if(HoveredWidget)
+                    Reflection::Call(HoveredWidget, [&](auto& Widget)
+                    {
+                        Meta::TryCall(Widget, [](auto& CalledWidget) -> decltype(CalledWidget.CallOnHover()) { CalledWidget.CallOnHover(); });
+                    });
+            }
+            if(FShokoInput::IsMouseWasPressed(EMouseButton::Left))
+            {
+                PressedWidget = CurrentWidget;
+                if(PressedWidget)
+                {
+                    Reflection::Call(PressedWidget, [&](auto& W)
+                    {
+                        Meta::TryCall(W, [](auto& CalledWidget) -> decltype(CalledWidget.CallOnMouseDown()) { CalledWidget.CallOnMouseDown(); });
+                    });
+                }
+            }
+            if(FShokoInput::IsMouseWasReleased(EMouseButton::Left))
+            {
+                if(PressedWidget)
+                {
+                    Reflection::Call(PressedWidget, [&](auto& Widget)
+                    {
+                        Meta::TryCall(Widget, [](auto& CalledWidget) -> decltype(CalledWidget.CallOnMouseUp()) { CalledWidget.CallOnMouseUp(); });
+                    });
+
+                    if(PressedWidget == CurrentWidget)
+                    {
+                        Reflection::Call(PressedWidget, [&](auto& Widget) {
+                            Meta::TryCall(Widget, [](auto& CalledWidget) -> decltype(CalledWidget.CallOnClicked()) { CalledWidget.CallOnClicked(); });
+                        });
+                    }
+
+                    PressedWidget = nullptr;
+                }
+            }
+            
             // RootWidget.Get<5>().SetPosition(FShokoInput::GetMousePosition().X, FShokoInput::GetMousePosition().Y);
-            printPtr(Test);
+            // printPtr(Test);
         }
         
         FShokoRenderer::PreRender();

@@ -16,6 +16,7 @@ namespace Shoko
             if(Ptr->LocalGUTID != InGUTID) return false;
         
             using WidgetType = decltype(GetClassByGUTID<InGUTID>());
+            
             if constexpr (Meta::IsVoid<WidgetType>) return false;
             else InFunc(*reinterpret_cast<const Meta::RemovePointer<WidgetType>*>(Ptr));
         
@@ -26,6 +27,6 @@ namespace Shoko
         void CallPrivate(const FWidgetBase* Ptr, Func&& InFunc, Meta::IndexSequence<InGUTIDs...>) { (TryCallPrivate<InGUTIDs>(Ptr, InFunc) || ...); }
     
         template<typename Func>
-        void Call(const FWidgetBase* Ptr, Func&& InFunc) { CallPrivate(Ptr, InFunc, Meta::MakeIndexSequence<6>{}); }
+        void Call(const FWidgetBase* Ptr, Func&& InFunc) { CallPrivate(Ptr, InFunc, Meta::MakeIndexSequence<__COUNTER__>{}); }
     }
 }
