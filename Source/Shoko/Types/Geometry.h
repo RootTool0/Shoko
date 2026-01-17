@@ -19,6 +19,12 @@ namespace Shoko
         constexpr int16 Right()  const { return static_cast<int16>(Location.X + Size.X); }
         constexpr int16 Bottom() const { return static_cast<int16>(Location.Y + Size.Y); }
         
-        constexpr bool Contains(FIntVector2D Point) const { return Point.X >= Location.X && Point.Y < Right() && Point.Y >= Location.Y && Point.Y < Bottom(); }
+        // constexpr bool Contains(FIntVector2D Point) const { return Location.X <= Point.X && Point.X < Right() && Location.Y <= Point.Y && Point.Y < Bottom(); }
+        constexpr bool Contains(FIntVector2D Point) const 
+        { 
+            return Point.X >= Location.X && Point.X < Right() && 
+                   Point.Y >= Location.Y && Point.Y < Bottom(); 
+        }
+        
     };
 }

@@ -34,7 +34,8 @@ namespace Shoko
     public:
         template <typename... Args> constexpr TTuple(Args&&... InArgs) : Super(Meta::Forward<Args>(InArgs)...) {}
         
-        constexpr size_t Num() const { return sizeof...(Types); }
+        static constexpr size_t Size = sizeof...(Types);
+        constexpr size_t Num() const { return Size; }
         
         template <size_t Index> constexpr       auto& Get()       { return static_cast<      TTupleLeaf<Index, typename TTupleElement<Index, Types...>::Type>&>(*this).Value; }
         template <size_t Index> constexpr const auto& Get() const { return static_cast<const TTupleLeaf<Index, typename TTupleElement<Index, Types...>::Type>&>(*this).Value; }

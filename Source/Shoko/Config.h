@@ -23,7 +23,7 @@
 
 
 // *** INPUT *** //
-#define SHOKO_INPUT SHOKO_INPUT_NONE
+#define SHOKO_INPUT SHOKO_INPUT_SDL2
 
 // Available Inputs:
 #define SHOKO_INPUT_NONE 0

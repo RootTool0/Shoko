@@ -17,6 +17,8 @@ namespace Shoko
             "Простите, но думаю вы случайно добавили что-то неподходящее..\n"
             "Проверьте - все-ли элементы унаследованы от SWidget?..");
         
+        using Super = SWidget<SWidgetContainer<TChildWidgets...>>;
+        
     public:
         uint8 ChildWidgetsCount;
         TTuple<TChildWidgets...> ChildWidgets;
@@ -31,7 +33,7 @@ namespace Shoko
                 "Я думаю вы пытаетесь получить больше, чем то, что у меня есть..\n"
                 "Может в следующий раз стоит быть осторожнее и выбирать индексы поменьше?..");
             
-            return ChildWidgets.template Get<Index>;
+            return ChildWidgets.template Get<Index>();
         }
         
         template <size_t Index>
@@ -42,15 +44,15 @@ namespace Shoko
                 "Я думаю вы пытаетесь получить больше, чем то, что у меня есть..\n"
                 "Может в следующий раз стоит быть осторожнее и выбирать индексы поменьше?..");
             
-            return ChildWidgets.template Get<Index>;
+            return ChildWidgets.template Get<Index>();
         }
         
-        constexpr const FWidgetBase* HitTest(int16 InMouseX, int16 InMouseY) const
+        constexpr const FWidgetBase* HitTest(FIntVector2D InMouseLocation) const
         {
-            if(this->HitTest(InMouseX, InMouseY)) return nullptr;
+            if(!Super::HitTest(InMouseLocation)) return nullptr;
             
             const FWidgetBase* FoundWidget = nullptr;
-            Meta::Apply([&](const auto&... Child) { ((FoundWidget = Child.HitTest(InMouseX, InMouseY), FoundWidget != nullptr) || ...); }, ChildWidgets);
+            Meta::Apply([&](const auto&... Child) { ((FoundWidget = Child.HitTest(InMouseLocation), FoundWidget != nullptr) || ...); }, ChildWidgets);
             return FoundWidget ? FoundWidget : static_cast<const FWidgetBase*>(this);
         }
         

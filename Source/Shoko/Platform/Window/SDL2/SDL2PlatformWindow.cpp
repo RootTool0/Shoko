@@ -38,7 +38,6 @@ bool FShokoSDL2PlatformWindow::Initialize()
 
 void FShokoSDL2PlatformWindow::Deinitialize() const
 {
-    std::cout << "SDL_DestroyWindow() called\n";
     SDL_DestroyRenderer(SDLRenderer);
     SDL_DestroyWindow(SDLWindow);
     SDL_Quit();

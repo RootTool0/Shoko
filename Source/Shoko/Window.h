@@ -9,14 +9,9 @@ namespace Shoko
 {
     class SWindow
     {
-    public:
-        SWindow() { Initialize(); }
         
-        void Initialize()
-        {
-            PlatformWindow = FShokoPlatformWindow();
-            PlatformWindow.Initialize();
-        }
+    public:
+        SWindow() : PlatformWindow(FShokoPlatformWindow()) { PlatformWindow.Initialize(); }
         
         void Deinitialize() const
         {
@@ -34,7 +29,7 @@ namespace Shoko
             PlatformWindow.SetSize(Size);
             return *this;
         }
-
+        
         constexpr void ActivateRenderContext() const
         {
             // TODO: Context Switcher

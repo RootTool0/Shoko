@@ -12,8 +12,8 @@ namespace Shoko
         
         T X, Y;
         
-        constexpr TVector2D()             : X(T(0)), Y(T(0)) {}
-        constexpr TVector2D(T InX, T InY) : X(InX), Y(InY) {}
+        explicit constexpr TVector2D()             : X(T(0)), Y(T(0)) {}
+        explicit constexpr TVector2D(T InX, T InY) : X(InX), Y(InY) {}
 
         constexpr TVector2D operator+(const TVector2D& Other) const { return TVector2D(X + Other.X, Y + Other.Y); }
         constexpr TVector2D operator-(const TVector2D& Other) const { return TVector2D(X - Other.X, Y - Other.Y); }

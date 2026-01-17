@@ -1,4 +1,5 @@
-﻿#include "Shoko/Shoko.h"
+﻿#include "Input.h"
+#include "Shoko/Shoko.h"
 
 using namespace Shoko;
 
@@ -22,7 +23,7 @@ void TestOnUnhover2()
     printf("[2] Unhover\n");
 }
 
-constexpr auto RootWidget = SNew<SWidgetContainer>
+auto RootWidget = SNew<SWidgetContainer>
 (
     SNew<SButton>()
         .SetPosition(100, 200)
@@ -39,7 +40,7 @@ constexpr auto RootWidget = SNew<SWidgetContainer>
         .SetColor(FColor(50, 50, 255)),
     
     SNew<SBoxWidget>()
-        .SetPosition(100, 200)
+        .SetPosition(0, 100)
         .SetSize(100, 100)
         .SetColor(FColor(255, 255, 255)),
     
@@ -74,6 +75,12 @@ std::uintptr_t Global = reinterpret_cast<std::uintptr_t>(&RootWidget);
 template <typename T>
 void printPtr(T* InPtr)
 {
+    if(!InPtr)
+    {
+        std::cout << "nullptr (nullptr)\n";
+        return;
+    }
+    
     std::uintptr_t AddressValue = reinterpret_cast<std::uintptr_t>(InPtr);
     std::cout << std::hex << InPtr << std::dec << " (" << AddressValue - Global << ")\n";
 }
@@ -96,8 +103,6 @@ void hexDump(const T& obj)
     std::cout << std::dec << "\n-------------------\n";
 }
 
-
-
 void ThePerfectAlgorithm(const void* JustPointer)
 {
     const FWidgetBase* WidgetBasePtr = static_cast<const FWidgetBase*>(JustPointer);
@@ -111,7 +116,7 @@ void ThePerfectAlgorithm(const void* JustPointer)
             
             Reflection::Call(WidgetBasePtr, [&](auto& Widget)
             {
-                std::cout << typeid(Widget).name() << '\n';
+                // std::cout << typeid(Widget).name() << '\n';
                 Widget.Render();
                 WidgetBasePtr += sizeof(decltype(Widget));
             });
@@ -121,55 +126,46 @@ void ThePerfectAlgorithm(const void* JustPointer)
 
 int main()
 {
-    std::cout << typeid(Reflection::GetClassByGUTID<0>()).name() << '\n';
-    std::cout << typeid(Reflection::GetClassByGUTID<1>()).name() << '\n';
-    std::cout << typeid(Reflection::GetClassByGUTID<2>()).name() << '\n';
-    std::cout << typeid(Reflection::GetClassByGUTID<3>()).name() << '\n';
-    std::cout << typeid(Reflection::GetClassByGUTID<4>()).name() << '\n';
-    std::cout << typeid(Reflection::GetClassByGUTID<5>()).name() << '\n';
-    std::cout << typeid(Reflection::GetClassByGUTID<6>()).name() << '\n';
-    std::cout << typeid(Reflection::GetClassByGUTID<7>()).name() << '\n';
-    std::cout << typeid(Reflection::GetClassByGUTID<8>()).name() << '\n';
-    
     hexDump(RootWidget);
     
     FShokoRenderer::Initialize();
+    FShokoInput::Initialize();
     
     auto Window = SWindow()
         .SetSize(FUIntVector2D(1920, 1080))
         .SetTitle("Hello From Shoko! [SDL2]");
+    RootWidget.SetSize(1920, 1080);
     
     Window.ActivateRenderContext();
     
-    auto lastTime = std::chrono::high_resolution_clock::now();
-    uint64 Time = 0; 
-    while (true)
+    auto LastTime = std::chrono::high_resolution_clock::now();
+    uint64 Time = 0;
+    while(true)
     {
-#if SHOKO_RENDERER == SHOKO_RENDERER_SDL2
-        SDL_Event event;
-        while(SDL_PollEvent(&event))
-            if(event.type == SDL_QUIT)
-                break;
-#endif
+        FInputEvent InputEvent = FShokoInput::PullEvents();
+        if(InputEvent.Key == EKey::Window_Close) break;
         
-        auto startTime = std::chrono::high_resolution_clock::now();
+        {
+            const FWidgetBase* Test = RootWidget.HitTest(FShokoInput::GetMousePosition());
+            // RootWidget.Get<5>().SetPosition(FShokoInput::GetMousePosition().X, FShokoInput::GetMousePosition().Y);
+            printPtr(Test);
+        }
         
         FShokoRenderer::PreRender();
         FShokoRenderer::Fill(FColor(30, 30, 120));
         ThePerfectAlgorithm(&RootWidget);
         FShokoRenderer::PostRender();
         
-        auto endTime = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<float> delta = endTime - lastTime;
-        lastTime = endTime;
-        
-        printf("FPS: %.2f\r", 1.0f / delta.count());
-        fflush(stdout);
-
+        // auto EndTime = std::chrono::high_resolution_clock::now();
+        // printf("FPS: %.2f\r", 1.0f / std::chrono::duration<float>(EndTime - LastTime).count());
+        // fflush(stdout);
+        // LastTime = EndTime;
         ++Time;
     }
     
     Window.Deinitialize();
+    FShokoInput::Deinitialize();
+    FShokoRenderer::Deinitialize();
     
     return 0;
 }
