@@ -23,3 +23,5 @@ namespace Shoko
         return InPointer && InPointer->LocalGUTID == TWidget::GUTID ? static_cast<const TWidget*>(InPointer) : nullptr;
     }
 }
+
+#include "Core/Reflection.h"

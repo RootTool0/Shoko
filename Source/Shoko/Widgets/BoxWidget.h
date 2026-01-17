@@ -7,9 +7,11 @@ namespace Shoko
 {
     class SBoxWidget : public SWidget<SBoxWidget>
     {
-        SHOKO_GENERATED_BODY()
+        SHOKO_GENERATED_BODY(SBoxWidget, 4)
         
-    public:
+    public:        
+        constexpr SBoxWidget() = default;
+        
         constexpr SBoxWidget& SetColor(FColor InColor)
         {
             Color = InColor;

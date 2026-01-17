@@ -1,7 +1,7 @@
 #pragma once
 
 // *** RHI *** //
-#define SHOKO_RENDERER SHOKO_RENDERER_HDMI
+#define SHOKO_RENDERER SHOKO_RENDERER_SDL2
 
 // Available RHIs:
 #define SHOKO_RENDERER_NONE      0
@@ -13,7 +13,7 @@
 
 
 // *** WINDOW *** //
-#define SHOKO_WINDOW SHOKO_WINDOW_NONE
+#define SHOKO_WINDOW SHOKO_WINDOW_SDL2
 
 // Available Windows:
 #define SHOKO_WINDOW_NONE   0

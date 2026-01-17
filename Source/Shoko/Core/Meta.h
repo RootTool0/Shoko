@@ -1,9 +1,13 @@
 ﻿#pragma once
 
+#include <utility>
+
 #include "Aliases.h"
+#include "Widgets/WidgetBase.h"
 
 namespace Shoko
 {
+    class FWidgetBase;
     template<typename TDerivedWidget>
     class SWidget;
     
@@ -49,7 +53,10 @@ namespace Shoko
         template<typename T>           struct RemoveExtentPrivate       { using Type = T; };
         template<typename T, size_t N> struct RemoveExtentPrivate<T[N]> { using Type = T; };
         template<typename T> using RemoveExtent = typename RemoveExtentPrivate<T>::Type;
-
+        
+        template<typename T> struct RemovePointerPrivate     { using Type = T; };
+        template<typename T> struct RemovePointerPrivate<T*> { using Type = T; };
+        template<typename T> using RemovePointer = typename RemovePointerPrivate<T>::Type;
         
         template<typename T> struct IsLValueReferencePrivate     : FalseType {};
         template<typename T> struct IsLValueReferencePrivate<T&> : TrueType  {};
@@ -74,8 +81,12 @@ namespace Shoko
         template<typename T> inline constexpr bool IsPointer = IsPointerPrivate<T>::Value;
     
         template<typename T, typename U> struct IsSamePrivate       : FalseType {};
-        template<typename T>             struct IsSamePrivate<T, T> : TrueType {};
+        template<typename T>             struct IsSamePrivate<T, T> : TrueType  {};
         template<typename T, typename U> inline constexpr bool IsSame = IsSamePrivate<T, U>::Value;
+
+        template<typename T> struct IsVoidPrivate       : FalseType {};
+        template<>           struct IsVoidPrivate<void> : TrueType  {};
+        template<typename T> inline constexpr bool IsVoid = IsVoidPrivate<T>::Value;
         
         template<typename T> struct IsIntegralPrivate         : FalseType {};
         template<>           struct IsIntegralPrivate<int8>   : TrueType  {};
@@ -177,5 +188,18 @@ namespace Shoko
 
         template <typename Func, typename Tuple, size_t... Indices> constexpr decltype(auto) ApplyPrivate(Func&& InFunc, Tuple&& InTuple, IndexSequence<Indices...>) { return Forward<Func>(InFunc)(InTuple.template Get<Indices>()...); }
         template <typename Func, typename Tuple> constexpr decltype(auto) Apply(Func&& InFunc, Tuple&& InTuple) { return ApplyPrivate(Forward<Func>(InFunc), Forward<Tuple>(InTuple), MakeIndexSequence<RemoveReference<Tuple>::Size>{} ); }
+
+        /*
+        template<int N = 0>
+        constexpr int NextID()
+        {
+            if constexpr (IsDefined<N>(0)) return NextID<N + 1>();
+            else return N;
+        }
+        */
+            
+        /*
+        
+        }*/
     }
 }

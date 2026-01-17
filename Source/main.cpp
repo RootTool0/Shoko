@@ -69,30 +69,58 @@ constexpr auto RootWidget = SNew<SWidgetContainer>
 #include <cmath>
 #include <iomanip>
 
+std::uintptr_t Global = reinterpret_cast<std::uintptr_t>(&RootWidget);
+
+template <typename T>
+void printPtr(T* InPtr)
+{
+    std::uintptr_t AddressValue = reinterpret_cast<std::uintptr_t>(InPtr);
+    std::cout << std::hex << InPtr << std::dec << " (" << AddressValue - Global << ")\n";
+}
+
 template <typename T>
 void hexDump(const T& obj)
 {
     const auto* Bytes = reinterpret_cast<const uint8*>(&obj);
     const size_t Size = sizeof(T);
 
-    std::cout << "--- Memory Dump ---" << std::endl;
-    std::cout << "Type: " << typeid(T).name() << "\n";
-    std::cout << "Size: " << Size << " bytes" << "\n";
+    std::cout << "--- Memory Dump ---" << '\n';
+    std::cout << "Type: " << typeid(T).name() << '\n';
+    std::cout << "Size: " << Size << " bytes" << '\n';
+    std::cout << "Start: "; printPtr(&obj);
     std::cout << "Data: ";
     
     for(size_t i = 0; i < Size; ++i)
         std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(Bytes[i]) << " ";
     
-    std::cout << std::dec << std::endl << "-------------------\n" << std::endl;
+    std::cout << std::dec << "\n-------------------\n";
+}
+
+
+
+void ThePerfectAlgorithm(const void* JustPointer)
+{
+    const FWidgetBase* WidgetBasePtr = static_cast<const FWidgetBase*>(JustPointer);
+    if(const SWidgetContainer<>* Container = Cast<SWidgetContainer<>>(WidgetBasePtr))
+    {
+        WidgetBasePtr += sizeof(SWidgetContainer<>);
+
+        for(int i = 0; i < Container->ChildWidgetsCount; ++i)
+        {
+            while (WidgetBasePtr->LocalGUTID == 0) ++WidgetBasePtr;
+            Reflection::Call(WidgetBasePtr, [&](auto& Widget)
+            {
+                Widget.Render();
+                WidgetBasePtr += sizeof(decltype(Widget));
+            });
+        }
+    }
 }
 
 int main()
 {
-    std::cout << +RootWidget.ChildWidgetsCount << std::endl;
     hexDump(RootWidget);
     
-    /*
-    auto TestWidget = RootWidget;
     FShokoRenderer::Initialize();
     
     auto Window = SWindow()
@@ -116,9 +144,7 @@ int main()
         
         FShokoRenderer::PreRender();
         FShokoRenderer::Fill(FColor(30, 30, 120));
-        // RootWidget.Render();
-        TestWidget.GetChildByIndex<2>().SetPosition(static_cast<int16>(300.f + sin(static_cast<float>(Time) / 256.f) * 200.f), 400);
-        TestWidget.Render();
+        ThePerfectAlgorithm(&RootWidget);
         FShokoRenderer::PostRender();
         
         auto endTime = std::chrono::high_resolution_clock::now();
@@ -132,7 +158,6 @@ int main()
     }
     
     Window.Deinitialize();
-    */
     
     return 0;
 }

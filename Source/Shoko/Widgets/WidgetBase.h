@@ -4,6 +4,9 @@
 
 namespace Shoko
 {
+    template<GUTID_t GUTID> struct GUTID_Tag {};
+    void GetClassByGUTID(...);
+    
     class FWidgetBase
     {
     public:

@@ -10,7 +10,7 @@ namespace Shoko
     template<typename... TChildWidgets>
     class SWidgetContainer : public SWidget<SWidgetContainer<TChildWidgets...>>
     {
-        SHOKO_GENERATED_BODY()
+        SHOKO_GENERATED_BODY_TEMPLATE(2)
         
         SHOKO_STATIC_ASSERT((Meta::IsWidget<TChildWidgets> && ...),
             "Похоже, что не все дети в контейнере (SWidgetContainer) являются виджетами (SWidget)\n"

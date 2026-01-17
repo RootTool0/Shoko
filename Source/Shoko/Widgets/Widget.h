@@ -10,7 +10,7 @@ namespace Shoko
     template<typename TDerivedWidget>
     class SWidget : public FWidgetBase
     {
-        SHOKO_GENERATED_BODY()
+        SHOKO_GENERATED_BODY_TEMPLATE(1)
         
     public:
         constexpr SWidget() : FWidgetBase(TDerivedWidget::GUTID) {}
