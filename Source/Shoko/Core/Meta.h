@@ -61,8 +61,8 @@ namespace Shoko
         template <typename T> struct AddRValueReferencePrivate       { using Type = T&&; };
         template <>           struct AddRValueReferencePrivate<void> { using Type = void; };
         template <typename T> using AddRValueReference = typename AddRValueReferencePrivate<T>::Type;
-        template <typename T> AddRValueReference<T> DeclVal() noexcept;
-        
+        template <typename T> AddRValueReference<T> DeclVal() noexcept {}
+
         template<typename T> struct IsLValueReferencePrivate     : FalseType {};
         template<typename T> struct IsLValueReferencePrivate<T&> : TrueType  {};
         template<typename T> inline constexpr bool IsLValueReference = IsLValueReferencePrivate<T>::Value;
@@ -194,10 +194,8 @@ namespace Shoko
         template <typename Func, typename Tuple, size_t... Indices> constexpr decltype(auto) ApplyPrivate(Func&& InFunc, Tuple&& InTuple, IndexSequence<Indices...>) { return Forward<Func>(InFunc)(InTuple.template Get<Indices>()...); }
         template <typename Func, typename Tuple> constexpr decltype(auto) Apply(Func&& InFunc, Tuple&& InTuple) { return ApplyPrivate(Forward<Func>(InFunc), Forward<Tuple>(InTuple), MakeIndexSequence<RemoveReference<Tuple>::Size>{} ); }
 
-        template <typename T, typename Func, typename = void> struct TryCallPrivate                                                          : FalseType {};
-        template <typename T, typename Func>                  struct TryCallPrivate<T, Func, Void<decltype(DeclVal<Func>()(DeclVal<T&>()))>> : TrueType  {};
-        template <typename T, typename Func> constexpr void TryCall(T& Obj, Func&& InFunc) { if constexpr (TryCallPrivate<T, Func>::Value) InFunc(Obj); }
-        
+        template <typename T, typename Func, typename = void> struct HasMethod                                                          : FalseType {};
+        template <typename T, typename Func>                  struct HasMethod<T, Func, Void<decltype(DeclVal<Func>()(DeclVal<T&>()))>> : TrueType  {};
         /*
         template<typename T> struct IsTemplateSpec : std::false_type {};
         template<template<typename...> class T, typename... Args>

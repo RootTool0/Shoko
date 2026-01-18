@@ -69,7 +69,7 @@ auto RootWidget = SNew<SWidgetContainer>
         .SetColor(FColor(255, 255, 255)),
     
     SNew<SBoxWidget>()
-        .SetPosition(0, 0)
+        .SetPosition(1, 1)
         .SetSize(10, 10)
         .SetColor(FColor(0, 0, 0)),
 
@@ -138,7 +138,7 @@ void ThePerfectAlgorithm(const void* JustPointer)
         {
             while (WidgetBasePtr->LocalGUTID == 0) ++WidgetBasePtr;
             
-            Reflection::Call(WidgetBasePtr, [&](auto& Widget)
+            Reflection::ForEachWidget(WidgetBasePtr, [&](auto& Widget)
             {
                 // std::cout << typeid(Widget).name() << '\n';
                 Widget.Render();
@@ -178,45 +178,40 @@ int main()
             if(HoveredWidget != CurrentWidget)
             {
                 if(HoveredWidget)
-                    Reflection::Call(HoveredWidget, [&](auto& Widget)
+                    Reflection::ForEachWidget(HoveredWidget, [&](auto& Widget)
                     {
-                        Meta::TryCall(Widget, [](auto& CalledWidget) -> decltype(CalledWidget.CallOnUnhover()) { CalledWidget.CallOnUnhover(); });
+                        if constexpr (SHOKO_REFLECTION_HAS_METHOD(Widget, CallOnUnhover)) Widget.CallOnUnhover();
                     });
                 
                 HoveredWidget = CurrentWidget;
                 
                 if(HoveredWidget)
-                    Reflection::Call(HoveredWidget, [&](auto& Widget)
+                    Reflection::ForEachWidget(HoveredWidget, [&](auto& Widget)
                     {
-                        Meta::TryCall(Widget, [](auto& CalledWidget) -> decltype(CalledWidget.CallOnHover()) { CalledWidget.CallOnHover(); });
+                        if constexpr (SHOKO_REFLECTION_HAS_METHOD(Widget, CallOnHover)) Widget.CallOnHover();
                     });
             }
+            
             if(FShokoInput::IsMouseWasPressed(EMouseButton::Left))
             {
                 PressedWidget = CurrentWidget;
                 if(PressedWidget)
                 {
-                    Reflection::Call(PressedWidget, [&](auto& W)
+                    Reflection::ForEachWidget(PressedWidget, [&](auto& Widget)
                     {
-                        Meta::TryCall(W, [](auto& CalledWidget) -> decltype(CalledWidget.CallOnMouseDown()) { CalledWidget.CallOnMouseDown(); });
+                        if constexpr (SHOKO_REFLECTION_HAS_METHOD(Widget, CallOnMouseDown)) Widget.CallOnMouseDown();
                     });
                 }
             }
+            
             if(FShokoInput::IsMouseWasReleased(EMouseButton::Left))
             {
                 if(PressedWidget)
                 {
-                    Reflection::Call(PressedWidget, [&](auto& Widget)
+                    Reflection::ForEachWidget(PressedWidget, [&](auto& Widget)
                     {
-                        Meta::TryCall(Widget, [](auto& CalledWidget) -> decltype(CalledWidget.CallOnMouseUp()) { CalledWidget.CallOnMouseUp(); });
+                        if constexpr (SHOKO_REFLECTION_HAS_METHOD(Widget, CallOnMouseUp)) Widget.CallOnMouseUp();
                     });
-
-                    if(PressedWidget == CurrentWidget)
-                    {
-                        Reflection::Call(PressedWidget, [&](auto& Widget) {
-                            Meta::TryCall(Widget, [](auto& CalledWidget) -> decltype(CalledWidget.CallOnClicked()) { CalledWidget.CallOnClicked(); });
-                        });
-                    }
 
                     PressedWidget = nullptr;
                 }

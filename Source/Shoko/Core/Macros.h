@@ -22,3 +22,5 @@ private:
 // Я знаю, звучит странно - но мне нравится
 
 #define SHOKO_CHECK_ALIAS_EXISTS(Alias) static_assert(Shoko::Meta::IsDefined<Shoko::Alias>, "Алиас " #Alias " не существует");
+
+#define SHOKO_REFLECTION_HAS_METHOD(Obj, MethodName) Reflection::HasMethod<decltype(Obj)>([](auto& x) -> decltype(x.MethodName()) {})
