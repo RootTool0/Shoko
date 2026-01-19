@@ -1,13 +1,11 @@
 ﻿#pragma once
 
-#include <utility>
-
 #include "Aliases.h"
-#include "Widgets/WidgetBase.h"
 
 namespace Shoko
 {
     class FWidgetBase;
+    
     template<typename TDerivedWidget>
     class SWidget;
     

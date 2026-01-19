@@ -4,6 +4,7 @@
 #include "Core/New.h"
 #include "Widgets.h"
 #include "Window.h"
+#include "Input.h"
 
 namespace Shoko
 {

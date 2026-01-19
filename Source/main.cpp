@@ -1,65 +1,31 @@
-﻿#include "Input.h"
+﻿#include "Experimental.h"
 #include "Shoko/Shoko.h"
 
 using namespace Shoko;
 
-void TestOnHover1()
-{
-    printf("[1] Hover\n");
-}
+void TestOnMouseUp1();
+void TestOnMouseUp2();
 
-void TestOnUnhover1()
-{
-    printf("[1] Unhover\n");
-}
-
-void TestOnMouseDown1()
-{
-    printf("[1] Mouse Down\n");
-}
-
-void TestOnMouseUp1()
-{
-    printf("[1] Mouse Up\n");
-}
-
-void TestOnHover2()
-{
-    printf("[2] Hover\n");
-}
-
-void TestOnUnhover2()
-{
-    printf("[2] Unhover\n");
-}
-
-void TestOnMouseDown2()
-{
-    printf("[2] Mouse Down\n");
-}
-
-void TestOnMouseUp2()
-{
-    printf("[2] Mouse Up\n");
-}
-
-auto RootWidget = SNew<SWidgetContainer>
+auto RootWidget1 = SNew<SWidgetContainer>
 (
     SNew<SButton>()
         .SetPosition(100, 200)
         .SetSize(200, 200)
-        .OnHover(&TestOnHover1)
-        .OnUnhover(&TestOnUnhover1)
-        .OnMouseDown(&TestOnMouseDown1)
         .OnMouseUp(&TestOnMouseUp1)
         .SetColor(FColor(255, 50, 50)),
-            
+
+    SNew<SBoxWidget>()
+        .SetPosition(1920-10, 0)
+        .SetSize(10, 10)
+        .SetColor(FColor(255, 0, 0))
+)
+.SetSize(1000, 700);
+
+auto RootWidget2 = SNew<SWidgetContainer>
+(
     SNew<SButton>()
         .SetPosition(400, 200)
         .SetSize(200, 200)
-        .OnHover(&TestOnHover2)
-        .OnUnhover(&TestOnUnhover2)
-        .OnMouseDown(&TestOnMouseDown2)
         .OnMouseUp(&TestOnMouseUp2)
         .SetColor(FColor(50, 50, 255)),
     
@@ -87,148 +53,143 @@ auto RootWidget = SNew<SWidgetContainer>
         .SetPosition(1920-10, 1080-10)
         .SetSize(10, 10)
         .SetColor(FColor(255, 255, 0))
-);
+)
+.SetSize(1000, 700);
 
-#include <iostream>
+bool bLol;
+
+void TestOnMouseUp1()
+{
+    printf("[1] Mouse Up\n");
+    bLol = false;
+}
+
+void TestOnMouseUp2()
+{
+    printf("[2] Mouse Up\n");
+    bLol = true;
+}
+
 #include <chrono>
-#include <cmath>
-#include <iomanip>
-
-std::uintptr_t Global = reinterpret_cast<std::uintptr_t>(&RootWidget);
-
-template <typename T>
-void printPtr(T* InPtr)
-{
-    if(!InPtr)
-    {
-        std::cout << "nullptr (nullptr)\n";
-        return;
-    }
-    
-    std::uintptr_t AddressValue = reinterpret_cast<std::uintptr_t>(InPtr);
-    std::cout << std::hex << InPtr << std::dec << " (" << AddressValue - Global << ")\n";
-}
-
-template <typename T>
-void hexDump(const T& obj)
-{
-    const auto* Bytes = reinterpret_cast<const uint8*>(&obj);
-    const size_t Size = sizeof(T);
-
-    std::cout << "--- Memory Dump ---" << '\n';
-    std::cout << "Type: " << typeid(T).name() << '\n';
-    std::cout << "Size: " << Size << " bytes" << '\n';
-    std::cout << "Start: "; printPtr(&obj);
-    std::cout << "Data: ";
-    
-    for(size_t i = 0; i < Size; ++i)
-        std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(Bytes[i]) << " ";
-    
-    std::cout << std::dec << "\n-------------------\n";
-}
-
-void ThePerfectAlgorithm(const void* JustPointer)
-{
-    const FWidgetBase* WidgetBasePtr = static_cast<const FWidgetBase*>(JustPointer);
-    if(const SWidgetContainer<>* Container = Cast<SWidgetContainer<>>(WidgetBasePtr))
-    {
-        WidgetBasePtr += sizeof(SWidgetContainer<>);
-
-        for(int i = 0; i < Container->ChildWidgetsCount; ++i)
-        {
-            while (WidgetBasePtr->LocalGUTID == 0) ++WidgetBasePtr;
-            
-            Reflection::ForEachWidget(WidgetBasePtr, [&](auto& Widget)
-            {
-                // std::cout << typeid(Widget).name() << '\n';
-                Widget.Render();
-                WidgetBasePtr += sizeof(decltype(Widget));
-            });
-        }
-    }
-}
-
-FWidgetBase* HoveredWidget = nullptr;
-FWidgetBase* PressedWidget = nullptr;
 
 int main()
 {
-    hexDump(RootWidget);
-    
     FShokoRenderer::Initialize();
     FShokoInput::Initialize();
     
     auto Window = SWindow()
-        .SetSize(FUIntVector2D(1920, 1080))
-        .SetTitle("Hello From Shoko! [SDL2]");
-    RootWidget.SetSize(1920, 1080);
-    
+        .SetSize(FUIntVector2D(1000, 700))
+        .SetTitle("Shoko - Compile-time UI Framework [FShokoRenderer Demo]");
+    RootWidget2.SetSize(1000, 700);
     Window.ActivateRenderContext();
     
     auto LastTime = std::chrono::high_resolution_clock::now();
     uint64 Time = 0;
     while(true)
     {
-        FInputEvent InputEvent = FShokoInput::PullEvents();
-        if(InputEvent.Key == EKey::Window_Close) break;
+        if(FShokoInput::PullEvents().Key == EKey::Window_Close) break;
         
+        Experimental::TestMouseSystem(bLol ? RootWidget1.HitTest(FShokoInput::GetMousePosition()) : RootWidget2.HitTest(FShokoInput::GetMousePosition()));
+        // RootWidget2.Get<0>().SetPosition(FShokoInput::GetMousePosition().X, FShokoInput::GetMousePosition().Y);
+        
+        FColor BackgroundColor = FColor::FromHex(0x1E1B1DFF);
+        FShokoRenderer::PreRender();
+        FShokoRenderer::Fill(BackgroundColor);
+        Experimental::ThePerfectAlgorithm(bLol ? static_cast<const void*>(&RootWidget1) : static_cast<const void*>(&RootWidget2));
+        FShokoRenderer::PostRender();
+        
+        /*
+        FShokoRenderer::PreRender();
         {
-            FWidgetBase* CurrentWidget = RootWidget.HitTest(FShokoInput::GetMousePosition());
-            
-            if(HoveredWidget != CurrentWidget)
-            {
-                if(HoveredWidget)
-                    Reflection::ForEachWidget(HoveredWidget, [&](auto& Widget)
-                    {
-                        if constexpr (SHOKO_REFLECTION_HAS_METHOD(Widget, CallOnUnhover)) Widget.CallOnUnhover();
-                    });
-                
-                HoveredWidget = CurrentWidget;
-                
-                if(HoveredWidget)
-                    Reflection::ForEachWidget(HoveredWidget, [&](auto& Widget)
-                    {
-                        if constexpr (SHOKO_REFLECTION_HAS_METHOD(Widget, CallOnHover)) Widget.CallOnHover();
-                    });
-            }
-            
-            if(FShokoInput::IsMouseWasPressed(EMouseButton::Left))
-            {
-                PressedWidget = CurrentWidget;
-                if(PressedWidget)
-                {
-                    Reflection::ForEachWidget(PressedWidget, [&](auto& Widget)
-                    {
-                        if constexpr (SHOKO_REFLECTION_HAS_METHOD(Widget, CallOnMouseDown)) Widget.CallOnMouseDown();
-                    });
-                }
-            }
-            
-            if(FShokoInput::IsMouseWasReleased(EMouseButton::Left))
-            {
-                if(PressedWidget)
-                {
-                    Reflection::ForEachWidget(PressedWidget, [&](auto& Widget)
-                    {
-                        if constexpr (SHOKO_REFLECTION_HAS_METHOD(Widget, CallOnMouseUp)) Widget.CallOnMouseUp();
-                    });
+            FColor BackgroundColor = FColor::FromHex(0x1E1B1DFF);
+            FColor PanelColor      = FColor::FromHex(0x2C272AFF);
+            FColor AccentColor     = FColor::FromHex(0xC8A3B0FF);
+            FColor TextPrimary     = FColor::FromHex(0xD8D3D6FF);
+            FColor AccentHover     = FColor::FromHex(0xD6B1BDFF);
 
-                    PressedWidget = nullptr;
-                }
-            }
             
-            // RootWidget.Get<5>().SetPosition(FShokoInput::GetMousePosition().X, FShokoInput::GetMousePosition().Y);
-            // printPtr(Test);
+            // ------------------------------------------
+            // 1. BASE: Fill, DrawLine, DrawArc
+            // ------------------------------------------
+            FShokoRenderer::Fill(BackgroundColor);
+            FShokoRenderer::DrawLine(FLocation(20, 20), FLocation(980, 20), AccentColor, 2); // Горизонтальный разделитель
+            FShokoRenderer::DrawArc(FLocation(950, 650), 40, FAngle::FromDegrees(180), FAngle::FromDegrees(270), AccentColor, 5, EShokoRendererBorderType::Outside);
+
+
+            // ------------------------------------------
+            // 2. RECT: DrawRect, DrawRectBorder
+            // ------------------------------------------
+            FShokoRenderer::DrawRect(FLocation(50, 50), FSize(150, 100), PanelColor); // Залитый прямоугольник
+            FShokoRenderer::DrawRectBorder(FLocation(250, 50), FSize(150, 100), AccentColor, 3, EShokoRendererBorderType::Inside);
+
+
+            // ------------------------------------------
+            // 3. ROUNDED RECT: DrawRoundedRect, DrawRoundedRectBorder
+            // ------------------------------------------
+            FShokoRenderer::DrawRoundedRect(FLocation(50, 180), FSize(150, 100), 15, PanelColor);
+            FShokoRenderer::DrawRoundedRectBorder(FLocation(250, 180), FSize(150, 100), 15, AccentColor, 3, EShokoRendererBorderType::Outside);
+
+
+            // ------------------------------------------
+            // 4. CIRCLE: DrawCircle, DrawCircleBorder
+            // ------------------------------------------
+            FShokoRenderer::DrawCircle(FLocation(125, 350), 50, PanelColor);
+            FShokoRenderer::DrawCircleBorder(FLocation(325, 350), 50, AccentColor, 3, EShokoRendererBorderType::Inside);
+
+
+            // ------------------------------------------
+            // 5. ELLIPSE: DrawEllipse, DrawEllipseBorder
+            // ------------------------------------------
+            FShokoRenderer::DrawEllipse(FLocation(125, 480), FSize(70, 40), PanelColor);
+            FShokoRenderer::DrawEllipseBorder(FLocation(325, 480), FSize(70, 40), AccentColor, 2, EShokoRendererBorderType::Outside);
+
+
+            // ------------------------------------------
+            // 6. CIRCLE SECTOR: DrawCircleSector, DrawCircleSectorBorder
+            // ------------------------------------------
+            FShokoRenderer::DrawCircleSector(FLocation(125, 620), 50, FAngle::FromDegrees(0), FAngle::FromDegrees(135), PanelColor);
+            FShokoRenderer::DrawCircleSectorBorder(FLocation(325, 620), 50, FAngle::FromDegrees(180), FAngle::FromDegrees(300), AccentColor, 3, EShokoRendererBorderType::Outside);
+
+
+            // ------------------------------------------
+            // 7. BEZIER: DrawQuadraticBezier, DrawCubicBezier
+            // ------------------------------------------
+            FShokoRenderer::DrawQuadraticBezier(FLocation(500, 50), FLocation(600, 150), FLocation(700, 50), AccentColor);
+            FShokoRenderer::DrawCubicBezier(FLocation(500, 200), FLocation(550, 300), FLocation(650, 100), FLocation(700, 200), AccentColor);
+
+
+            // ------------------------------------------
+            // 8. POLYGON: DrawPolygonBorder
+            // ------------------------------------------
+            TStaticArray<FLocation, 3> TrianglePoints =
+            {
+                FLocation(500, 400),
+                FLocation(600, 500),
+                FLocation(400, 500)
+            };
+            FShokoRenderer::DrawPolygonBorder<3>(TrianglePoints, AccentColor, 3, EShokoRendererBorderType::Inside);
+
+
+            // ------------------------------------------
+            // 9. PATH: DrawPath
+            // ------------------------------------------
+            TStaticArray<FLocation, 5> WavePoints =
+            {
+                FLocation(750, 400),
+                FLocation(800, 450),
+                FLocation(850, 400),
+                FLocation(900, 450),
+                FLocation(950, 400)
+            };
+            FShokoRenderer::DrawPath<5>(WavePoints, AccentColor, 2);
         }
         
-        FShokoRenderer::PreRender();
-        FShokoRenderer::Fill(FColor(30, 30, 120));
-        ThePerfectAlgorithm(&RootWidget);
         FShokoRenderer::PostRender();
+        */
         
         // auto EndTime = std::chrono::high_resolution_clock::now();
         // printf("FPS: %.2f\r", 1.0f / std::chrono::duration<float>(EndTime - LastTime).count());
-        // fflush(stdout);
+        fflush(stdout);
         // LastTime = EndTime;
         ++Time;
     }

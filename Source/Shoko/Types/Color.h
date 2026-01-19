@@ -12,9 +12,9 @@ namespace Shoko
         
         T R, G, B, A;
         
-        constexpr TColor() : R(0), G(0), B(0), A(255) {}
-        constexpr TColor(const T InScalar) : R(InScalar), G(InScalar), B(InScalar), A(InScalar) {}
-        constexpr TColor(const T InR, const T InG, const T InB) : R(InR), G(InG), B(InB), A(255) {}
+        constexpr TColor()                                                   : R(0), G(0), B(0), A(255) {}
+        constexpr TColor(const T InScalar)                                   : R(InScalar), G(InScalar), B(InScalar), A(InScalar) {}
+        constexpr TColor(const T InR, const T InG, const T InB)              : R(InR), G(InG), B(InB), A(255) {}
         constexpr TColor(const T InR, const T InG, const T InB, const T InA) : R(InR), G(InG), B(InB), A(InA) {}
         
         constexpr TColor operator+(const TColor& Other) const
@@ -94,6 +94,8 @@ namespace Shoko
         static FColor Error;
         uint16 ToRGB565() const { return ((R >> 3) << 11) | ((G >> 2) << 5) | (B >> 3); }
         uint32 ToARGB() const { return (static_cast<uint32>(A) << 24) | (static_cast<uint32>(R) << 16) | (static_cast<uint32>(G) << 8)  | (static_cast<uint32>(B)); }
+        
+        static constexpr FColor FromHex(uint32 InHEX) { return FColor((InHEX >> 24) & 0xFF, (InHEX >> 16) & 0xFF, (InHEX >> 8) & 0xFF, (InHEX >> 0) & 0xFF); }
     };
     
     inline FColor FColor::Red     = FColor(255,   0,   0);

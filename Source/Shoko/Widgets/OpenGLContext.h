@@ -42,7 +42,7 @@ namespace Shoko
 #else
         void Render() const
         {
-            FShokoRenderer::DrawRect(Geometry, FColor::Error);
+            FShokoRenderer::DrawRect(Geometry.Location, Geometry.Size, FColor::Error);
         }
 #endif
     };

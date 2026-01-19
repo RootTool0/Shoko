@@ -22,7 +22,7 @@ namespace Shoko
         
         void Render() const
         {
-            FShokoRenderer::DrawRect(Geometry, Color);
+            FShokoRenderer::DrawRect(Geometry.Location, Geometry.Size, Color);
         }
         
     protected:

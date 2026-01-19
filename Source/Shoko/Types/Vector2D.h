@@ -22,6 +22,8 @@ namespace Shoko
  
         constexpr TVector2D& operator+=(const TVector2D& Other) { X += Other.X; Y += Other.Y; return *this; }
         constexpr TVector2D& operator-=(const TVector2D& Other) { X -= Other.X; Y -= Other.Y; return *this; }
+        constexpr TVector2D& operator+=(T Scalar) { X += Scalar; Y += Scalar; return *this; }
+        constexpr TVector2D& operator-=(T Scalar) { X -= Scalar; Y -= Scalar; return *this; }
         
         constexpr bool operator==(const TVector2D& Other) const { return X == Other.X && Y == Other.Y; }
         constexpr bool operator!=(const TVector2D& Other) const { return !(*this == Other); }
@@ -31,4 +33,7 @@ namespace Shoko
     
     using FIntVector2D = TVector2D<int16>;
     using FUIntVector2D = TVector2D<uint16>;
+
+    using FLocation = TVector2D<int16>;
+    using FSize = TVector2D<uint16>;
 }
