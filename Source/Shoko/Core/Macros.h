@@ -13,11 +13,6 @@ public: \
     static constexpr GUTID StaticGUTID = __COUNTER__; \
 private:
 
-// template<> struct GetClassByGUTIDPrivate<TempVal> { using Type = ClassName; }; \
-// friend ClassName GetClassByGUTID(GUTID_Tag<GUTID>); \
-// static constexpr GUTID_t GUTID = __COUNTER__; \
-// friend ClassName* IdentifyWidget(Meta::IntToType<GUTID>) { return nullptr; } \
-
 // GUTID - Globally Unique Type Identifier
 // Я знаю, звучит странно - но мне нравится
 

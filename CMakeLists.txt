@@ -8,6 +8,7 @@ find_package(SDL2 REQUIRED CONFIG)
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(glad CONFIG REQUIRED)
+find_package(raylib REQUIRED)
 
 # Source
 file(GLOB_RECURSE ALL_FILES "Source/*")
@@ -18,6 +19,7 @@ target_link_libraries(Shoko PRIVATE
     glfw
     OpenGL::GL
 	glad::glad
+	raylib
 )
 
 target_compile_definitions(Shoko PRIVATE SDL_MAIN_HANDLED)

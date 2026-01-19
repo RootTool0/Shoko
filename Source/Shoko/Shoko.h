@@ -5,6 +5,8 @@
 #include "Widgets.h"
 #include "Window.h"
 #include "Input.h"
+#include "Types/Angle.h"
+#include "Types/StaticArray.h"
 
 namespace Shoko
 {

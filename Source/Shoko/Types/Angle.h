@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/Math.h"
+
 namespace Shoko
 {
     struct FAngle
@@ -14,8 +16,8 @@ namespace Shoko
         explicit constexpr FAngle()                : Data(0) {}
         explicit constexpr FAngle(uint8 InRawData) : Data(InRawData) {}
 
-        static constexpr FAngle FromDegrees(float InDegrees) { return FAngle(static_cast<unsigned char>(InDegrees >= 0 ? (InDegrees * DegreesToByte + 0.5f) : (InDegrees * DegreesToByte - 0.5f))); }
-        static constexpr FAngle FromRadians(float InRadians) { return FAngle(static_cast<unsigned char>(InRadians >= 0 ? (InRadians * RadiansToByte + 0.5f) : (InRadians * RadiansToByte - 0.5f))); }
+        static constexpr FAngle FromDegrees(float InDegrees) { return FAngle(static_cast<uint8>(InDegrees >= 0 ? (InDegrees * DegreesToByte + 0.5f) : (InDegrees * DegreesToByte - 0.5f))); }
+        static constexpr FAngle FromRadians(float InRadians) { return FAngle(static_cast<uint8>(InRadians >= 0 ? (InRadians * RadiansToByte + 0.5f) : (InRadians * RadiansToByte - 0.5f))); }
 
         float GetDegrees() const { return static_cast<float>(Data) * ByteToDegrees; }
         float GetRadians() const { return static_cast<float>(Data) * ByteToRadians; }

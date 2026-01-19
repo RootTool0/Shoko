@@ -3,7 +3,7 @@
 #include "Config.h"
 
 #if SHOKO_RENDERER == SHOKO_RENDERER_NONE
-#include "Renderer/None/None.h"
+#include "Renderer/None/NonePlatformRenderer.h"
 #endif
 
 #if SHOKO_RENDERER == SHOKO_RENDERER_SDL2
@@ -20,6 +20,10 @@
 
 #if SHOKO_RENDERER == SHOKO_RENDERER_HDMI
 #include "Renderer/HDMI/HDMIPlatformRenderer.h"
+#endif
+
+#if SHOKO_RENDERER == SHOKO_RENDERER_RayLib
+#include "Renderer/RayLib/RayLibPlatformRenderer.h"
 #endif
 
 SHOKO_CHECK_ALIAS_EXISTS(FShokoPlatformRenderer);

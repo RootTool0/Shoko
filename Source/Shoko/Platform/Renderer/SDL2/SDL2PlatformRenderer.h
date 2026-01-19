@@ -18,7 +18,6 @@ namespace Shoko
 #include "../RendererDeclaration.h"
         
     public:
-        // static bool MainLoop();
         static SDL_Renderer* SDLRenderer;
     };
 

@@ -9,7 +9,6 @@
 #include "Widgets/WidgetContainer.h"
 
 /*
-
 void TestOnHover1()
 {
     printf("[1] Hover\n");
@@ -162,10 +161,10 @@ namespace Shoko
             }
         }
 
-        inline FWidgetBase* HoveredWidget = nullptr;
-        inline FWidgetBase* PressedWidget = nullptr;
+        inline const FWidgetBase* HoveredWidget = nullptr;
+        inline const FWidgetBase* PressedWidget = nullptr;
 
-        inline void TestMouseSystem(FWidgetBase* CurrentWidget)
+        inline void TestMouseSystem(const FWidgetBase* CurrentWidget)
         {
             // FWidgetBase* CurrentWidget = RootWidget.HitTest(FShokoInput::GetMousePosition());
             

@@ -10,10 +10,12 @@
 #include "Window/SDL2/SDL2PlatformWindow.h"
 #endif
 
-/*
 #if SHOKO_WINDOW == SHOKO_WINDOW_OpenGL
-#include "Backends/OpenGL/ShokoOpenGLWindow.h"
+#include "Window/OpenGL/OpenGLPlatformWindow.h"
 #endif
-*/
+
+#if SHOKO_WINDOW == SHOKO_WINDOW_RayLib
+#include "Window/RayLib/RayLibPlatformWindow.h"
+#endif
 
 SHOKO_CHECK_ALIAS_EXISTS(FShokoPlatformWindow);
