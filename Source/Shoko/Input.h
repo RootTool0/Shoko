@@ -34,7 +34,7 @@ namespace Shoko
 
             CurrentMouseButtonsState = 0;
             if(FShokoPlatformInput::GetMouseLeftButton())   CurrentMouseButtonsState |= static_cast<uint8>(EMouseButton::Left);
-            if(FShokoPlatformInput::GetMouseMiddleButton()) CurrentMouseButtonsState |= static_cast<uint8>(EMouseButton::Right);
+            if(FShokoPlatformInput::GetMouseRightButton())  CurrentMouseButtonsState |= static_cast<uint8>(EMouseButton::Right);
             if(FShokoPlatformInput::GetMouseMiddleButton()) CurrentMouseButtonsState |= static_cast<uint8>(EMouseButton::Middle);
             
             return GetInputEvent();

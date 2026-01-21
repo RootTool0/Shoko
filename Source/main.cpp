@@ -10,22 +10,35 @@ bool bPage = false;
 void TestOnHover2()   { bPage = true; }
 void TestOnUnhover2() { bPage = false; }
 
-constexpr auto RootWidget = 
+void TestCheckBox(bool bValue) { std::cout << "CheckBox: " << (bValue ? "true" : "false") << '\n'; }
+void TestSlider(float Alpha) { std::cout << "Slider: " << Alpha << '\n'; }
+
+constexpr auto RootWidget = SNew<SWidgetContainer>(
+    SNew<SSlider>()
+        .SetPosition(100, 100)
+        .OnValueChangeFinished(&TestSlider),
+
+    SNew<SCheckBox>()
+        .SetPosition(200, 200)
+        .OnValueChanged(&TestCheckBox),
+        
     SNew<SButton>()
         .SetPosition(500, 0)
-        .SetSize(500, 700)
         .OnHover(&TestOnHover2)
         .OnUnhover(&TestOnUnhover2)
-        .SetColor(FColor(255, 50, 50, 0));
+)
+.SetSize(1000, 700);
 
 int main()
 {
+    Experimental::hexDump(RootWidget);
+    
     FShokoRenderer::Initialize();
     FShokoInput::Initialize();
     
     auto Window = SWindow()
         .SetSize(FUIntVector2D(1000, 700))
-        .SetTitle("Shoko - Compile-time UI Framework [Rendering Tech Demo]");
+        .SetTitle("Shoko - Compile-time UI Framework");
     Window.ActivateRenderContext();
     
     auto LastTime = std::chrono::high_resolution_clock::now();
@@ -35,7 +48,11 @@ int main()
         if(FShokoInput::PullEvents().Key == EKey::Window_Close) break;
         
         Experimental::TestMouseSystem(RootWidget.HitTest(FShokoInput::GetMousePosition()));
-        bPage ? Demo::AllPrimitives() : Demo::TestUI();
+        
+        FShokoRenderer::PreRender();
+        Demo::TestUI();
+        RootWidget.Render();
+        FShokoRenderer::PostRender();
         
         {
             auto EndTime = std::chrono::high_resolution_clock::now();

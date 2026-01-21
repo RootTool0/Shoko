@@ -194,6 +194,7 @@ namespace Shoko
 
         template <typename T, typename Func, typename = void> struct HasMethod                                                          : FalseType {};
         template <typename T, typename Func>                  struct HasMethod<T, Func, Void<decltype(DeclVal<Func>()(DeclVal<T&>()))>> : TrueType  {};
+        
         /*
         template<typename T> struct IsTemplateSpec : std::false_type {};
         template<template<typename...> class T, typename... Args>

@@ -97,7 +97,6 @@ namespace Shoko
         
         inline void TestUI()
         {
-            FShokoRenderer::PreRender();
             {
                 // -------------------------------------------------
                 // Colors
@@ -158,7 +157,7 @@ namespace Shoko
                 FShokoRenderer::DrawRoundedRect(FLocation(140, 220), FSize(140, 40), 8, Accent);
                 FShokoRenderer::DrawRoundedRect(FLocation(300, 220), FSize(140, 40), 8, PanelDark);
                 FShokoRenderer::DrawRoundedRectBorder(FLocation(300, 220), FSize(140, 40), 8, Border, 1, EShokoRendererBorderType::Inside);
-
+                
                 // -------------------------------------------------
                 // Toggles
                 // -------------------------------------------------
@@ -209,7 +208,6 @@ namespace Shoko
                     2
                 );
             }
-            FShokoRenderer::PostRender();
         }
     }
 }

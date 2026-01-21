@@ -1,9 +1,11 @@
 #include "Config.h"
+#include "Window.h"
 #if SHOKO_WINDOW == SHOKO_WINDOW_RayLib
 
 #include "RayLibPlatformWindow.h"
 #include "Types/Vector2D.h"
 
+#include <raylib.h>
 #include <iostream>
 
 using namespace Shoko;

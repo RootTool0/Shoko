@@ -1,7 +1,5 @@
 #pragma once
 
-#include <raylib.h>
-
 #include "Types/Vector2D.h"
 
 namespace Shoko

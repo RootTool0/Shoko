@@ -1,7 +1,6 @@
 #pragma once
 
 #include <raylib.h>
-
 #undef PI
 #undef DEG2RAD
 #undef RAD2DEG

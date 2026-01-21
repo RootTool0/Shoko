@@ -139,7 +139,7 @@ namespace Shoko
     
             std::cout << std::dec << "\n-------------------\n";
         }
-
+        
         inline void ThePerfectAlgorithm(const void* JustPointer)
         {
             const FWidgetBase* WidgetBasePtr = static_cast<const FWidgetBase*>(JustPointer);
@@ -160,7 +160,7 @@ namespace Shoko
                 }
             }
         }
-
+        
         inline const FWidgetBase* HoveredWidget = nullptr;
         inline const FWidgetBase* PressedWidget = nullptr;
 
@@ -184,6 +184,12 @@ namespace Shoko
                         if constexpr (SHOKO_REFLECTION_HAS_METHOD(Widget, CallOnHover)) Widget.CallOnHover();
                     });
             }
+            
+            if(PressedWidget)
+                Reflection::ForEachWidget(PressedWidget, [&](auto& Widget)
+                {
+                    if constexpr (SHOKO_REFLECTION_HAS_METHOD(Widget, CallOnMouseMove)) Widget.CallOnMouseMove();
+                });
             
             if(FShokoInput::IsMouseWasPressed(EMouseButton::Left))
             {

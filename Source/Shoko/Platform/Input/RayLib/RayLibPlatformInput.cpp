@@ -4,6 +4,8 @@
 
 #include "RayLibPlatformInput.h"
 
+#include <raylib.h>
+
 using namespace Shoko;
 
 EKey FShokoRayLibPlatformInput::Key = EKey::None;

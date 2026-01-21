@@ -18,4 +18,4 @@
 #include "Window/RayLib/RayLibPlatformWindow.h"
 #endif
 
-SHOKO_CHECK_ALIAS_EXISTS(FShokoPlatformWindow);
+// SHOKO_CHECK_ALIAS_EXISTS(FShokoPlatformWindow);

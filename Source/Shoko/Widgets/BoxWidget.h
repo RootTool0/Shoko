@@ -1,20 +1,18 @@
 ﻿#pragma once
 
-#include <iostream>
-
 #include "Widget.h"
 #include "Renderer.h"
 
 namespace Shoko
 {
-    class SBoxWidget : public SWidget<SBoxWidget>
+    class SBox : public SWidget<SBox>
     {
-        SHOKO_GENERATED_BODY(SBoxWidget)
+        SHOKO_GENERATED_BODY(SBox)
         
     public:        
-        constexpr SBoxWidget() = default;
+        constexpr SBox() = default;
         
-        constexpr SBoxWidget& SetColor(FColor InColor)
+        constexpr SBox& SetColor(FColor InColor)
         {
             Color = InColor;
             return *this;

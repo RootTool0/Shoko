@@ -3,7 +3,6 @@
 #include <string>
 
 #include "Platform/PlatformWindow.h"
-#include "Platform/PlatformRenderer.h"
 
 namespace Shoko
 {
