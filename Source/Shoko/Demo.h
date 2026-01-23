@@ -4,10 +4,25 @@
 #include "Types/Angle.h"
 #include "Types/Color.h"
 
+#include <chrono>
+
 namespace Shoko
 {
     namespace Demo
     {
+        inline auto LastTime = std::chrono::high_resolution_clock::now();
+        inline float MaxFPS = 0;
+        
+        inline void ShowFPS()
+        {
+            auto EndTime = std::chrono::high_resolution_clock::now();
+            float FPS = 1.0f / std::chrono::duration<float>(EndTime - LastTime).count();
+            if(FPS > MaxFPS) MaxFPS = FPS;
+            printf("FPS: %.2f (Max: %.2f)\r", FPS, MaxFPS);
+            fflush(stdout);
+            LastTime = EndTime;
+        }
+        
         inline void AllPrimitives()
         {
             FShokoRenderer::PreRender();

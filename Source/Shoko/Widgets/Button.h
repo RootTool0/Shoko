@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Styles.h"
+#include "Style.h"
 #include "Widget.h"
 #include "Types/Color.h"
 
@@ -59,14 +59,14 @@ namespace Shoko
             
             if((ButtonState & static_cast<uint8>(EButtonState::MouseDown)) != 0)
             {
-                FShokoRenderer::DrawRoundedRect(Geometry.Location, Geometry.Size, Radius, FShokoStyle::Action);
+                FShokoRenderer::DrawRoundedRect(Geometry.Location, Geometry.Size, Radius, FStyle::Action);
                 return;
             }
             
-            FShokoRenderer::DrawRoundedRect(Geometry.Location, Geometry.Size, Radius, FShokoStyle::BackgroundPanelDark);
+            FShokoRenderer::DrawRoundedRect(Geometry.Location, Geometry.Size, Radius, FStyle::BackgroundPanelDark);
             
             if((ButtonState & static_cast<uint8>(EButtonState::Hover)) != 0)
-                FShokoRenderer::DrawRoundedRectBorder(Geometry.Location, Geometry.Size, Radius, FShokoStyle::Border, 1, EShokoRendererBorderType::Inside);
+                FShokoRenderer::DrawRoundedRectBorder(Geometry.Location, Geometry.Size, Radius, FStyle::Border, 1, EShokoRendererBorderType::Inside);
             
             // FShokoRenderer::DrawRect(Geometry.Location, Geometry.Size, Color);
         }

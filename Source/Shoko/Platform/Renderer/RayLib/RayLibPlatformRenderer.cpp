@@ -38,7 +38,7 @@ void ApplyBorderToRect(Rectangle& Rect, float Thickness, EShokoRendererBorderTyp
 }
 
 #pragma region Init
-bool FShokoRayLibPlatformRenderer::Initialize() { return IsWindowReady(); }
+bool FShokoRayLibPlatformRenderer::Initialize() { SetTraceLogLevel(LOG_NONE); return IsWindowReady(); }
 void FShokoRayLibPlatformRenderer::Deinitialize() {}
 void FShokoRayLibPlatformRenderer::PreRender() { BeginDrawing(); }
 void FShokoRayLibPlatformRenderer::PostRender() { EndDrawing(); }
@@ -72,17 +72,16 @@ void FShokoRayLibPlatformRenderer::DrawRectBorder(FLocation TopLeft, FSize Size,
 #pragma region Rounded Rect
 void FShokoRayLibPlatformRenderer::DrawRoundedRect(FLocation TopLeft, FSize Size, uint8 CornerRadius, FColor Color)
 {
-    Rectangle rect = { (float)TopLeft.X, (float)TopLeft.Y, (float)Size.X, (float)Size.Y };
-    // roundness: 0.0 to 1.0 (процент от меньшей стороны)
-    float roundness = (float)CornerRadius / (Size.Y / 2.0f); 
+    Rectangle rect = { static_cast<float>(TopLeft.X), static_cast<float>(TopLeft.Y), static_cast<float>(Size.X), static_cast<float>(Size.Y) };
+    float roundness = static_cast<float>(CornerRadius) / (static_cast<float>(Size.Y) / 2.f); 
     DrawRectangleRounded(rect, roundness, 16, TO_RL_COLOR(Color));
 }
 
 void FShokoRayLibPlatformRenderer::DrawRoundedRectBorder(FLocation TopLeft, FSize Size, uint8 CornerRadius, FColor Color, uint8 BorderThickness, EShokoRendererBorderType BorderType)
 {
-    Rectangle rect = { (float)TopLeft.X, (float)TopLeft.Y, (float)Size.X, (float)Size.Y };
-    ApplyBorderToRect(rect, (float)BorderThickness, BorderType);
-    float roundness = (rect.height > 0) ? (float)CornerRadius / (rect.height * 0.5f) : 0.0f;
+    Rectangle rect = { static_cast<float>(TopLeft.X), static_cast<float>(TopLeft.Y), static_cast<float>(Size.X), static_cast<float>(Size.Y) };
+    ApplyBorderToRect(rect, BorderThickness, BorderType);
+    float roundness = (rect.height > 0) ? static_cast<float>(CornerRadius) / (rect.height * 0.5f) : 0.0f;
     DrawRectangleRoundedLines(rect, roundness, 16, TO_RL_COLOR(Color));
 }
 #pragma endregion
@@ -103,11 +102,11 @@ void FShokoRayLibPlatformRenderer::DrawCircleBorder(FLocation Center, uint8 Radi
 #pragma region Ellipse
 void FShokoRayLibPlatformRenderer::DrawEllipse(FLocation Center, FSize Size, FColor Color)
 {
-    ::DrawEllipse((int)Center.X, (int)Center.Y, Size.X / 2.0f, Size.Y / 2.0f, TO_RL_COLOR(Color));
+    ::DrawEllipse(Center.X, Center.Y, static_cast<float>(Size.X) / 2.f, static_cast<float>(Size.Y) / 2.f, TO_RL_COLOR(Color));
 }
 void FShokoRayLibPlatformRenderer::DrawEllipseBorder(FLocation Center, FSize Size, FColor Color, uint8 BorderThickness, EShokoRendererBorderType BorderType)
 {
-    DrawEllipseLines((int)Center.X, (int)Center.Y, Size.X / 2.0f, Size.Y / 2.0f, TO_RL_COLOR(Color));
+    DrawEllipseLines(Center.X, Center.Y, static_cast<float>(Size.X) / 2.f, static_cast<float>(Size.Y) / 2.f, TO_RL_COLOR(Color));
 }
 #pragma endregion
 
@@ -132,6 +131,16 @@ void FShokoRayLibPlatformRenderer::DrawCubicBezier(FLocation A, FLocation B, FLo
 {
     DrawSplineSegmentBezierCubic(TO_RL_V2(A), TO_RL_V2(B), TO_RL_V2(C), TO_RL_V2(D), 2.0f, TO_RL_COLOR(Color));
 }
+#pragma endregion
+
+#pragma region Text
+
+void FShokoRayLibPlatformRenderer::DrawText(FLocation TopLeft, const char* Text, uint16 Len, uint8 Size, FColor Color)
+{
+    if(!Text || Len == 0) return;
+    ::DrawText(TextFormat("%.*s", Len, Text), TopLeft.X, TopLeft.Y, Size, TO_RL_COLOR(Color));
+}
+
 #pragma endregion
 
 #endif

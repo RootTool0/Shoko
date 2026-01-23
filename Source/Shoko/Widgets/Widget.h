@@ -15,28 +15,26 @@ namespace Shoko
     public:
         constexpr SWidget() : FWidgetBase(TDerivedWidget::StaticGUTID) {}
         
-        constexpr TDerivedWidget& SetSize(const int16 InWidth, const int16 InHeight)
+        constexpr TDerivedWidget& SetSize(FSize Size)
         {
-            Geometry.Size.X = InWidth; 
-            Geometry.Size.Y = InHeight;
+            Geometry.Size = Size; 
             return static_cast<TDerivedWidget&>(*this);
         }
         
-        constexpr TDerivedWidget& SetPosition(const int16 InX, const int16 InY)
+        constexpr TDerivedWidget& SetLocation(FLocation Location)
         {
-            Geometry.Location.X = InX;
-            Geometry.Location.Y = InY;
+            Geometry.Location = Location;
             return static_cast<TDerivedWidget&>(*this);
         }
-    
+        
         constexpr int16 GetX() const      { return Geometry.Location.X; }
         constexpr int16 GetY() const      { return Geometry.Location.Y; }
         constexpr int16 GetWidth() const  { return Geometry.Size.X; }
         constexpr int16 GetHeight() const { return Geometry.Size.Y; }
-    
+        
         // constexpr void Render() const { static_cast<const TDerivedWidget*>(this)->Render(); }
         constexpr void Render() const { TDerivedWidget::Render(); }
-        constexpr const FWidgetBase* HitTest(FIntVector2D InMouseLocation) const { return Geometry.Contains(InMouseLocation) ? static_cast<const FWidgetBase*>(this) : nullptr; }
+        constexpr const FWidgetBase* HitTest(FLocation InMouseLocation) const { return Geometry.Contains(InMouseLocation) ? static_cast<const FWidgetBase*>(this) : nullptr; }
         
     protected:
         FGeometry Geometry;

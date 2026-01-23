@@ -46,14 +46,14 @@ namespace Shoko
         
         static bool HasModifier(EModifier Mask) { return (InputEvent.Modifiers & static_cast<uint8>(Mask)) != 0; }
 
-        static constexpr FIntVector2D GetMousePosition() { return CurrentMousePosition; }
-        static constexpr FIntVector2D GetMouseDelta() { return CurrentMousePosition - LastMousePosition; }
+        static constexpr FLocation GetMousePosition() { return CurrentMousePosition; }
+        static constexpr FLocation GetMouseDelta() { return CurrentMousePosition - LastMousePosition; }
         
         static constexpr FInputEvent GetInputEvent() { return InputEvent; }
         
     private:
-        static FIntVector2D CurrentMousePosition;
-        static FIntVector2D LastMousePosition;
+        static FLocation CurrentMousePosition;
+        static FLocation LastMousePosition;
         
         static uint8 CurrentMouseButtonsState;
         static uint8 LastMouseButtonsState;

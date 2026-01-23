@@ -25,7 +25,7 @@ namespace Shoko
         
         template<typename Func, GUTID... InGUTIDs>
         void ForEachWidgetPrivate(const FWidgetBase* Ptr, Func&& InFunc, Meta::IndexSequence<InGUTIDs...>) { (TryCallMethod<InGUTIDs>(Ptr, InFunc) || ...); }
-    
+        
         template<typename Func>
         void ForEachWidget(const FWidgetBase* Ptr, Func&& InFunc) { ForEachWidgetPrivate(Ptr, InFunc, Meta::MakeIndexSequence<__COUNTER__>{}); }
         

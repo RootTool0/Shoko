@@ -2,7 +2,7 @@
 
 #include "Input.h"
 #include "Renderer.h"
-#include "Styles.h"
+#include "Style.h"
 #include "Widget.h"
 
 namespace Shoko
@@ -47,8 +47,8 @@ namespace Shoko
             const uint8 Radius = Geometry.Size.GetMin() / 2;
             const uint16 Width = Geometry.Size.X * Alpha / 255;
 
-            FShokoRenderer::DrawRoundedRect(Geometry.Location, Geometry.Size, Radius, FShokoStyle::BackgroundPanelDark);
-            FShokoRenderer::DrawRoundedRect(Geometry.Location, FSize(Width, Geometry.Size.Y), Radius, FShokoStyle::Action);
+            FShokoRenderer::DrawRoundedRect(Geometry.Location, Geometry.Size, Radius, FStyle::BackgroundPanelDark);
+            FShokoRenderer::DrawRoundedRect(Geometry.Location, FSize(Width, Geometry.Size.Y), Radius, FStyle::Action);
         }
         
     private:

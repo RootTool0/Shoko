@@ -7,6 +7,7 @@
 #include "Input.h"
 #include "Types/Angle.h"
 #include "Types/StaticArray.h"
+#include "Types/StringFixed.h"
 
 namespace Shoko
 {

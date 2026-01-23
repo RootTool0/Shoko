@@ -50,10 +50,10 @@ bool FShokoRayLibPlatformInput::GetRightCtrl()  { return IsKeyDown(KEY_RIGHT_CON
 bool FShokoRayLibPlatformInput::GetLeftCmd()    { return IsKeyDown(KEY_LEFT_SUPER); }
 bool FShokoRayLibPlatformInput::GetRightCmd()   { return IsKeyDown(KEY_RIGHT_SUPER); }
 
-FIntVector2D FShokoRayLibPlatformInput::GetMousePosition()
+FLocation FShokoRayLibPlatformInput::GetMousePosition()
 {
     Vector2 pos = ::GetMousePosition();
-    return FIntVector2D(static_cast<int16>(pos.x), static_cast<int16>(pos.y));
+    return FLocation(static_cast<int16>(pos.x), static_cast<int16>(pos.y));
 }
 bool FShokoRayLibPlatformInput::GetMouseLeftButton()   { return IsMouseButtonDown(MOUSE_BUTTON_LEFT); }
 bool FShokoRayLibPlatformInput::GetMouseRightButton()  { return IsMouseButtonDown(MOUSE_BUTTON_RIGHT); }

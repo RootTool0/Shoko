@@ -22,7 +22,7 @@ bool FShokoNonePlatformInput::GetRightCtrl()  { return false; }
 bool FShokoNonePlatformInput::GetLeftCmd()    { return false; }
 bool FShokoNonePlatformInput::GetRightCmd()   { return false; }
 
-FIntVector2D FShokoNonePlatformInput::GetMousePosition() { return FIntVector2D(0, 0); }
+FLocation FShokoNonePlatformInput::GetMousePosition() { return FLocation(0, 0); }
 bool FShokoNonePlatformInput::GetMouseLeftButton()   { return false; }
 bool FShokoNonePlatformInput::GetMouseRightButton()  { return false; }
 bool FShokoNonePlatformInput::GetMouseMiddleButton() { return false; }

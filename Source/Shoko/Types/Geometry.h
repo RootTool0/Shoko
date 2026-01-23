@@ -24,6 +24,6 @@ namespace Shoko
         constexpr uint16 Width()  const { return Size.X; }
         constexpr uint16 Height() const { return Size.Y; }
         
-        constexpr bool Contains(FIntVector2D Point) const { return Point.X >= Location.X && Point.X < Right() && Point.Y >= Location.Y && Point.Y < Bottom(); }
+        constexpr bool Contains(FLocation InLocation) const { return InLocation.X >= Location.X && InLocation.X < Right() && InLocation.Y >= Location.Y && InLocation.Y < Bottom(); }
     };
 }

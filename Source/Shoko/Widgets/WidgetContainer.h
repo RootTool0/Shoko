@@ -47,7 +47,7 @@ namespace Shoko
             return ChildWidgets.template Get<Index>();
         }
         
-        constexpr const FWidgetBase* HitTest(FIntVector2D InMouseLocation) const
+        constexpr const FWidgetBase* HitTest(FLocation InMouseLocation) const
         {
             if(!Super::HitTest(InMouseLocation)) return nullptr;
             
@@ -55,7 +55,7 @@ namespace Shoko
             Meta::Apply([&](const auto&... Child) { ((FoundWidget = Child.HitTest(InMouseLocation), FoundWidget != nullptr) || ...); }, ChildWidgets);
             return FoundWidget ? FoundWidget : static_cast<const FWidgetBase*>(this);
         }
-        constexpr FWidgetBase* HitTest(FIntVector2D InMouseLocation) { return const_cast<FWidgetBase*>(static_cast<const SWidgetContainer*>(this)->HitTest(InMouseLocation)); }
+        constexpr FWidgetBase* HitTest(FLocation InMouseLocation) { return const_cast<FWidgetBase*>(static_cast<const SWidgetContainer*>(this)->HitTest(InMouseLocation)); }
         
         constexpr void Render() const { Meta::Apply([&](const auto&... Child) { (Child.Render(), ...); }, ChildWidgets); }
     };

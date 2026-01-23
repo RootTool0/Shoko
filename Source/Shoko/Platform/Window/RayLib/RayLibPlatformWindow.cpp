@@ -21,7 +21,13 @@ bool FShokoSDL2PlatformWindow::Initialize()
         std::cerr << "RayLib InitWindow error: Не удалось создать окно или контекст OpenGL\n";
         return false;
     }
-
+    
+    {
+        Image Icon = LoadImage("icon.png");
+        SetWindowIcon(Icon);
+        UnloadImage(Icon);
+    }
+    
     return true;
 }
 

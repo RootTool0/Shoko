@@ -1,33 +1,68 @@
 ﻿#include "Shoko/Shoko.h"
-#include "Demo.h"
 #include "Experimental.h"
-
-#include <chrono>
+#include "Demo.h"
 
 using namespace Shoko;
 
-bool bPage = false;
-void TestOnHover2()   { bPage = true; }
-void TestOnUnhover2() { bPage = false; }
+uint8 Value = 0;
+TStringFixed<32> ResultText;
 
-void TestCheckBox(bool bValue) { std::cout << "CheckBox: " << (bValue ? "true" : "false") << '\n'; }
-void TestSlider(float Alpha) { std::cout << "Slider: " << Alpha << '\n'; }
+void UpdateBinaryResult()
+{
+    ResultText.Empty();
+    ResultText += "Result: ";
+    ResultText += TextFormat("%d", Value); 
+    
+    ResultText += " (0x";
+    ResultText += TextFormat("%02X", Value);
+    ResultText += ")";
+}
+
+void OnBitChanged(uint8 BitIndex, bool bValue)
+{
+    if(bValue) Value |= (1 << BitIndex);
+    else Value &= ~(1 << BitIndex);
+    UpdateBinaryResult();
+}
 
 constexpr auto RootWidget = SNew<SWidgetContainer>(
-    SNew<SSlider>()
-        .SetPosition(100, 100)
-        .OnValueChangeFinished(&TestSlider),
+    SNew<SRoundRect>()
+        .SetLocation(FLocation(24, 24))
+        .SetSize(FSize(976, 464))
+        .SetRadius(24)
+        .SetColor(FStyle::BackgroundPanel),
+    
+    SNew<SText>()
+        .SetText("BINARY TO DECIMAL")
+        .SetLocation(FLocation(340, 160))
+        .SetSize(32)
+        .SetColor(FStyle::Action),
+    
+    SNew<SCheckBox>().SetLocation(FLocation(278, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(7, bValue); }),
+    SNew<SCheckBox>().SetLocation(FLocation(338, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(6, bValue); }),
+    SNew<SCheckBox>().SetLocation(FLocation(398, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(5, bValue); }),
+    SNew<SCheckBox>().SetLocation(FLocation(458, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(4, bValue); }),
+    SNew<SCheckBox>().SetLocation(FLocation(518, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(3, bValue); }),
+    SNew<SCheckBox>().SetLocation(FLocation(578, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(2, bValue); }),
+    SNew<SCheckBox>().SetLocation(FLocation(638, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(1, bValue); }),
+    SNew<SCheckBox>().SetLocation(FLocation(698, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(0, bValue); }),
 
-    SNew<SCheckBox>()
-        .SetPosition(200, 200)
-        .OnValueChanged(&TestCheckBox),
-        
-    SNew<SButton>()
-        .SetPosition(500, 0)
-        .OnHover(&TestOnHover2)
-        .OnUnhover(&TestOnUnhover2)
+    SNew<SText>().SetLocation(FLocation(284, 268)).SetColor(FStyle::ActionDisabled).SetText("128"),
+    SNew<SText>().SetLocation(FLocation(350, 268)).SetColor(FStyle::ActionDisabled).SetText("64"),
+    SNew<SText>().SetLocation(FLocation(410, 268)).SetColor(FStyle::ActionDisabled).SetText("32"),
+    SNew<SText>().SetLocation(FLocation(472, 268)).SetColor(FStyle::ActionDisabled).SetText("16"),
+    SNew<SText>().SetLocation(FLocation(539, 268)).SetColor(FStyle::ActionDisabled).SetText("8"),
+    SNew<SText>().SetLocation(FLocation(599, 268)).SetColor(FStyle::ActionDisabled).SetText("4"),
+    SNew<SText>().SetLocation(FLocation(659, 268)).SetColor(FStyle::ActionDisabled).SetText("2"),
+    SNew<SText>().SetLocation(FLocation(719, 268)).SetColor(FStyle::ActionDisabled).SetText("1"),
+    
+    SNew<SText>()
+        .SetText(ResultText)
+        .SetLocation(FLocation(400, 320))
+        .SetSize(26)
+        .SetColor(FStyle::ActionHighlight)
 )
-.SetSize(1000, 700);
+.SetSize(FSize(1024, 512));
 
 int main()
 {
@@ -37,12 +72,11 @@ int main()
     FShokoInput::Initialize();
     
     auto Window = SWindow()
-        .SetSize(FUIntVector2D(1000, 700))
+        .SetSize(FSize(1024, 512))
         .SetTitle("Shoko - Compile-time UI Framework");
-    Window.ActivateRenderContext();
     
-    auto LastTime = std::chrono::high_resolution_clock::now();
-    float MaxFPS = 0;
+    UpdateBinaryResult();
+    
     while(true)
     {
         if(FShokoInput::PullEvents().Key == EKey::Window_Close) break;
@@ -50,18 +84,13 @@ int main()
         Experimental::TestMouseSystem(RootWidget.HitTest(FShokoInput::GetMousePosition()));
         
         FShokoRenderer::PreRender();
-        Demo::TestUI();
-        RootWidget.Render();
-        FShokoRenderer::PostRender();
-        
         {
-            auto EndTime = std::chrono::high_resolution_clock::now();
-            float FPS = 1.0f / std::chrono::duration<float>(EndTime - LastTime).count();
-            if(FPS > MaxFPS) MaxFPS = FPS;
-            printf("FPS: %.2f (Max: %.2f)\r", FPS, MaxFPS);
-            fflush(stdout);
-            LastTime = EndTime;
+            FShokoRenderer::Fill(FStyle::Background);
+            RootWidget.Render();
         }
+        FShokoRenderer::PostRender();
+
+        Demo::ShowFPS();
     }
     
     Window.Deinitialize();

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Renderer.h"
-#include "Styles.h"
+#include "Style.h"
 #include "Widget.h"
 
 namespace Shoko
@@ -26,11 +26,11 @@ namespace Shoko
         void Render() const
         {
             if(bValue)
-                FShokoRenderer::DrawRect(Geometry.Location, Geometry.Size, FShokoStyle::Action);
+                FShokoRenderer::DrawRect(Geometry.Location, Geometry.Size, FStyle::Action);
             else
             {
-                FShokoRenderer::DrawRect(Geometry.Location, Geometry.Size, FShokoStyle::BackgroundPanelDark);
-                FShokoRenderer::DrawRectBorder(Geometry.Location, Geometry.Size, FShokoStyle::ActionDisabled, 2, EShokoRendererBorderType::Inside);
+                FShokoRenderer::DrawRect(Geometry.Location, Geometry.Size, FStyle::BackgroundPanelDark);
+                FShokoRenderer::DrawRectBorder(Geometry.Location, Geometry.Size, FStyle::ActionDisabled, 2, EShokoRendererBorderType::Inside);
             }
         }
         

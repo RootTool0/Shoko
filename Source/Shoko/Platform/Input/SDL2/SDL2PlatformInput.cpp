@@ -50,11 +50,11 @@ bool FShokoSDL2PlatformInput::GetRightCtrl()  { return (Keymod & KMOD_RCTRL) != 
 bool FShokoSDL2PlatformInput::GetLeftCmd()    { return (Keymod & KMOD_LGUI) != 0; }
 bool FShokoSDL2PlatformInput::GetRightCmd()   { return (Keymod & KMOD_RGUI) != 0; }
 
-FIntVector2D FShokoSDL2PlatformInput::GetMousePosition()
+FLocation FShokoSDL2PlatformInput::GetMousePosition()
 {
     int X, Y;
     SDL_GetMouseState(&X, &Y);
-    return FIntVector2D(static_cast<int16>(X), static_cast<int16>(Y));
+    return FLocation(static_cast<int16>(X), static_cast<int16>(Y));
 }
 bool FShokoSDL2PlatformInput::GetMouseLeftButton()   { return (MouseMask & SDL_BUTTON_LMASK) != 0; }
 bool FShokoSDL2PlatformInput::GetMouseRightButton()  { return (MouseMask & SDL_BUTTON_RMASK) != 0; }
