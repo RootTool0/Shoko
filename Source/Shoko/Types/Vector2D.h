@@ -43,4 +43,5 @@ namespace Shoko
 
     using FLocation = TVector2D<int16>;
     using FSize = TVector2D<uint16>;
+    using FPadding = TVector2D<uint8>;
 }

@@ -10,16 +10,20 @@ namespace Shoko
     {
         static_assert(Meta::IsWidget<TChildWidget>, "SWidgetWrapper child must be SWidget");
 
+        using Super = SWidget<TDerivedWidget>;
+        
     public:
         TChildWidget ChildWidget;
         
         explicit constexpr SWidgetWrapper(TChildWidget&& InChildWidget) : ChildWidget(Meta::Move(InChildWidget)) {}
-        
-        constexpr const FWidgetBase* HitTest(int16 InMouseX, int16 InMouseY) const
-        {
-            if(!this->HitTest(InMouseX, InMouseY)) return nullptr;
 
-            const FWidgetBase* FoundWidget = ChildWidget.HitTest(InMouseX, InMouseY);
+        constexpr void Render() const { ChildWidget.Render(); }
+        
+        constexpr const FWidgetBase* HitTest(FLocation InMouseLocation) const
+        {
+            if(!Super::HitTest(InMouseLocation)) return nullptr;
+
+            const FWidgetBase* FoundWidget = ChildWidget.HitTest(InMouseLocation);
             return FoundWidget ? FoundWidget : static_cast<const FWidgetBase*>(this);
         }
     };

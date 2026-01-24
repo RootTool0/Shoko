@@ -17,3 +17,8 @@
 #include "Widgets/Text.h"
 
 #include "Widgets/OpenGLContext.h"
+
+#include "Widgets/HorizontalBox.h"
+#include "Widgets/VerticalBox.h"
+#include "Widgets/PaddingBox.h"
+#include "Widgets/CenterBox.h"

@@ -15,15 +15,15 @@ namespace Shoko
     public:
         constexpr SWidget() : FWidgetBase(TDerivedWidget::StaticGUTID) {}
         
-        constexpr TDerivedWidget& SetSize(FSize Size)
+        constexpr TDerivedWidget& SetSize(FSize InSize)
         {
-            Geometry.Size = Size; 
+            Geometry.Size = InSize; 
             return static_cast<TDerivedWidget&>(*this);
         }
         
-        constexpr TDerivedWidget& SetLocation(FLocation Location)
+        constexpr TDerivedWidget& SetLocation(FLocation InLocation)
         {
-            Geometry.Location = Location;
+            Geometry.Location = InLocation;
             return static_cast<TDerivedWidget&>(*this);
         }
         
@@ -32,11 +32,11 @@ namespace Shoko
         constexpr int16 GetWidth() const  { return Geometry.Size.X; }
         constexpr int16 GetHeight() const { return Geometry.Size.Y; }
         
-        // constexpr void Render() const { static_cast<const TDerivedWidget*>(this)->Render(); }
-        constexpr void Render() const { TDerivedWidget::Render(); }
+        constexpr void Render() const { static_cast<const TDerivedWidget*>(this)->Render(); }
+        // constexpr void Render() const { TDerivedWidget::Render(); }
         constexpr const FWidgetBase* HitTest(FLocation InMouseLocation) const { return Geometry.Contains(InMouseLocation) ? static_cast<const FWidgetBase*>(this) : nullptr; }
         
-    protected:
+    // protected:
         FGeometry Geometry;
     };
 }

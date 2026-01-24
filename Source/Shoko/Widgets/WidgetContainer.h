@@ -24,7 +24,7 @@ namespace Shoko
         TTuple<TChildWidgets...> ChildWidgets;
         
         explicit constexpr SWidgetContainer(TChildWidgets&&... InChildWidgets) : ChildWidgetsCount(static_cast<uint8>(sizeof...(TChildWidgets))), ChildWidgets(Meta::Move(InChildWidgets)...) {}
-
+        
         template <size_t Index>
         constexpr auto& Get() &
         {

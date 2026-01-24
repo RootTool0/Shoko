@@ -1,4 +1,4 @@
-﻿#include "Shoko/Shoko.h"
+﻿#include "Shoko.h"
 #include "Experimental.h"
 #include "Demo.h"
 
@@ -25,12 +25,28 @@ void OnBitChanged(uint8 BitIndex, bool bValue)
     UpdateBinaryResult();
 }
 
+/*
+constexpr auto RootWidget =
+    SNew<SCenterBox>(
+        SNew<SPaddingBox>(
+            SNew<SRoundRect>()
+                .SetRadius(24)
+                .SetColor(FStyle::BackgroundPanel)
+        )
+        .SetPadding(FPadding(12, 12))
+    ).SetSize(FSize(1024, 512));
+    */
+    
+/*
 constexpr auto RootWidget = SNew<SWidgetContainer>(
-    SNew<SRoundRect>()
-        .SetLocation(FLocation(24, 24))
-        .SetSize(FSize(976, 464))
-        .SetRadius(24)
-        .SetColor(FStyle::BackgroundPanel),
+    SNew<SCenterBox>(
+        SNew<SPaddingBox>(
+            SNew<SRoundRect>()
+                // .SetRadius(24)
+                .SetColor(FStyle::BackgroundPanel)
+        )
+        .SetPadding(FPadding(24, 24))
+    ),
     
     SNew<SText>()
         .SetText("BINARY TO DECIMAL")
@@ -63,6 +79,30 @@ constexpr auto RootWidget = SNew<SWidgetContainer>(
         .SetColor(FStyle::ActionHighlight)
 )
 .SetSize(FSize(1024, 512));
+*/
+
+constexpr auto RootWidget = SNew<SHorizontalBox>(
+    SNew<SRect>()
+        .SetColor(FColor(255, 0, 0)),
+
+    SNew<SPaddingBox>(
+        SNew<SRect>()
+            .SetColor(FColor(0, 0, 255))
+    )
+    .SetPadding(FPadding(12, 48)),
+
+    SNew<SVerticalBox>(
+        SNew<SCenterBox>(
+            SNew<SRect>()
+                .SetColor(FColor(255, 0, 255))
+                .SetSize(FSize(24, 24))
+        ),
+        SNew<SRect>()
+            .SetColor(FColor(0, 255, 0))
+    )
+)
+.SetSize(FSize(1024, 512));
+
 
 int main()
 {
