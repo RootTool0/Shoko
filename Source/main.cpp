@@ -25,84 +25,72 @@ void OnBitChanged(uint8 BitIndex, bool bValue)
     UpdateBinaryResult();
 }
 
-/*
 constexpr auto RootWidget =
-    SNew<SCenterBox>(
+    SNew<SRootContainer>(
         SNew<SPaddingBox>(
             SNew<SRoundRect>()
-                .SetRadius(24)
+                .SetRadius(12)
                 .SetColor(FStyle::BackgroundPanel)
         )
-        .SetPadding(FPadding(12, 12))
-    ).SetSize(FSize(1024, 512));
-    */
-    
-/*
-constexpr auto RootWidget = SNew<SWidgetContainer>(
-    SNew<SCenterBox>(
+        .SetPadding(FPadding(24)),
+        
         SNew<SPaddingBox>(
-            SNew<SRoundRect>()
-                // .SetRadius(24)
-                .SetColor(FStyle::BackgroundPanel)
+            SNew<SRootContainer>(
+                SNew<SVerticalBox>(
+                    SNew<SCenterBox>(
+                        SNew<SText>()
+                            .SetText("BINARY TO DECIMAL")
+                            .SetTextSize(32)
+                            .SetColor(FStyle::Action)
+                    ),
+                    
+                    SNew<SHorizontalBox>(
+                        SNew<SVerticalBox>(
+                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(7, bValue); })),
+                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("128"))
+                        ),
+                        SNew<SVerticalBox>(
+                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(6, bValue); })),
+                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("64"))
+                        ),    
+                        SNew<SVerticalBox>(
+                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(5, bValue); })),
+                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("32"))
+                        ),    
+                        SNew<SVerticalBox>(
+                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(4, bValue); })),
+                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("16"))
+                        ),    
+                        SNew<SVerticalBox>(
+                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(3, bValue); })),
+                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("8"))
+                        ),    
+                        SNew<SVerticalBox>(
+                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(2, bValue); })),
+                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("4"))
+                        ),
+                        SNew<SVerticalBox>(
+                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(1, bValue); })),
+                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("2"))
+                        ),
+                        SNew<SVerticalBox>(
+                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(0, bValue); })),
+                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("1"))
+                        )
+                    ),
+                    
+                    SNew<SCenterBox>(
+                        SNew<SText>()
+                            .SetText(ResultText)
+                            .SetTextSize(14)
+                            .SetColor(FStyle::ActionHighlight)
+                    )
+                )
+            )
         )
-        .SetPadding(FPadding(24, 24))
-    ),
-    
-    SNew<SText>()
-        .SetText("BINARY TO DECIMAL")
-        .SetLocation(FLocation(340, 160))
-        .SetSize(32)
-        .SetColor(FStyle::Action),
-    
-    SNew<SCheckBox>().SetLocation(FLocation(278, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(7, bValue); }),
-    SNew<SCheckBox>().SetLocation(FLocation(338, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(6, bValue); }),
-    SNew<SCheckBox>().SetLocation(FLocation(398, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(5, bValue); }),
-    SNew<SCheckBox>().SetLocation(FLocation(458, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(4, bValue); }),
-    SNew<SCheckBox>().SetLocation(FLocation(518, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(3, bValue); }),
-    SNew<SCheckBox>().SetLocation(FLocation(578, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(2, bValue); }),
-    SNew<SCheckBox>().SetLocation(FLocation(638, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(1, bValue); }),
-    SNew<SCheckBox>().SetLocation(FLocation(698, 208)).SetSize(FSize(48)).OnValueChanged([](bool bValue){ OnBitChanged(0, bValue); }),
-
-    SNew<SText>().SetLocation(FLocation(284, 268)).SetColor(FStyle::ActionDisabled).SetText("128"),
-    SNew<SText>().SetLocation(FLocation(350, 268)).SetColor(FStyle::ActionDisabled).SetText("64"),
-    SNew<SText>().SetLocation(FLocation(410, 268)).SetColor(FStyle::ActionDisabled).SetText("32"),
-    SNew<SText>().SetLocation(FLocation(472, 268)).SetColor(FStyle::ActionDisabled).SetText("16"),
-    SNew<SText>().SetLocation(FLocation(539, 268)).SetColor(FStyle::ActionDisabled).SetText("8"),
-    SNew<SText>().SetLocation(FLocation(599, 268)).SetColor(FStyle::ActionDisabled).SetText("4"),
-    SNew<SText>().SetLocation(FLocation(659, 268)).SetColor(FStyle::ActionDisabled).SetText("2"),
-    SNew<SText>().SetLocation(FLocation(719, 268)).SetColor(FStyle::ActionDisabled).SetText("1"),
-    
-    SNew<SText>()
-        .SetText(ResultText)
-        .SetLocation(FLocation(400, 320))
-        .SetSize(26)
-        .SetColor(FStyle::ActionHighlight)
-)
-.SetSize(FSize(1024, 512));
-*/
-
-constexpr auto RootWidget = SNew<SHorizontalBox>(
-    SNew<SRect>()
-        .SetColor(FColor(255, 0, 0)),
-
-    SNew<SPaddingBox>(
-        SNew<SRect>()
-            .SetColor(FColor(0, 0, 255))
+        .SetPadding(FPadding(48))
     )
-    .SetPadding(FPadding(12, 48)),
-
-    SNew<SVerticalBox>(
-        SNew<SCenterBox>(
-            SNew<SRect>()
-                .SetColor(FColor(255, 0, 255))
-                .SetSize(FSize(24, 24))
-        ),
-        SNew<SRect>()
-            .SetColor(FColor(0, 255, 0))
-    )
-)
-.SetSize(FSize(1024, 512));
-
+    .SetSize(FSize(480, 320));
 
 int main()
 {
@@ -112,7 +100,7 @@ int main()
     FShokoInput::Initialize();
     
     auto Window = SWindow()
-        .SetSize(FSize(1024, 512))
+        .SetSize(FSize(480, 320))
         .SetTitle("Shoko - Compile-time UI Framework");
     
     UpdateBinaryResult();

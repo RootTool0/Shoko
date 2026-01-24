@@ -2,6 +2,7 @@
 
 #include "Core/Meta.h"
 #include "Types/Vector2D.h"
+#include "Types/Geometry.h"
 
 namespace Shoko
 {
@@ -41,7 +42,9 @@ namespace Shoko
     private:
         constexpr void CalculateLayout()
         {
-            Super::ChildWidget.Geometry.PaddingByParent(Super::Geometry, Padding);
+            FGeometry Geometry = FGeometry::GetGeometryPaddingByParent(Super::GetGeometry(), Padding);
+            Super::ChildWidget.SetLocation(Geometry.Location);
+            Super::ChildWidget.SetSize(Geometry.Size);
         }
     };
 }

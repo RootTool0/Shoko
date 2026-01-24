@@ -27,16 +27,12 @@ namespace Shoko
             return static_cast<TDerivedWidget&>(*this);
         }
         
-        constexpr int16 GetX() const      { return Geometry.Location.X; }
-        constexpr int16 GetY() const      { return Geometry.Location.Y; }
-        constexpr int16 GetWidth() const  { return Geometry.Size.X; }
-        constexpr int16 GetHeight() const { return Geometry.Size.Y; }
+        constexpr FGeometry GetGeometry() const { return Geometry; }
         
         constexpr void Render() const { static_cast<const TDerivedWidget*>(this)->Render(); }
-        // constexpr void Render() const { TDerivedWidget::Render(); }
         constexpr const FWidgetBase* HitTest(FLocation InMouseLocation) const { return Geometry.Contains(InMouseLocation) ? static_cast<const FWidgetBase*>(this) : nullptr; }
-        
-    // protected:
+    
+    private:
         FGeometry Geometry;
     };
 }

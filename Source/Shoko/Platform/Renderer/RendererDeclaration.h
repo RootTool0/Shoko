@@ -53,6 +53,6 @@ template <uint8 N> static void DrawPolygonBorder(const TStaticArray<FLocation, N
 template <uint8 N> static void DrawPath(const TStaticArray<FLocation, N>& Points, FColor Color, uint8 BorderThickness);
 
 // Text
-static void DrawText(FLocation TopLeft, const char* Text, uint16 Len, uint8 Size, FColor Color);
+static void DrawText(FLocation Center, const char* Text, uint16 Len, uint8 Size, FColor Color);
 
 private:

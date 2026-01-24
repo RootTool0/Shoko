@@ -9,8 +9,6 @@ namespace Shoko
     {
         
     public:
-        
-    public:
         template<uint16 Capacity>
         constexpr FStringView(const TStringFixed<Capacity>& InBuffer) : DataPtr(InBuffer.GetData()) {}
         constexpr FStringView(const char* InPtr)                      : DataPtr(InPtr) {}
@@ -56,6 +54,15 @@ namespace Shoko
         constexpr bool operator!=(const FStringView Other) const { return !(*this == Other); }
         */
 
+        
+        constexpr uint16 Len()
+        {
+            if(!DataPtr) return 0;
+            
+            uint16 Count = 0;
+            while (DataPtr[Count] != '\0') ++Count;
+            return Count;
+        }
         
     private:
         const char* DataPtr;

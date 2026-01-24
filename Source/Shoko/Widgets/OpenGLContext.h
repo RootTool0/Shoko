@@ -26,10 +26,10 @@ namespace Shoko
             // if (TimeUniform >= 0) glUniform1f(TimeUniform, t);
 
             glBegin(GL_QUADS);
-            glVertex2i(Geometry.Location.X, Geometry.Location.Y);
-            glVertex2i(Geometry.Location.X + Geometry.Size.X, Geometry.Location.Y);
-            glVertex2i(Geometry.Location.X + Geometry.Size.X, Geometry.Location.Y + Geometry.Size.Y);
-            glVertex2i(Geometry.Location.X, Geometry.Location.Y + Geometry.Size.Y);
+            glVertex2i(GetGeometry().Location.X, GetGeometry().Location.Y);
+            glVertex2i(GetGeometry().Location.X + GetGeometry().Size.X, GetGeometry().Location.Y);
+            glVertex2i(GetGeometry().Location.X + GetGeometry().Size.X, GetGeometry().Location.Y + GetGeometry().Size.Y);
+            glVertex2i(GetGeometry().Location.X, GetGeometry().Location.Y + GetGeometry().Size.Y);
             glEnd();
 
             glUseProgram(0);
@@ -42,7 +42,7 @@ namespace Shoko
 #else
         void Render() const
         {
-            FShokoRenderer::DrawRect(Geometry.Location, Geometry.Size, FColor::Error);
+            FShokoRenderer::DrawRect(GetGeometry().Location, GetGeometry().Size, FColor::Error);
         }
 #endif
     };

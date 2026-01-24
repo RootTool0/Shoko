@@ -29,7 +29,7 @@ namespace Shoko
         template<typename Func>
         void ForEachWidget(const FWidgetBase* Ptr, Func&& InFunc) { ForEachWidgetPrivate(Ptr, InFunc, Meta::MakeIndexSequence<__COUNTER__>{}); }
         
-        template <typename T, typename Func> constexpr bool HasMethod(Func&&) { return Meta::HasMethod<T, Func>::Value; }
+        template <typename T, typename Func> constexpr bool HasMember(Func&&) { return Meta::HasMember<T, Func>::Value; }
         
         // template <typename T, typename Func> constexpr void TryCall(T& Obj, Func&& InFunc) { if constexpr (Meta::HasMethod<T, Func>::Value) InFunc(Obj); }
     }

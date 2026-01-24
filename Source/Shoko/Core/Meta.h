@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Aliases.h"
+#include "Macros.h"
 
 namespace Shoko
 {
@@ -192,16 +193,17 @@ namespace Shoko
         template <typename Func, typename Tuple, size_t... Indices> constexpr decltype(auto) ApplyPrivate(Func&& InFunc, Tuple&& InTuple, IndexSequence<Indices...>) { return Forward<Func>(InFunc)(InTuple.template Get<Indices>()...); }
         template <typename Func, typename Tuple> constexpr decltype(auto) Apply(Func&& InFunc, Tuple&& InTuple) { return ApplyPrivate(Forward<Func>(InFunc), Forward<Tuple>(InTuple), MakeIndexSequence<RemoveReference<Tuple>::Size>{} ); }
 
-        template <typename T, typename Func, typename = void> struct HasMethod                                                          : FalseType {};
-        template <typename T, typename Func>                  struct HasMethod<T, Func, Void<decltype(DeclVal<Func>()(DeclVal<T&>()))>> : TrueType  {};
+        template <typename T, typename Func, typename = void> struct HasMember                                                          : FalseType {};
+        template <typename T, typename Func>                  struct HasMember<T, Func, Void<decltype(DeclVal<Func>()(DeclVal<T&>()))>> : TrueType  {};
         
-        /*
-        template<typename T> struct IsTemplateSpec : std::false_type {};
-        template<template<typename...> class T, typename... Args>
-        struct IsTemplateSpec<T<Args...>> : std::true_type {};
+        template <typename T, typename = void> struct IsContainerPrivate                                                : FalseType {};
+        template <typename T>                  struct IsContainerPrivate<T, Void<decltype(DeclVal<T&>().ChildWidgets)>> : TrueType  {};
+        template <typename T> inline constexpr bool IsContainer = IsContainerPrivate<Decay<T>>::Value;
+        
+        //template<typename T> inline constexpr bool IsContainer = HasMember<Decay<T>, decltype([](auto& x) -> decltype(x.ChildWidgets) {})>::Value;
 
-        template<typename T>
-        inline constexpr bool IsTemplateV = IsTemplateSpec<T>::value;
-        */
+        template<typename T> using EnableIfWrapper   = EnableIf<!IsContainer<T>, T>;
+        template<typename T> using EnableIfContainer = EnableIf< IsContainer<T>, T>;
+
     }
 }

@@ -13,7 +13,7 @@ namespace Shoko
         SHOKO_GENERATED_BODY(SToggle)
         
     public:
-        constexpr SToggle() { Geometry.Size = FSize(60, 28); }
+        constexpr SToggle() { SetSize(FSize(60, 28)); }
         
         constexpr SToggle& OnValueChanged(ToggleHandler InValueChangedHandler)
         {
@@ -25,18 +25,18 @@ namespace Shoko
         
         void Render() const
         {
-            const uint8 Radius = Geometry.Size.GetMin() / 2;
+            const uint8 Radius = GetGeometry().Size.GetMin() / 2;
             static constexpr uint8 Offset = 4;
             
             if(bValue)
             {
-                FShokoRenderer::DrawRoundedRect(Geometry.Location, Geometry.Size, Radius, FStyle::Action);
-                FShokoRenderer::DrawCircle(Geometry.Location + FLocation(Geometry.Size.X - Radius, Radius), Radius - Offset, FStyle::BackgroundPanelDark);
+                FShokoRenderer::DrawRoundedRect(GetGeometry().Location, GetGeometry().Size, Radius, FStyle::Action);
+                FShokoRenderer::DrawCircle(GetGeometry().Location + FLocation(static_cast<int16>(GetGeometry().Size.X - Radius), Radius), Radius - Offset, FStyle::BackgroundPanelDark);
             }
             else
             {
-                FShokoRenderer::DrawRoundedRect(Geometry.Location, Geometry.Size, Radius, FStyle::BackgroundPanelDark);
-                FShokoRenderer::DrawCircle(Geometry.Location + FLocation(Radius), Radius - Offset, FStyle::ActionDisabled);
+                FShokoRenderer::DrawRoundedRect(GetGeometry().Location, GetGeometry().Size, Radius, FStyle::BackgroundPanelDark);
+                FShokoRenderer::DrawCircle(GetGeometry().Location + FLocation(Radius), Radius - Offset, FStyle::ActionDisabled);
             }
         }
         

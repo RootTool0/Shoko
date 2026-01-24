@@ -97,10 +97,10 @@ void FShokoOpenGLPlatformRenderer::DrawRect(FGeometry Geometry, FColor Color)
     glUseProgram(RectShader);
     
     float model[16] = {
-        static_cast<float>(Geometry.Size.X), 0, 0, 0,
-        0, static_cast<float>(Geometry.Size.Y), 0, 0,
+        static_cast<float>(GetGeometry().Size.X), 0, 0, 0,
+        0, static_cast<float>(GetGeometry().Size.Y), 0, 0,
         0, 0, 1, 0,
-        static_cast<float>(Geometry.Location.X), static_cast<float>(Geometry.Location.Y), 0, 1
+        static_cast<float>(GetGeometry().Location.X), static_cast<float>(GetGeometry().Location.Y), 0, 1
     };
     
     float Projection[16] = {
@@ -136,10 +136,10 @@ void FShokoOpenGLPlatformRenderer::DrawRect(FGeometry Geometry, FColor Color)
     float windowWidth = 800;
     float windowHeight = 600;
     
-    float x0 = 2.0f * Geometry.Location.X / windowWidth - 1.0f;
-    float y0 = 1.0f - 2.0f * Geometry.Location.Y / windowHeight;
-    float x1 = 2.0f * (Geometry.Location.X + Geometry.Size.X) / windowWidth - 1.0f;
-    float y1 = 1.0f - 2.0f * (Geometry.Location.Y + Geometry.Size.Y) / windowHeight;
+    float x0 = 2.0f * GetGeometry().Location.X / windowWidth - 1.0f;
+    float y0 = 1.0f - 2.0f * GetGeometry().Location.Y / windowHeight;
+    float x1 = 2.0f * (GetGeometry().Location.X + GetGeometry().Size.X) / windowWidth - 1.0f;
+    float y1 = 1.0f - 2.0f * (GetGeometry().Location.Y + GetGeometry().Size.Y) / windowHeight;
 
     float vertices[] = {
         x0, y0, Color.R, Color.G, Color.B, Color.A,
@@ -167,10 +167,10 @@ void FShokoOpenGLPlatformRenderer::DrawRect(FGeometry Geometry, FColor Color)
     glUseProgram(RectShader);
 
     // Рассчитываем вершины прямоугольника в NDC ([-1,1])
-    float x0 = 2.0f * Geometry.Location.X / 800.0f - 1.0f;         // левый
-    float y0 = 1.0f - 2.0f * Geometry.Location.Y / 600.0f;         // верхний
-    float x1 = 2.0f * (Geometry.Location.X + Geometry.Size.X) / 800.0f - 1.0f;  // правый
-    float y1 = 1.0f - 2.0f * (Geometry.Location.Y + Geometry.Size.Y) / 600.0f;  // нижний
+    float x0 = 2.0f * GetGeometry().Location.X / 800.0f - 1.0f;         // левый
+    float y0 = 1.0f - 2.0f * GetGeometry().Location.Y / 600.0f;         // верхний
+    float x1 = 2.0f * (GetGeometry().Location.X + GetGeometry().Size.X) / 800.0f - 1.0f;  // правый
+    float y1 = 1.0f - 2.0f * (GetGeometry().Location.Y + GetGeometry().Size.Y) / 600.0f;  // нижний
 
     float vertices[] = {
         x0, y0,   // верхний левый

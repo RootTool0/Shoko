@@ -59,16 +59,16 @@ namespace Shoko
             
             if((ButtonState & static_cast<uint8>(EButtonState::MouseDown)) != 0)
             {
-                FShokoRenderer::DrawRoundedRect(Geometry.Location, Geometry.Size, Radius, FStyle::Action);
+                FShokoRenderer::DrawRoundedRect(GetGeometry().Location, GetGeometry().Size, Radius, FStyle::Action);
                 return;
             }
             
-            FShokoRenderer::DrawRoundedRect(Geometry.Location, Geometry.Size, Radius, FStyle::BackgroundPanelDark);
+            FShokoRenderer::DrawRoundedRect(GetGeometry().Location, GetGeometry().Size, Radius, FStyle::BackgroundPanelDark);
             
             if((ButtonState & static_cast<uint8>(EButtonState::Hover)) != 0)
-                FShokoRenderer::DrawRoundedRectBorder(Geometry.Location, Geometry.Size, Radius, FStyle::Border, 1, EShokoRendererBorderType::Inside);
+                FShokoRenderer::DrawRoundedRectBorder(GetGeometry().Location, GetGeometry().Size, Radius, FStyle::Border, 1, EShokoRendererBorderType::Inside);
             
-            // FShokoRenderer::DrawRect(Geometry.Location, Geometry.Size, Color);
+            // FShokoRenderer::DrawRect(GetGeometry().Location, GetGeometry().Size, Color);
         }
         
     private:

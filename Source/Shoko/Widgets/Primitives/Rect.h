@@ -20,7 +20,7 @@ namespace Shoko
         
         void Render() const
         {
-            FShokoRenderer::DrawRect(Geometry.Location, Geometry.Size, Color);
+            FShokoRenderer::DrawRect(GetGeometry().Location, GetGeometry().Size, Color);
         }
 
         constexpr const FWidgetBase* HitTest(FLocation InMouseLocation) const { return nullptr;  }

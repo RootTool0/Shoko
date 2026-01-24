@@ -34,7 +34,7 @@ namespace Shoko
     private:
         constexpr void CalculateLayout()
         {
-            Super::ChildWidget.Geometry.CenterByParent(Super::Geometry);
+            Super::ChildWidget.SetLocation(FGeometry::GetCenterLocation(Super::GetGeometry(), Super::ChildWidget.GetGeometry()));
         }
     };
 }

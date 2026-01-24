@@ -13,7 +13,7 @@ namespace Shoko
         SHOKO_GENERATED_BODY(SCheckBox)
         
     public:
-        constexpr SCheckBox() { Geometry.Size = FSize(24, 24); }
+        constexpr SCheckBox() { SetSize(FSize(24, 24)); }
         
         constexpr SCheckBox& OnValueChanged(CheckBoxHandler InValueChangedHandler)
         {
@@ -26,11 +26,11 @@ namespace Shoko
         void Render() const
         {
             if(bValue)
-                FShokoRenderer::DrawRect(Geometry.Location, Geometry.Size, FStyle::Action);
+                FShokoRenderer::DrawRect(GetGeometry().Location, GetGeometry().Size, FStyle::Action);
             else
             {
-                FShokoRenderer::DrawRect(Geometry.Location, Geometry.Size, FStyle::BackgroundPanelDark);
-                FShokoRenderer::DrawRectBorder(Geometry.Location, Geometry.Size, FStyle::ActionDisabled, 2, EShokoRendererBorderType::Inside);
+                FShokoRenderer::DrawRect(GetGeometry().Location, GetGeometry().Size, FStyle::BackgroundPanelDark);
+                FShokoRenderer::DrawRectBorder(GetGeometry().Location, GetGeometry().Size, FStyle::ActionDisabled, 2, EShokoRendererBorderType::Inside);
             }
         }
         

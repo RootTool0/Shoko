@@ -19,12 +19,6 @@ namespace Shoko
 
         constexpr void Render() const { ChildWidget.Render(); }
         
-        constexpr const FWidgetBase* HitTest(FLocation InMouseLocation) const
-        {
-            if(!Super::HitTest(InMouseLocation)) return nullptr;
-
-            const FWidgetBase* FoundWidget = ChildWidget.HitTest(InMouseLocation);
-            return FoundWidget ? FoundWidget : static_cast<const FWidgetBase*>(this);
-        }
+        constexpr const FWidgetBase* HitTest(FLocation InMouseLocation) const { return ChildWidget.HitTest(InMouseLocation); }
     };
 }

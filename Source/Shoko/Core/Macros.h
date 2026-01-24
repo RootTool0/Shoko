@@ -18,4 +18,5 @@ private:
 
 #define SHOKO_CHECK_ALIAS_EXISTS(Alias) static_assert(Shoko::Meta::IsDefined<Shoko::Alias>, "Алиас " #Alias " не существует");
 
-#define SHOKO_REFLECTION_HAS_METHOD(Obj, MethodName) Reflection::HasMethod<decltype(Obj)>([](auto& x) -> decltype(x.MethodName()) {})
+#define SHOKO_REFLECTION_HAS_METHOD(Obj, MethodName) Reflection::HasMember<decltype(Obj)>([](auto& x) -> decltype(x.MethodName()) {})
+#define SHOKO_REFLECTION_HAS_FIELD(Obj, FieldName) Reflection::HasMember<decltype(Obj)>

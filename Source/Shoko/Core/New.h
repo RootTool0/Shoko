@@ -38,7 +38,7 @@ namespace Shoko
     }
     
     template<template<typename> class TWidgetWrapper, typename TChildWidget>
-    constexpr auto SNew(TChildWidget&& ChildWidget)
+    constexpr auto SNew(TChildWidget&& ChildWidget) -> Meta::EnableIfWrapper<TWidgetWrapper<Meta::Decay<TChildWidget>>>
     {
         SHOKO_STATIC_ASSERT(Meta::IsWidget<TWidgetWrapper<TChildWidget>> && Meta::IsWidget<TChildWidget>,
             "Кажется Вы пытаетесь создать виджет, о котором я не знаю...\n"
@@ -54,7 +54,7 @@ namespace Shoko
     }
     
     template<template<typename...> class TWidgetContainer, typename... TChildWidgets>
-    constexpr auto SNew(TChildWidgets&&... ChildWidgets)
+    constexpr auto SNew(TChildWidgets&&... ChildWidgets) -> Meta::EnableIfContainer<TWidgetContainer<Meta::Decay<TChildWidgets>...>>
     {
         SHOKO_STATIC_ASSERT(Meta::IsWidget<TWidgetContainer<Meta::Decay<TChildWidgets>...>> && (Meta::IsWidget<TChildWidgets> && ...),
             "Кажется Вы пытаетесь создать виджет, о котором я не знаю...\n"

@@ -61,10 +61,10 @@ void FShokoHDMIPlatformRenderer::DrawRect(FGeometry Geometry, FColor Color)
     uint32_t RawColor = Color.ToARGB();
     
     uint16_t RGB565 = Color.ToRGB565();
-    uint16 x0 = FMath::Max<uint16>(0, Geometry.Location.X);
-    uint16 y0 = FMath::Max<uint16>(0, Geometry.Location.Y);
-    uint16 x1 = FMath::Min<uint16>(ScreenWidth,  Geometry.Location.X + Geometry.Size.X);
-    uint16 y1 = FMath::Min<uint16>(ScreenHeight, Geometry.Location.Y + Geometry.Size.Y);
+    uint16 x0 = FMath::Max<uint16>(0, GetGeometry().Location.X);
+    uint16 y0 = FMath::Max<uint16>(0, GetGeometry().Location.Y);
+    uint16 x1 = FMath::Min<uint16>(ScreenWidth,  GetGeometry().Location.X + GetGeometry().Size.X);
+    uint16 y1 = FMath::Min<uint16>(ScreenHeight, GetGeometry().Location.Y + GetGeometry().Size.Y);
     
     for(int32_t y = y0; y < y1; ++y)
     {

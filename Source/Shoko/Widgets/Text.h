@@ -9,10 +9,12 @@ namespace Shoko
     class SText : public SWidget<SText>
     {
         SHOKO_GENERATED_BODY(SText)
+
+        using Super = SWidget<SText>;
         
     public:
-        constexpr SText() { Geometry.Size = FSize(0); }
-        
+        constexpr SText() { Super::SetSize(FSize(0, 0)); }
+
         constexpr SText& SetText(FStringView InText)
         {
             Text = InText;
@@ -25,7 +27,7 @@ namespace Shoko
             return *this;
         }
         
-        constexpr SText& SetSize(uint8 InSize)
+        constexpr SText& SetTextSize(uint8 InSize)
         {
             Size = InSize;
             return *this;
@@ -33,7 +35,8 @@ namespace Shoko
         
         void Render() const
         {
-            if(!Text.IsEmpty()) FShokoRenderer::DrawText(Geometry.Location, Text.GetData(), Text.Len(), Size, Color);
+            if(!Text.IsEmpty())
+                FShokoRenderer::DrawText(GetGeometry().Location, Text.GetData(), Text.Len(), Size, Color);
         }
         
     private:

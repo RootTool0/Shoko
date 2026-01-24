@@ -41,15 +41,15 @@ namespace Shoko
             const uint8 Count = this->ChildWidgetsCount;
             if(Count == 0) return;
             
-            const int16 Width = Super::Geometry.Width() / Count;
-            int16 CursorX = Super::Geometry.X();
+            const int16 Width = Super::GetGeometry().Width() / Count;
+            int16 CursorX = Super::GetGeometry().X();
 
             Meta::Apply(
                 [&](auto&... Child)
                 {
                     ((
-                        Child.SetLocation(FLocation(CursorX, Super::Geometry.Y())),
-                        Child.SetSize(FSize(Width, Super::Geometry.Height())),
+                        Child.SetLocation(FLocation(CursorX, Super::GetGeometry().Y())),
+                        Child.SetSize(FSize(Width, Super::GetGeometry().Height())),
                         CursorX += Width
                     ), ...);
                 },

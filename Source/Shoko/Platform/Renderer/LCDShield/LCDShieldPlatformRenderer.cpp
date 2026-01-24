@@ -61,10 +61,10 @@ void FShokoLCDShieldPlatformRenderer::DrawRect(FGeometry Geometry, FColor Color)
     if(!FrameBuffer.is_open()) return;
 
     uint16_t RGB565 = Color.ToRGB565();
-    uint16 x0 = FMath::Max<uint16>(0, Geometry.Location.X);
-    uint16 y0 = FMath::Max<uint16>(0, Geometry.Location.Y);
-    uint16 x1 = FMath::Min<uint16>(ScreenWidth,  Geometry.Location.X + Geometry.Size.X);
-    uint16 y1 = FMath::Min<uint16>(ScreenHeight, Geometry.Location.Y + Geometry.Size.Y);
+    uint16 x0 = FMath::Max<uint16>(0, GetGeometry().Location.X);
+    uint16 y0 = FMath::Max<uint16>(0, GetGeometry().Location.Y);
+    uint16 x1 = FMath::Min<uint16>(ScreenWidth,  GetGeometry().Location.X + GetGeometry().Size.X);
+    uint16 y1 = FMath::Min<uint16>(ScreenHeight, GetGeometry().Location.Y + GetGeometry().Size.Y);
 
     for(uint16 y = y0; y < y1; ++y)
     {
