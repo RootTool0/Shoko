@@ -1,8 +1,8 @@
 #pragma once
 
+#include SHOKO_PLATFORM_INPUT_INCLUDE
 #include "Types/Vector2D.h"
 #include "Types/InputEvent.h"
-#include "Platform/PlatformInput.h"
 
 namespace Shoko
 {

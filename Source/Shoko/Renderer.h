@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Platform/PlatformRenderer.h"
+#include SHOKO_PLATFORM_RENDERER_INCLUDE
 
 namespace Shoko
 {

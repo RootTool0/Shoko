@@ -1,7 +1,3 @@
-#include "Config.h"
-#include "Window.h"
-#if SHOKO_WINDOW == SHOKO_WINDOW_RayLib
-
 #include "RayLibPlatformWindow.h"
 #include "Types/Vector2D.h"
 
@@ -44,5 +40,3 @@ void FShokoSDL2PlatformWindow::SetSize(FUIntVector2D Size) const
 {
     SetWindowSize(static_cast<int>(Size.X), static_cast<int>(Size.Y));
 }
-
-#endif

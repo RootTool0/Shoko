@@ -2,12 +2,11 @@
 
 #include "Core/Meta.h"
 #include "Core/New.h"
+
 #include "Widgets.h"
 #include "Window.h"
 #include "Input.h"
-#include "Types/Angle.h"
-#include "Types/StaticArray.h"
-#include "Types/StringFixed.h"
+#include "Types.h"
 
 namespace Shoko
 {

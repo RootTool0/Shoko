@@ -1,8 +1,5 @@
-#include "Config.h"
-#include "Types/InputEvent.h"
-#if SHOKO_INPUT == SHOKO_INPUT_RayLib
-
 #include "RayLibPlatformInput.h"
+#include "Types/InputEvent.h"
 
 #include <raylib.h>
 
@@ -62,5 +59,3 @@ FLocation FShokoRayLibPlatformInput::GetMousePosition()
 bool FShokoRayLibPlatformInput::GetMouseLeftButton()   { return IsMouseButtonDown(MOUSE_BUTTON_LEFT); }
 bool FShokoRayLibPlatformInput::GetMouseRightButton()  { return IsMouseButtonDown(MOUSE_BUTTON_RIGHT); }
 bool FShokoRayLibPlatformInput::GetMouseMiddleButton() { return IsMouseButtonDown(MOUSE_BUTTON_MIDDLE); }
-
-#endif

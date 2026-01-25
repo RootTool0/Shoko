@@ -1,6 +1,3 @@
-#include "Config.h"
-#if SHOKO_RENDERER == SHOKO_RENDERER_RayLib
-
 #include "RayLibPlatformRenderer.h"
 #include "Types/Renderer.h"
 #include "Types/Angle.h"
@@ -154,5 +151,3 @@ void FShokoRayLibPlatformRenderer::DrawText(FLocation Center, const char* Text, 
 }
 
 #pragma endregion
-
-#endif

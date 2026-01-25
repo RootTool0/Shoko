@@ -8,9 +8,10 @@ namespace Shoko
     {
         SHOKO_GENERATED_BODY(SOpenGLContext)
 
+		using Super = SWidget<SOpenGLContext>;
     public:
         
-#if SHOKO_RENDERER == SHOKO_RENDERER_OpenGL
+#ifdef SHOKO_PLATFORM_USE_OpenGL
         constexpr SOpenGLContext& SetShader(GLuint InShaderProgram)
         {
             ShaderProgram = InShaderProgram;

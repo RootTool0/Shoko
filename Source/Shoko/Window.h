@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Platform/PlatformWindow.h"
+#include SHOKO_PLATFORM_WINDOW_INCLUDE
 
 namespace Shoko
 {
@@ -32,9 +32,9 @@ namespace Shoko
         constexpr void ActivateRenderContext() const
         {
             // TODO: Context Switcher
-#if SHOKO_RENDERER == SHOKO_RENDERER_SDL2
+/*#if SHOKO_RENDERER == SHOKO_RENDERER_SDL2
             FShokoPlatformRenderer::SDLRenderer = PlatformWindow.SDLRenderer;
-#endif
+#endif*/
         }
         
     private:

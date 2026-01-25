@@ -1,7 +1,6 @@
 ﻿#include "Shoko.h"
 #include "Experimental.h"
 #include "Demo.h"
-#include "Types/StringBuffer/StringBuffer.h"
 
 using namespace Shoko;
 
@@ -11,11 +10,15 @@ TStringFixed<32> ResultText;
 void UpdateBinaryResult()
 {
     ResultText.Empty();
+    char buffer[32];
+    
     ResultText += "Result: ";
-    ResultText += TextFormat("%d", Value); 
+    snprintf(buffer, sizeof(buffer), "%d", Value);
+    ResultText += buffer;
     
     ResultText += " (0x";
-    ResultText += TextFormat("%02X", Value);
+    snprintf(buffer, sizeof(buffer), "%02X", Value);
+    ResultText += buffer;
     ResultText += ")";
 }
 
@@ -52,8 +55,6 @@ constexpr auto RootWidget =
         .SetPadding(FPadding(48))
     )
     .SetSize(FSize(480, 320));
-
-
 
 int main()
 {

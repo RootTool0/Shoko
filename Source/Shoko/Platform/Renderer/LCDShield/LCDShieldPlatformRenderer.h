@@ -2,8 +2,13 @@
 
 #include <fstream>
 
+#include "Core/Aliases.h"
+
 #include "Types/Geometry.h"
 #include "Types/Color.h"
+#include "Types/StaticArray.h"
+#include "Types/Renderer.h"
+#include "Types/Angle.h"
 
 namespace Shoko
 {
@@ -17,5 +22,15 @@ namespace Shoko
         static constexpr uint16 ScreenHeight = 480;
     };
     
+#pragma region Polygon
+    template <uint8 N> 
+    void FShokoLCDShieldPlatformRenderer::DrawPath(const TStaticArray<FLocation, N>& Points, FColor Color, uint8 BorderThickness) {}
+#pragma endregion
+    
+#pragma region Path
+    template <uint8 N>
+    void FShokoLCDShieldPlatformRenderer::DrawPolygonBorder(const TStaticArray<FLocation, N>& Points, FColor Color, uint8 BorderThickness, EShokoRendererBorderType BorderType) {}
+#pragma endregion
+
     using FShokoPlatformRenderer = FShokoLCDShieldPlatformRenderer;
 }
