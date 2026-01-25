@@ -8,7 +8,7 @@
 
 using namespace Shoko;
 
-EKey FShokoRayLibPlatformInput::Key = EKey::None;
+uint8 FShokoRayLibPlatformInput::Key = 0;
 
 bool FShokoRayLibPlatformInput::Initialize() { return IsWindowReady(); }
 void FShokoRayLibPlatformInput::Deinitialize() {}
@@ -17,29 +17,33 @@ void FShokoRayLibPlatformInput::PullEvents()
 {
     if(WindowShouldClose())
     {
-        Key = EKey::Window_Close;
+        Key = FInputEvent::GetKey(ESystemKey::Window_Close);
         return;
     }
     
-    int rawKey = GetKeyPressed();
-    if(rawKey != 0) 
+    int RawKey = GetKeyPressed();
+    if(RawKey != 0) 
     {
-        // Простая маскировка под вашу логику A-Z и 0-9
-        if (rawKey >= KEY_A && rawKey <= KEY_Z) {
-            Key = static_cast<EKey>(rawKey); 
-        } else if (rawKey >= KEY_ZERO && rawKey <= KEY_NINE) {
-            Key = static_cast<EKey>(rawKey);
-        }
+        if ((KEY_A <= RawKey && RawKey <= KEY_Z) || (KEY_ZERO <= RawKey && RawKey <= KEY_NINE)) 
+            Key = FInputEvent::GetKey(static_cast<EKeyboardKey>(RawKey)); 
+        else if (RawKey == KEY_BACKSPACE)
+            Key = FInputEvent::GetKey(EKeyboardKey::Special_Backspace); 
+        else if (RawKey == KEY_SPACE)
+            Key = FInputEvent::GetKey(EKeyboardKey::Special_Space);
+        else if (RawKey == KEY_PERIOD)
+            Key = FInputEvent::GetKey(EKeyboardKey::Special_Period);
+        else if (RawKey == KEY_COMMA)
+            Key = FInputEvent::GetKey(EKeyboardKey::Special_Comma);
+        else if (RawKey == KEY_SEMICOLON)
+            Key = FInputEvent::GetKey(EKeyboardKey::Special_Semicolon);
+        
+        return;
     }
-    
-    if (Key != EKey::None && Key != EKey::Window_Close) {
-        if (!IsKeyDown(static_cast<int>(Key))) {
-            Key = EKey::None;
-        }
-    }
+
+    Key = 0;
 }
 
-EKey FShokoRayLibPlatformInput::GetKey() { return Key; }
+uint8 FShokoRayLibPlatformInput::GetKey() { return Key; }
 
 bool FShokoRayLibPlatformInput::GetLeftShift()  { return IsKeyDown(KEY_LEFT_SHIFT); }
 bool FShokoRayLibPlatformInput::GetRightShift() { return IsKeyDown(KEY_RIGHT_SHIFT); }

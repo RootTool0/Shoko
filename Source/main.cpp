@@ -1,6 +1,7 @@
 ﻿#include "Shoko.h"
 #include "Experimental.h"
 #include "Demo.h"
+#include "Types/StringBuffer/StringBuffer.h"
 
 using namespace Shoko;
 
@@ -25,6 +26,8 @@ void OnBitChanged(uint8 BitIndex, bool bValue)
     UpdateBinaryResult();
 }
 
+TStringBuffer<12> TextInputBuffer;
+
 constexpr auto RootWidget =
     SNew<SRootContainer>(
         SNew<SPaddingBox>(
@@ -36,61 +39,21 @@ constexpr auto RootWidget =
         
         SNew<SPaddingBox>(
             SNew<SRootContainer>(
-                SNew<SVerticalBox>(
-                    SNew<SCenterBox>(
-                        SNew<SText>()
-                            .SetText("BINARY TO DECIMAL")
-                            .SetTextSize(32)
-                            .SetColor(FStyle::Action)
-                    ),
-                    
-                    SNew<SHorizontalBox>(
-                        SNew<SVerticalBox>(
-                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(7, bValue); })),
-                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("128"))
-                        ),
-                        SNew<SVerticalBox>(
-                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(6, bValue); })),
-                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("64"))
-                        ),    
-                        SNew<SVerticalBox>(
-                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(5, bValue); })),
-                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("32"))
-                        ),    
-                        SNew<SVerticalBox>(
-                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(4, bValue); })),
-                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("16"))
-                        ),    
-                        SNew<SVerticalBox>(
-                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(3, bValue); })),
-                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("8"))
-                        ),    
-                        SNew<SVerticalBox>(
-                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(2, bValue); })),
-                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("4"))
-                        ),
-                        SNew<SVerticalBox>(
-                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(1, bValue); })),
-                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("2"))
-                        ),
-                        SNew<SVerticalBox>(
-                            SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(0, bValue); })),
-                            SNew<SCenterBox>(SNew<SText>().SetColor(FStyle::ActionDisabled).SetText("1"))
-                        )
-                    ),
-                    
-                    SNew<SCenterBox>(
-                        SNew<SText>()
-                            .SetText(ResultText)
-                            .SetTextSize(14)
-                            .SetColor(FStyle::ActionHighlight)
-                    )
-                )
+                SNew<SCenterBox>(
+                    SNew<STextInput>()
+                        .SetTextBuffer(&TextInputBuffer)
+                        .SetTextSize(32)
+                        .SetTextColor(FStyle::Border)
+                        .SetBackgroundColor(FStyle::ActionDisabled)
+                        .SetSize(FSize(315, 40))
+                )  
             )
         )
         .SetPadding(FPadding(48))
     )
     .SetSize(FSize(480, 320));
+
+
 
 int main()
 {
@@ -107,7 +70,7 @@ int main()
     
     while(true)
     {
-        if(FShokoInput::PullEvents().Key == EKey::Window_Close) break;
+        if(FShokoInput::PullEvents().Key == FInputEvent::GetKey(ESystemKey::Window_Close)) break;
         
         Experimental::TestMouseSystem(RootWidget.HitTest(FShokoInput::GetMousePosition()));
         
@@ -118,7 +81,7 @@ int main()
         }
         FShokoRenderer::PostRender();
 
-        Demo::ShowFPS();
+        // Demo::ShowFPS();
     }
     
     Window.Deinitialize();

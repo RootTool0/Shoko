@@ -36,7 +36,7 @@ namespace Shoko
         void Render() const
         {
             if(!Text.IsEmpty())
-                FShokoRenderer::DrawText(GetGeometry().Location, Text.GetData(), Text.Len(), Size, Color);
+                FShokoRenderer::DrawText(GetGeometry().Location, Text.GetData(), Text.Len(), Size, Color, true);
         }
         
     private:

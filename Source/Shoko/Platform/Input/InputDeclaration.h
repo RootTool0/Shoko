@@ -6,7 +6,7 @@ static bool Initialize();
 static void Deinitialize();
 static void PullEvents();
 
-static EKey GetKey();
+static uint8 GetKey();
 
 static bool GetLeftShift();
 static bool GetRightShift();

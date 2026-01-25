@@ -135,13 +135,22 @@ void FShokoRayLibPlatformRenderer::DrawCubicBezier(FLocation A, FLocation B, FLo
 
 #pragma region Text
 
-void FShokoRayLibPlatformRenderer::DrawText(FLocation Center, const char* Text, uint16 Len, uint8 Size, FColor Color)
+void FShokoRayLibPlatformRenderer::DrawText(FLocation Center, const char* Text, uint16 Len, uint8 Size, FColor Color, bool bCentered)
 {
     if(!Text || Len == 0) return;
-    
+
     const char* FormattedText = TextFormat("%.*s", Len, Text);
-    Vector2 MeasuredSize = MeasureTextEx(GetFontDefault(), FormattedText, (float)Size, 1.0f);
-    ::DrawText(FormattedText, Center.X - static_cast<int>(MeasuredSize.x / 2.0f), Center.Y - static_cast<int>(MeasuredSize.y / 2.0f), Size, TO_RL_COLOR(Color));
+    int PosX = static_cast<int>(Center.X);
+    int PosY = static_cast<int>(Center.Y);
+
+    if (bCentered)
+    {
+        Vector2 MeasuredSize = MeasureTextEx(GetFontDefault(), FormattedText, (float)Size, 1.0f);
+        PosX -= static_cast<int>(MeasuredSize.x / 2.0f);
+        PosY -= static_cast<int>(MeasuredSize.y / 2.0f);
+    }
+    
+    ::DrawText(FormattedText, PosX, PosY, Size, TO_RL_COLOR(Color));
 }
 
 #pragma endregion

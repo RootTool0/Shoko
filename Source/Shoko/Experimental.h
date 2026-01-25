@@ -163,7 +163,8 @@ namespace Shoko
         
         inline const FWidgetBase* HoveredWidget = nullptr;
         inline const FWidgetBase* PressedWidget = nullptr;
-
+        inline const FWidgetBase* FocusedWidget = nullptr;
+        
         inline void TestMouseSystem(const FWidgetBase* CurrentWidget)
         {
             // FWidgetBase* CurrentWidget = RootWidget.HitTest(FShokoInput::GetMousePosition());
@@ -194,6 +195,7 @@ namespace Shoko
             if(FShokoInput::IsMouseWasPressed(EMouseButton::Left))
             {
                 PressedWidget = CurrentWidget;
+                FocusedWidget = CurrentWidget;
                 if(PressedWidget)
                     Reflection::ForEachWidget(PressedWidget, [&](auto& Widget)
                     {
@@ -212,6 +214,15 @@ namespace Shoko
 
                     PressedWidget = nullptr;
                 }
+            }
+            
+            if(FocusedWidget && !FShokoInput::GetInputEvent().bRepeat)
+            {
+                Reflection::ForEachWidget(FocusedWidget, [&](auto& Widget)
+                {
+                    if constexpr (SHOKO_REFLECTION_HAS_METHOD(Widget, CallOnKey))
+                        Widget.CallOnKey(FShokoInput::GetInputEvent().Key);
+                });
             }
             
             // RootWidget.Get<5>().SetPosition(FShokoInput::GetMousePosition().X, FShokoInput::GetMousePosition().Y);

@@ -4,14 +4,12 @@
 
 namespace Shoko
 {
-    enum class EKey : uint8;
-
     class FShokoRayLibPlatformInput
     {
 #include "../InputDeclaration.h"
 
     private:
-        static EKey Key;
+        static uint8 Key;
     };
     
     using FShokoPlatformInput = FShokoRayLibPlatformInput;

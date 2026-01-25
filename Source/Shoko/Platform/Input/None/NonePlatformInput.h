@@ -4,8 +4,6 @@
 
 namespace Shoko
 {
-    enum class EKey : uint8;
-
     class FShokoNonePlatformInput
     {
 #include "../InputDeclaration.h"

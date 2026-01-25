@@ -15,6 +15,7 @@
 #include "Widgets/Slider.h"
 #include "Widgets/Toggle.h"
 #include "Widgets/Text.h"
+#include "Widgets/TextInput.h"
 
 #include "Widgets/OpenGLContext.h"
 

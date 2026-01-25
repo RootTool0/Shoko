@@ -4,9 +4,9 @@
 
 namespace Shoko
 {
-    enum class EKey : uint8
+    enum class EKeyboardKey : uint8
     {
-        None,
+        None = 0,
         
         Number_0 = '0',
         Number_1 = '1',
@@ -45,6 +45,17 @@ namespace Shoko
         Letter_X = 'X',
         Letter_Y = 'Y',
         Letter_Z = 'Z',
+
+        Special_Space     = ' ',
+        Special_Period    = '.',
+        Special_Comma     = ',',
+        Special_Semicolon = ';',
+        Special_Backspace
+    };
+    
+    enum class ESystemKey : uint8
+    {
+        None = 0,
         
         Window_Close
     };
@@ -80,8 +91,14 @@ namespace Shoko
     
     struct FInputEvent
     {
-        EKey Key;
+        uint8 Key;
         uint8 Modifiers;
         uint8 MouseButtons;
+        bool bRepeat = false;
+        
+        static bool IsKeyboardKey(uint8 Key) { return Key != 0 && (Key & 0x80) == 0; }
+        
+        static uint8 GetKey(EKeyboardKey KeyboardKey) { return static_cast<uint8>(KeyboardKey) & ~0x80; }
+        static uint8 GetKey(ESystemKey SystemKey)     { return static_cast<uint8>(SystemKey)   |  0x80; }
     };
 }
