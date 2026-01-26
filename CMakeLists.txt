@@ -50,7 +50,7 @@ file(GLOB_RECURSE BASE_FILES CONFIGURE_DEPENDS "Source/*")
 list(FILTER BASE_FILES EXCLUDE REGEX "Source/Shoko/Platform/")
 add_executable(Shoko ${BASE_FILES})
 
-shoko_init_platform("RayLib")
+shoko_init_platform("OpenGL")
 
 target_include_directories(Shoko PRIVATE Source/Shoko)
 

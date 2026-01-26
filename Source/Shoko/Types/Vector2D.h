@@ -21,9 +21,10 @@ namespace Shoko
 
         constexpr TVector2D operator+(const TVector2D& Other) const { return TVector2D(X + Other.X, Y + Other.Y); }
         constexpr TVector2D operator-(const TVector2D& Other) const { return TVector2D(X - Other.X, Y - Other.Y); }
+        constexpr TVector2D operator-(T Scalar) const               { return TVector2D(X - Scalar,  Y - Scalar);  }
         constexpr TVector2D operator*(T Scalar) const               { return TVector2D(X * Scalar,  Y * Scalar);  }
         constexpr TVector2D operator/(T Scalar) const               { return TVector2D(X / Scalar,  Y / Scalar);  }
- 
+        
         constexpr TVector2D& operator+=(const TVector2D& Other) { X += Other.X; Y += Other.Y; return *this; }
         constexpr TVector2D& operator-=(const TVector2D& Other) { X -= Other.X; Y -= Other.Y; return *this; }
         constexpr TVector2D& operator+=(T Scalar) { X += Scalar; Y += Scalar; return *this; }
@@ -34,7 +35,7 @@ namespace Shoko
 
         T GetMin() const { return FMath::Min(X, Y); }
         T GetMax() const { return FMath::Max(X, Y); }
-        
+
         // void Print() const { std::cout << "(" << X << ", " << Y << ")\n"; }
     };
     
@@ -43,5 +44,9 @@ namespace Shoko
 
     using FLocation = TVector2D<int16>;
     using FSize = TVector2D<uint16>;
+
+    inline FLocation operator-(const FLocation& Lhs, const FSize& Rhs    ) { return FLocation(static_cast< int16>(Lhs.X - Rhs.X), static_cast< int16>(Lhs.Y - Rhs.Y)); }
+    inline FSize     operator-(const FSize& Lhs    , const FLocation& Rhs) { return FSize    (static_cast<uint16>(Lhs.X - Rhs.X), static_cast<uint16>(Lhs.Y - Rhs.Y)); }
+    
     using FPadding = TVector2D<uint8>;
 }

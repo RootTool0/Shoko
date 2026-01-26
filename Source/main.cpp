@@ -54,17 +54,19 @@ constexpr auto RootWidget =
         .SetPadding(FPadding(48))
     )
     .SetSize(FSize(480, 320));
+    
 
 int main()
 {
     Experimental::hexDump(RootWidget);
     
-    FShokoRenderer::Initialize();
-    FShokoInput::Initialize();
-    
     auto Window = SWindow()
         .SetSize(FSize(480, 320))
         .SetTitle("Shoko - Compile-time UI Framework");
+    Window.ActivateRenderContext();
+    
+    FShokoRenderer::Initialize();
+    FShokoInput::Initialize();
     
     UpdateBinaryResult();
     
@@ -81,7 +83,7 @@ int main()
         }
         FShokoRenderer::PostRender();
         
-        // Demo::ShowFPS();
+        Demo::ShowFPS();
     }
     
     Window.Deinitialize();

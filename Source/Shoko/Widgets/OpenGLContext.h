@@ -13,7 +13,7 @@ namespace Shoko
     public:
         
 #ifdef SHOKO_PLATFORM_USE_OpenGL
-        constexpr SOpenGLContext& SetShader(GLuint InShaderProgram)
+        /*constexpr SOpenGLContext& SetShader(GLuint InShaderProgram)
         {
             ShaderProgram = InShaderProgram;
             TimeUniform = glGetUniformLocation(ShaderProgram, "time");
@@ -39,7 +39,7 @@ namespace Shoko
 
     private:
         GLuint ShaderProgram = 0;
-        GLint TimeUniform = -1;
+        GLint TimeUniform = -1;*/
 
 #else
         void Render() const

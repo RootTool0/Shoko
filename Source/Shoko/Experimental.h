@@ -188,7 +188,6 @@ namespace Shoko
             if(FShokoInput::IsMouseWasPressed(EMouseButton::Left))
             {
                 PressedWidget = CurrentWidget;
-                FocusedWidget = CurrentWidget;
                 if(PressedWidget)
                     Reflection::ForEachWidget(PressedWidget, [&](auto& Widget)
                     {

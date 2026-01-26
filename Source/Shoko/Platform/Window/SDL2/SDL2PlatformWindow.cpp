@@ -1,7 +1,5 @@
-#include "Config.h"
-#if SHOKO_WINDOW == SHOKO_WINDOW_SDL2
-
 #include "SDL2PlatformWindow.h"
+
 #include "Types/Vector2D.h"
 
 #include <iostream>
@@ -51,5 +49,3 @@ void FShokoSDL2PlatformWindow::SetSize(FUIntVector2D Size) const
 {
     SDL_SetWindowSize(SDLWindow, Size.X, Size.Y);
 }
-
-#endif

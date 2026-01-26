@@ -3,9 +3,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Types/Geometry.h"
+#include "Core/Aliases.h"
 #include "Types/Color.h"
+#include "Types/StaticArray.h"
+#include "Types/Renderer.h"
 #include "Types/Vector2D.h"
+#include "Types/Angle.h"
 
 namespace Shoko
 {
@@ -14,20 +17,49 @@ namespace Shoko
 #include "../RendererDeclaration.h"
         
     public:
-        static GLuint CreateGLSLProgram(const char* VertexSource, const char* FragmentSource);
-
-    private:
         static GLFWwindow* Window;
-
-        static GLuint VAO;
-        static GLuint VBO;
-        static GLuint EBO;
+        static int WindowWidth;
+        static int WindowHeight;
         
-        static GLuint RectShader;
+        static void UpdateProjection();
+        
+    private:
+        enum class EShaderProgram : uint8
+        {
+            Default,
+            Rect,
+            Circle,
+            Arc,
 
-        static void SetupQuad();
-        static void SetupShaders();
+            Max
+        };
+        
+        static uint32 ShaderPrograms[static_cast<uint8>(EShaderProgram::Max)];
+        static uint32 VAO;
+        static uint32 VBO;
+        static float Projection[16];
+        
+    private:
+        static void UseShader(EShaderProgram Primitive);
+        static void BakeQuad(FLocation TopLeft, FSize Size);
+        static void PushQuad();
     };
-
-    using FShokoRenderer = FShokoOpenGLPlatformRenderer;
+    
+#pragma region Polygon
+    template <uint8 N> 
+    void FShokoOpenGLPlatformRenderer::DrawPath(const TStaticArray<FLocation, N>& Points, FColor Color, uint8 BorderThickness)
+    {
+        
+    }  
+#pragma endregion
+    
+#pragma region Path
+    template <uint8 N>
+    void FShokoOpenGLPlatformRenderer::DrawPolygonBorder(const TStaticArray<FLocation, N>& Points, FColor Color, uint8 BorderThickness, EShokoRendererBorderType BorderType)
+    {
+        
+    }
+#pragma endregion
+    
+    using FShokoPlatformRenderer = FShokoOpenGLPlatformRenderer;
 }

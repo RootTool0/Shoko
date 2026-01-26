@@ -1,9 +1,7 @@
-#include "Config.h"
+#include "NonePlatformRenderer.h"
+
 #include "Types/Color.h"
 #include "Types/Vector2D.h"
-#if SHOKO_RENDERER == SHOKO_RENDERER_NONE
-
-#include "NonePlatformRenderer.h"
 #include "Types/Renderer.h"
 #include "Types/Angle.h"
 
@@ -35,5 +33,3 @@ void FShokoNonePlatformRenderer::DrawCircleSectorBorder(FLocation Center, uint8 
 
 void FShokoNonePlatformRenderer::DrawQuadraticBezier(FLocation A, FLocation B, FLocation C, FColor Color) {}
 void FShokoNonePlatformRenderer::DrawCubicBezier(FLocation A, FLocation B, FLocation C, FLocation D, FColor Color) {}
-
-#endif

@@ -131,7 +131,6 @@ void FShokoRayLibPlatformRenderer::DrawCubicBezier(FLocation A, FLocation B, FLo
 #pragma endregion
 
 #pragma region Text
-
 void FShokoRayLibPlatformRenderer::DrawText(FLocation Center, const char* Text, uint16 Len, uint8 Size, FColor Color, bool bCentered)
 {
     if(!Text || Len == 0) return;
@@ -149,5 +148,4 @@ void FShokoRayLibPlatformRenderer::DrawText(FLocation Center, const char* Text, 
     
     ::DrawText(FormattedText, PosX, PosY, Size, TO_RL_COLOR(Color));
 }
-
 #pragma endregion

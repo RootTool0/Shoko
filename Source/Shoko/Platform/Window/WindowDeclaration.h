@@ -3,9 +3,9 @@
 public:
 
 bool Initialize();
-void Deinitialize() const;
+void Deinitialize();
 
 void SetTitle(const char* NewTitle) const;
-void SetSize(FUIntVector2D Size) const;
+void SetSize(FSize Size) const;
 
 private:
