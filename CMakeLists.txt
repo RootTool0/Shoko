@@ -30,7 +30,7 @@ macro(shoko_init_platform PLATFORM)
         message(WARNING "Platform [${PLATFORM}]: No files found!")
     endif()
     
-        if("${PLATFORM}" STREQUAL "RayLib")
+    if("${PLATFORM}" STREQUAL "RayLib")
         find_package(raylib REQUIRED)
         target_link_libraries(Shoko PRIVATE raylib)
     elseif("${PLATFORM}" STREQUAL "SDL2")
