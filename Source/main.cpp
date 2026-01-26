@@ -4,33 +4,6 @@
 
 using namespace Shoko;
 
-uint8 Value = 0;
-TStringFixed<32> ResultText;
-
-void UpdateBinaryResult()
-{
-    ResultText.Empty();
-    char buffer[32];
-    
-    ResultText += "Result: ";
-    snprintf(buffer, sizeof(buffer), "%d", Value);
-    ResultText += buffer;
-    
-    ResultText += " (0x";
-    snprintf(buffer, sizeof(buffer), "%02X", Value);
-    ResultText += buffer;
-    ResultText += ")";
-
-    std::cout << ResultText << '\n';
-}
-
-void OnBitChanged(uint8 BitIndex, bool bValue)
-{
-    if(bValue) Value |= (1 << BitIndex);
-    else Value &= ~(1 << BitIndex);
-    UpdateBinaryResult();
-}
-
 constexpr auto RootWidget =
     SNew<SRootContainer>(
         SNew<SPaddingBox>(
@@ -40,21 +13,27 @@ constexpr auto RootWidget =
         .SetPadding(FPadding(24)),
         
         SNew<SPaddingBox>(
-            SNew<SHorizontalBox>(
-                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(7, bValue); })),
-                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(6, bValue); })),
-                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(5, bValue); })),
-                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(4, bValue); })),
-                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(3, bValue); })),
-                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(2, bValue); })),
-                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(1, bValue); })),
-                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(0, bValue); }))
-            )
+            SNew<SOpenGLContext>()
         )
         .SetPadding(FPadding(48))
     )
     .SetSize(FSize(480, 320));
-    
+
+const char* Shader = R"(
+#version 330 core
+
+in vec2 vUV;
+out vec4 FragColor;
+
+uniform float uTime;
+
+void main()
+{         
+    vec3 Col = 0.5 + 0.5 * cos(uTime + vUV.xyx + vec3(0, 2, 4));
+
+    FragColor = vec4(Col, 1.0);
+}
+)";
 
 int main()
 {
@@ -68,7 +47,7 @@ int main()
     FShokoRenderer::Initialize();
     FShokoInput::Initialize();
     
-    UpdateBinaryResult();
+    RootWidget.Get<1>().ChildWidget.SetShaderProgram(FShokoRenderer::CompileShader(Shader));
     
     while(true)
     {

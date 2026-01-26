@@ -31,7 +31,7 @@ std::string LoadShaderSource(const char* Path)
     return ss.str();
 }
 
-uint32 CompileShader(uint32 Type, const std::string& Source)
+uint32 CompileShaderPrivate(uint32 Type, const std::string& Source)
 {
     uint32 Shader = glCreateShader(Type);
     const char* Src = Source.c_str();
@@ -53,8 +53,8 @@ uint32 CreateShaderProgram(const char* ShaderName)
 {
     std::string Path = std::string("Source/Shoko/Platform/Renderer/OpenGL/Shaders/") + ShaderName;
     
-    uint32 VertexShader   = CompileShader(GL_VERTEX_SHADER,   LoadShaderSource("Source/Shoko/Platform/Renderer/OpenGL/Shaders/Default.vert"));
-    uint32 FragmentShader = CompileShader(GL_FRAGMENT_SHADER, LoadShaderSource((Path + ".frag").c_str()));
+    uint32 VertexShader   = CompileShaderPrivate(GL_VERTEX_SHADER,   LoadShaderSource("Source/Shoko/Platform/Renderer/OpenGL/Shaders/Default.vert"));
+    uint32 FragmentShader = CompileShaderPrivate(GL_FRAGMENT_SHADER, LoadShaderSource((Path + ".frag").c_str()));
     
     uint32 Program = glCreateProgram();
     glAttachShader(Program, VertexShader);
@@ -332,9 +332,7 @@ void FShokoOpenGLPlatformRenderer::UseShader(EShaderProgram Primitive)
 {
     uint32 Shader = ShaderPrograms[static_cast<uint8>(Primitive)];
     glUseProgram(Shader);
-    
-    int loc = glGetUniformLocation(Shader, "uProjection");
-    glUniformMatrix4fv(loc, 1, GL_FALSE, Projection);
+    glUniformMatrix4fv(glGetUniformLocation(Shader, "uProjection"), 1, GL_FALSE, Projection);
 }
 
 void FShokoOpenGLPlatformRenderer::UpdateProjection()
@@ -382,3 +380,50 @@ void FShokoOpenGLPlatformRenderer::PushQuad()
     glBindVertexArray(0);
 }
 #pragma endregion
+
+uint32 FShokoOpenGLPlatformRenderer::CompileShader(const char* Source)
+{
+    std::string VertSrc = LoadShaderSource("Source/Shoko/Platform/Renderer/OpenGL/Shaders/Default.vert");
+    
+    uint32 VertexShader   = CompileShaderPrivate(GL_VERTEX_SHADER, VertSrc);
+    uint32 FragmentShader = CompileShaderPrivate(GL_FRAGMENT_SHADER, Source);
+    
+    uint32 Program = glCreateProgram();
+    glAttachShader(Program, VertexShader);
+    glAttachShader(Program, FragmentShader);
+    glLinkProgram(Program);
+    
+    int success;
+    glGetProgramiv(Program, GL_LINK_STATUS, &success);
+    if(!success)
+    {
+        char InfoLog[512];
+        glGetProgramInfoLog(Program, 512, nullptr, InfoLog);
+        std::cerr << "Custom Shader Linking Failed:\n" << InfoLog << "\n";
+    }
+    
+    glDeleteShader(VertexShader);
+    glDeleteShader(FragmentShader);
+    
+    return Program;
+}
+
+void FShokoOpenGLPlatformRenderer::DrawRectShader(FLocation TopLeft, FSize Size, uint32 Shader)
+{
+    if(Shader == 0)
+    {
+        DrawRect(TopLeft, Size, FColor::Error);
+        return;
+    }
+
+    glUseProgram(Shader);
+    glUniformMatrix4fv(glGetUniformLocation(Shader, "uProjection"), 1, GL_FALSE, Projection);
+    
+    int locTime = glGetUniformLocation(Shader, "uTime");
+    if(locTime != -1) glUniform1f(locTime, static_cast<float>(glfwGetTime()));
+    
+    BakeQuad(TopLeft, Size);
+    PushQuad();
+
+    glUseProgram(0);
+}

@@ -23,6 +23,9 @@ namespace Shoko
         
         static void UpdateProjection();
         
+        static uint32 CompileShader(const char* Source);
+        static void DrawRectShader(FLocation TopLeft, FSize Size, uint32 Shader);
+        
     private:
         enum class EShaderProgram : uint8
         {
