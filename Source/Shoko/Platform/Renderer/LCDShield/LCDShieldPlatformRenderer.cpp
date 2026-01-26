@@ -1,43 +1,52 @@
 #include "LCDShieldPlatformRenderer.h"
 
-#include <fstream>
-#include <cstdint>
-#include <iostream>
-
 #include "Types/Angle.h"
 #include "Types/Renderer.h"
 
+#include <sys/mman.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <iostream>
+
 using namespace Shoko;
 
-std::ofstream FShokoLCDShieldPlatformRenderer::FrameBuffer;
+uint16_t* FShokoLCDShieldPlatformRenderer::BufferPtr;
+int FShokoLCDShieldPlatformRenderer::FBDescriptor;
 
 #pragma region Init
 bool FShokoLCDShieldPlatformRenderer::Initialize()
 {
-    FrameBuffer.open("/dev/fb1", std::ios::binary);
+    FBDescriptor = open("/dev/fb1", O_RDWR);
+    if(FBDescriptor < 0) return false;
+
+    // Мапим память дисплея напрямую в адресное пространство процесса
+    size_t ScreenSize = ScreenWidth * ScreenHeight * 2;
+    BufferPtr = (uint16_t*)mmap(NULL, ScreenSize, PROT_READ | PROT_WRITE, MAP_SHARED, FBDescriptor, 0);
     
-    if(!FrameBuffer)
-    {
-        std::cerr << "Cannot open /dev/fb1\n";
-        return false;
-    }
-    
-    return true;
+    return BufferPtr != MAP_FAILED;
 }
-void FShokoLCDShieldPlatformRenderer::Deinitialize() { if(FrameBuffer.is_open()) FrameBuffer.close(); }
-void FShokoLCDShieldPlatformRenderer::PreRender()    { if(FrameBuffer.is_open()) FrameBuffer.seekp(0, std::ios::beg); }
-void FShokoLCDShieldPlatformRenderer::PostRender()   { if(FrameBuffer.is_open()) FrameBuffer.flush(); }
+void FShokoLCDShieldPlatformRenderer::Deinitialize()
+{
+    if(BufferPtr != MAP_FAILED) munmap(BufferPtr, ScreenWidth * ScreenHeight * 2);
+    if(FBDescriptor >= 0) close(FBDescriptor);
+}
+void FShokoLCDShieldPlatformRenderer::PreRender() {}
+void FShokoLCDShieldPlatformRenderer::PostRender()
+{
+    if(BufferPtr != MAP_FAILED) msync(BufferPtr, ScreenWidth * ScreenHeight * 2, MS_SYNC);
+}
 #pragma endregion
 
 #pragma region Base
 void FShokoLCDShieldPlatformRenderer::Fill(FColor Color)
 {
-    if (!FrameBuffer.is_open()) return;
+    if(BufferPtr == MAP_FAILED) return;
 
     uint16_t RGB565 = Color.ToRGB565();
+    uint32_t TotalPixels = ScreenWidth * ScreenHeight;
     
-    for(int i = 0; i < ScreenWidth * ScreenHeight; i++)
-        FrameBuffer.write(reinterpret_cast<char*>(&RGB565), 2);
+    for(uint32_t i = 0; i < TotalPixels; ++i)
+        BufferPtr[i] = RGB565;
 }
 void FShokoLCDShieldPlatformRenderer::DrawLine(FLocation Start, FLocation End, FColor Color, uint8 Thickness) {}
 void FShokoLCDShieldPlatformRenderer::DrawArc(FLocation Center, uint8 Radius, FAngle StartAngle, FAngle EndAngle, FColor Color, uint8 BorderThickness, EShokoRendererBorderType BorderType) {}
@@ -47,23 +56,61 @@ void FShokoLCDShieldPlatformRenderer::DrawArc(FLocation Center, uint8 Radius, FA
 
 void FShokoLCDShieldPlatformRenderer::DrawRect(FLocation TopLeft, FSize Size, FColor Color)
 {
-    if(!FrameBuffer.is_open()) return;
+    if (BufferPtr == MAP_FAILED) return;
 
     uint16_t RGB565 = Color.ToRGB565();
-    uint16 x0 = FMath::Max<uint16>(0, TopLeft.X);
-    uint16 y0 = FMath::Max<uint16>(0, TopLeft.Y);
-    uint16 x1 = FMath::Min<uint16>(ScreenWidth,  TopLeft.X + Size.X);
-    uint16 y1 = FMath::Min<uint16>(ScreenHeight, TopLeft.Y + Size.Y);
+    
+    int x0 = std::max(0, (int)TopLeft.X);
+    int y0 = std::max(0, (int)TopLeft.Y);
+    int x1 = std::min((int)ScreenWidth,  (int)(TopLeft.X + Size.X));
+    int y1 = std::min((int)ScreenHeight, (int)(TopLeft.Y + Size.Y));
 
-    for(uint16 y = y0; y < y1; ++y)
-    {
-        FrameBuffer.seekp((y * ScreenWidth + x0) * 2, std::ios::beg);
-        for(uint16 x = x0; x < x1; ++x)
-            FrameBuffer.write(reinterpret_cast<char*>(&RGB565), 2);
+    for (int y = y0; y < y1; ++y) {
+        uint16_t* Row = BufferPtr + (y * ScreenWidth);
+        for (int x = x0; x < x1; ++x) {
+            Row[x] = RGB565; 
+        }
     }
 }
 
-void FShokoLCDShieldPlatformRenderer::DrawRectBorder(FLocation TopLeft, FSize Size, FColor Color, uint8 BorderThickness, EShokoRendererBorderType BorderType) {}
+void FShokoLCDShieldPlatformRenderer::DrawRectBorder(FLocation TopLeft, FSize Size, FColor Color, uint8 BorderThickness, EShokoRendererBorderType BorderType)
+{
+    if (BufferPtr == MAP_FAILED || BorderThickness == 0) return;
+
+    int16 x = TopLeft.X;
+    int16 y = TopLeft.Y;
+    uint16 w = Size.X;
+    uint16 h = Size.Y;
+    uint16 t = static_cast<uint16>(BorderThickness);
+
+    if (BorderType == EShokoRendererBorderType::Outside) 
+    {
+        x -= static_cast<int16>(t); 
+        y -= static_cast<int16>(t);
+        w += static_cast<uint16>(t << 1); 
+        h += static_cast<uint16>(t << 1);
+    } 
+    else if (BorderType == EShokoRendererBorderType::Both) 
+    {
+        uint16 half = t >> 1; 
+        x -= static_cast<int16>(half); 
+        y -= static_cast<int16>(half);
+        w += t; 
+        h += t;
+    }
+
+    DrawRect(FLocation(x, y), FSize(w, t), Color);
+    DrawRect(FLocation(x, static_cast<int16>(y + h - t)), FSize(w, t), Color);
+    
+    if (h > (t << 1)) 
+    {
+        uint16 SideHeight = static_cast<uint16>(h - (t << 1));
+        int16 SideY = static_cast<int16>(y + t);
+        
+        DrawRect(FLocation(x, SideY), FSize(t, SideHeight), Color);
+        DrawRect(FLocation(static_cast<int16>(x + w - t), SideY), FSize(t, SideHeight), Color);
+    }
+}
 #pragma endregion
 
 #pragma region Rounded Rect

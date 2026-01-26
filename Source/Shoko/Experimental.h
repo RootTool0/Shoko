@@ -3,11 +3,6 @@
 #include <iomanip>
 #include <iostream>
 
-#include "Input.h"
-#include "Shoko.h"
-#include "Types/InputEvent.h"
-#include "Widgets/WidgetContainer.h"
-
 /*
 void TestOnHover1()
 {
@@ -167,8 +162,6 @@ namespace Shoko
         
         inline void TestMouseSystem(const FWidgetBase* CurrentWidget)
         {
-            // FWidgetBase* CurrentWidget = RootWidget.HitTest(FShokoInput::GetMousePosition());
-            
             if(HoveredWidget != CurrentWidget)
             {
                 if(HoveredWidget)
@@ -224,9 +217,6 @@ namespace Shoko
                         Widget.CallOnKey(FShokoInput::GetInputEvent().Key);
                 });
             }
-            
-            // RootWidget.Get<5>().SetPosition(FShokoInput::GetMousePosition().X, FShokoInput::GetMousePosition().Y);
-            // printPtr(Test);
         }
     }
 }

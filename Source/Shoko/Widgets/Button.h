@@ -8,6 +8,7 @@ namespace Shoko
 {
     using HandlerPtr = void(*)();
     
+    SHOKO_CLASS(SButton)
     class SButton : public SWidget<SButton>
     {
         SHOKO_GENERATED_BODY(SButton)

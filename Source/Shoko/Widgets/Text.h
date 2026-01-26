@@ -6,6 +6,7 @@
 
 namespace Shoko
 {
+    SHOKO_CLASS(SText)
     class SText : public SWidget<SText>
     {
         SHOKO_GENERATED_BODY(SText)

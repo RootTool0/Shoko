@@ -5,6 +5,7 @@
 
 namespace Shoko
 {
+    SHOKO_CLASS(SRoundRect)
     class SRoundRect : public SWidget<SRoundRect>
     {
         SHOKO_GENERATED_BODY(SRoundRect)

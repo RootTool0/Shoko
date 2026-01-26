@@ -8,6 +8,7 @@ namespace Shoko
 {
     using CheckBoxHandler = void(*)(bool bValue);
     
+    SHOKO_CLASS(SCheckBox)
     class SCheckBox : public SWidget<SCheckBox>
     {
         SHOKO_GENERATED_BODY(SCheckBox)

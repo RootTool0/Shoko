@@ -2,6 +2,8 @@
 
 #include "Core/Aliases.h"
 
+#include <ostream>
+
 namespace Shoko
 {
     template<uint16 Capacity>
@@ -58,6 +60,12 @@ namespace Shoko
                 Buffer[Length] = '\0';
             }
             return *this;
+        }
+        
+        friend std::ostream& operator<<(std::ostream& os, const TStringFixed& Str)
+        {
+            os << Str.GetData();
+            return os;
         }
         
         constexpr const char* GetData() const { return Buffer; }

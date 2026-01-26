@@ -17,9 +17,11 @@ namespace Shoko
 #include "../RendererDeclaration.h"
         
     private:
-        static std::ofstream FrameBuffer;
-        static constexpr uint16 ScreenWidth = 320;
-        static constexpr uint16 ScreenHeight = 480;
+        static uint16_t* BufferPtr;
+        static int FBDescriptor;
+        
+        static constexpr uint16 ScreenWidth  = 480;
+        static constexpr uint16 ScreenHeight = 320;
     };
     
 #pragma region Polygon

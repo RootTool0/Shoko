@@ -20,6 +20,8 @@ void UpdateBinaryResult()
     snprintf(buffer, sizeof(buffer), "%02X", Value);
     ResultText += buffer;
     ResultText += ")";
+
+    std::cout << ResultText << '\n';
 }
 
 void OnBitChanged(uint8 BitIndex, bool bValue)
@@ -29,27 +31,24 @@ void OnBitChanged(uint8 BitIndex, bool bValue)
     UpdateBinaryResult();
 }
 
-TStringBuffer<12> TextInputBuffer;
-
 constexpr auto RootWidget =
     SNew<SRootContainer>(
         SNew<SPaddingBox>(
-            SNew<SRoundRect>()
-                .SetRadius(12)
+            SNew<SRect>()
                 .SetColor(FStyle::BackgroundPanel)
         )
         .SetPadding(FPadding(24)),
         
         SNew<SPaddingBox>(
-            SNew<SRootContainer>(
-                SNew<SCenterBox>(
-                    SNew<STextInput>()
-                        .SetTextBuffer(&TextInputBuffer)
-                        .SetTextSize(32)
-                        .SetTextColor(FStyle::Border)
-                        .SetBackgroundColor(FStyle::ActionDisabled)
-                        .SetSize(FSize(315, 40))
-                )  
+            SNew<SHorizontalBox>(
+                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(7, bValue); })),
+                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(6, bValue); })),
+                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(5, bValue); })),
+                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(4, bValue); })),
+                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(3, bValue); })),
+                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(2, bValue); })),
+                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(1, bValue); })),
+                SNew<SCenterBox>(SNew<SCheckBox>().SetSize(FSize(36)).OnValueChanged([](bool bValue){ OnBitChanged(0, bValue); }))
             )
         )
         .SetPadding(FPadding(48))
@@ -81,7 +80,7 @@ int main()
             RootWidget.Render();
         }
         FShokoRenderer::PostRender();
-
+        
         // Demo::ShowFPS();
     }
     

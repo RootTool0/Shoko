@@ -9,6 +9,7 @@
 
 namespace Shoko
 {
+    SHOKO_CLASS(STextInput)
     class STextInput : public SWidget<STextInput>
     {
         SHOKO_GENERATED_BODY(STextInput)

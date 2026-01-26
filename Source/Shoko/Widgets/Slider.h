@@ -9,6 +9,7 @@ namespace Shoko
 {
     using SliderHandler = void(*)(float Alpha);
     
+    SHOKO_CLASS(SSlider)
     class SSlider : public SWidget<SSlider>
     {
         SHOKO_GENERATED_BODY(SSlider)

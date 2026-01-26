@@ -21,10 +21,10 @@ namespace Shoko
         
         static bool HasModifier(EModifier Mask) { return (InputEvent.Modifiers & static_cast<uint8>(Mask)) != 0; }
 
-        static constexpr FLocation GetMousePosition() { return CurrentMousePosition; }
-        static constexpr FLocation GetMouseDelta() { return CurrentMousePosition - LastMousePosition; }
+        static FLocation GetMousePosition() { return CurrentMousePosition; }
+        static FLocation GetMouseDelta() { return CurrentMousePosition - LastMousePosition; }
         
-        static constexpr FInputEvent GetInputEvent() { return InputEvent; }
+        static FInputEvent GetInputEvent() { return InputEvent; }
         
     private:
         static FLocation CurrentMousePosition;

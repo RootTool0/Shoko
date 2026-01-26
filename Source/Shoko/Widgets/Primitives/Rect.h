@@ -5,6 +5,7 @@
 
 namespace Shoko
 {
+    SHOKO_CLASS(SRect)
     class SRect : public SWidget<SRect>
     {
         SHOKO_GENERATED_BODY(SRect)

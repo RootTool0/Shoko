@@ -8,6 +8,7 @@ namespace Shoko
 {
     using ToggleHandler = void(*)(bool bValue);
     
+    SHOKO_CLASS(SToggle)
     class SToggle : public SWidget<SToggle>
     {
         SHOKO_GENERATED_BODY(SToggle)

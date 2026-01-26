@@ -14,7 +14,7 @@ FInputEvent FShokoInput::PullEvents()
 {
     LastMousePosition = CurrentMousePosition;
     LastMouseButtonsState = CurrentMouseButtonsState;
-            
+    
     FShokoPlatformInput::PullEvents();
     CurrentMousePosition = FShokoPlatformInput::GetMousePosition();
     

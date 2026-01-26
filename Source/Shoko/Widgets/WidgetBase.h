@@ -4,8 +4,13 @@
 
 namespace Shoko
 {
+    /*
     template<GUTID InGUTID> struct GUTIDReflectionFlag {};
     void GetClassByGUTIDPrivate(...);
+    */
+
+    template<GUTID InGUTID>
+    struct TClassByGUTIDPrivate { using Type = void; };
     
     class FWidgetBase
     {
