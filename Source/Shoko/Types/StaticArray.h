@@ -3,10 +3,8 @@
 namespace Shoko
 {
     template<typename T, size_t N>
-    class TStaticArray
+    struct TStaticArray
     {
-    private:
-        T Data[N];
         
     public:
         constexpr TStaticArray() = default;
@@ -17,10 +15,10 @@ namespace Shoko
             static_assert(sizeof...(Args) == N, "TStaticArray: Wrong number of elements");
         }
         
-        constexpr T& operator[](size_t InIndex) { return Data[InIndex]; }
+        constexpr       T& operator[](size_t InIndex)       { return Data[InIndex]; }
         constexpr const T& operator[](size_t InIndex) const { return Data[InIndex]; }
         
-        static constexpr size_t Size() { return N; }
+        static constexpr size_t Num() { return N; }
         
         constexpr T* Begin() { return Data; }
         constexpr T* End()   { return Data + N; }
@@ -31,5 +29,8 @@ namespace Shoko
         {
             for(size_t i = 0; i < N; ++i) Data[i] = InValue;
         }
+        
+    private:
+        T Data[N];
     };
 }

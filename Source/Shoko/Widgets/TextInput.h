@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include <iostream>
-
 #include "Renderer.h"
 #include "Widget.h"
 #include "Types/InputEvent.h"
