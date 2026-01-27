@@ -16,7 +16,7 @@ namespace Shoko
         TChildWidget ChildWidget;
         
         explicit constexpr SWidgetWrapper(TChildWidget&& InChildWidget) : ChildWidget(Meta::Move(InChildWidget)) {}
-
+        
         constexpr void Render() const { ChildWidget.Render(); }
         
         constexpr const FWidgetBase* HitTest(FLocation InMouseLocation) const { return ChildWidget.HitTest(InMouseLocation); }

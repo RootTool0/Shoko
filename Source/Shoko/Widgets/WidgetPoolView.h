@@ -25,8 +25,6 @@ namespace Shoko
         void Render() const
         {
             if(!PoolPtr) return;
-
-            // printf("Capacity: %d\n", PoolPtr->GetCapacity());
             
             for(uint16 i = 0; i < PoolPtr->GetCapacity(); ++i)
                 if(PoolPtr->CheckElement(i))

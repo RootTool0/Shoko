@@ -27,7 +27,7 @@ bool FShokoSDL2PlatformWindow::Initialize()
     return true;
 }
 
-void FShokoSDL2PlatformWindow::Deinitialize() const
+void FShokoSDL2PlatformWindow::Deinitialize()
 {
     CloseWindow();
 }

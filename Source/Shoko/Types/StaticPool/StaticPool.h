@@ -84,7 +84,6 @@ namespace Shoko
         constexpr const TWidget* End()   const { return reinterpret_cast<const TWidget*>(RawData) + InCapacity; }
         
     private:
-        // alignas(TWidget)
         uint8 RawData[InCapacity * sizeof(TWidget)];
         
         TWidget* CreateByPtr(TWidget* InPtr, TWidget&& InWidget) { return new(InPtr) TWidget(Meta::Move(InWidget)); }
