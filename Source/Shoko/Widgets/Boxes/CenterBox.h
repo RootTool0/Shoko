@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "WidgetWrapper.h"
+#include "Widgets/Base/WidgetWrapper.h"
 #include "Core/Macros.h"
 #include "Core/Meta.h"
 #include "Types/Vector2D.h"

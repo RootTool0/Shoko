@@ -25,6 +25,8 @@ namespace Shoko
         
         static uint32 CompileShader(const char* Source);
         static void DrawRectShader(FLocation TopLeft, FSize Size, uint32 Shader);
+
+        static void SetShaderUniform1f(uint32 Shader, const char* Name, float Value);
         
     private:
         enum class EShaderProgram : uint8

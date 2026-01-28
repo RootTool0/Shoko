@@ -427,3 +427,13 @@ void FShokoOpenGLPlatformRenderer::DrawRectShader(FLocation TopLeft, FSize Size,
 
     glUseProgram(0);
 }
+
+void FShokoOpenGLPlatformRenderer::SetShaderUniform1f(uint32 Shader, const char* Name, float Value)
+{
+    if(Shader == 0) return;
+
+    glUseProgram(Shader);
+    int loc = glGetUniformLocation(Shader, Name);
+    if(loc != -1) glUniform1f(loc, Value);
+    glUseProgram(0);
+}

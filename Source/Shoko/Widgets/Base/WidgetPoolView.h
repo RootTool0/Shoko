@@ -2,7 +2,7 @@
 
 #include "Core/Aliases.h"
 #include "Core/Macros.h"
-#include "Types/StaticPool/StaticPoolBase.h"
+#include "Types/StaticPool/StaticPool.h"
 
 namespace Shoko
 {

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "WidgetWrapper.h"
+#include "Base/WidgetWrapper.h"
 #include "Types/Color.h"
 
 namespace Shoko

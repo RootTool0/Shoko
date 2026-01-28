@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "Input.h"
+#include "Base/Widget.h"
 #include "Renderer.h"
+#include "Input.h"
 #include "Style.h"
-#include "Widget.h"
 
 namespace Shoko
 {
@@ -17,15 +17,15 @@ namespace Shoko
     public:
         constexpr SSlider() { SetSize(FSize(300, 14)); }
         
-        constexpr SSlider& OnValueChanged(SliderHandler InValueChangedHandler)
+        constexpr SSlider& OnValueChange(SliderHandler InValueChangeHandler)
         {
-            OnValueChangedHandler = InValueChangedHandler;
+            OnValueChangeHandler = InValueChangeHandler;
             return *this;
         }
         
-        constexpr SSlider& OnValueChangeFinished(SliderHandler InValueChangeFinishedHandler)
+        constexpr SSlider& OnValueChanged(SliderHandler InValueChangedHandler)
         {
-            OnValueChangeFinishedHandler = InValueChangeFinishedHandler;
+            OnValueChangedHandler = InValueChangedHandler;
             return *this;
         }
         
@@ -34,13 +34,13 @@ namespace Shoko
             const float AlphaNormalized = FMath::Clamp((static_cast<float>(FShokoInput::GetMousePosition().X) - static_cast<float>(GetGeometry().Left())) / static_cast<float>(GetGeometry().Width()), 0.f, 1.f);
             Alpha = static_cast<uint8>(AlphaNormalized * 255.0f);
             
-            if(OnValueChangedHandler) OnValueChangedHandler(AlphaNormalized);
+            if(OnValueChangeHandler) OnValueChangeHandler(AlphaNormalized);
         }
         
         void CallOnMouseUp() const
         {
-            const float AlphaNormalized = FMath::Clamp((static_cast<float>(FShokoInput::GetMousePosition().X) - static_cast<float>(GetGeometry().Left())) / static_cast<float>(GetGeometry().Width()), 0.f, 1.f);            
-            if(OnValueChangeFinishedHandler) OnValueChangeFinishedHandler(static_cast<float>(Alpha) / 255.f);
+            // const float AlphaNormalized = FMath::Clamp((static_cast<float>(FShokoInput::GetMousePosition().X) - static_cast<float>(GetGeometry().Left())) / static_cast<float>(GetGeometry().Width()), 0.f, 1.f);            
+            if(OnValueChangedHandler) OnValueChangedHandler(static_cast<float>(Alpha) / 255.f);
         }
         
         void Render() const
@@ -54,7 +54,7 @@ namespace Shoko
         
     private:
         mutable uint8 Alpha = 0;
+        SliderHandler OnValueChangeHandler = nullptr;
         SliderHandler OnValueChangedHandler = nullptr;
-        SliderHandler OnValueChangeFinishedHandler = nullptr;
     };
 }

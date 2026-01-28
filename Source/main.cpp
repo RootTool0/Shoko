@@ -2,48 +2,31 @@
 #include "Experimental.h"
 #include "Demo.h"
 
-#include "Types/StaticPool/StaticPool.h"
-#include "Widgets/WidgetPoolView.h"
-
 using namespace Shoko;
 
-TStaticPool<SCheckBox, 8> Pool;
-int X = 0;
+uint32 ShaderID = 0;
 
 constexpr auto RootWidget =
-    SNew<SRootContainer>(
+    SNew<SVerticalBox>(
+        SNew<SOpenGLContext>(),
+        
         SNew<SPaddingBox>(
-            SNew<SRootContainer>(
+            SNew<SRootBox>(
                 SNew<SRoundRect>()
                 .SetRadius(24)
                 .SetColor(FStyle::BackgroundPanel),
-                
-                SNew<SPaddingBox>(
-                    SNew<SHorizontalBox>(
-                        SNew<SButton>()
-                        .OnMouseUp([]()
-                        {
-                            if(Pool.RemoveLast())
-                                X -= 50;
-                        }),
-                        
-                        SNew<SButton>()
-                        .OnMouseUp([]()
-                        {
-                            if(Pool.Add(SNew<SCheckBox>().SetLocation(FLocation(0, X))))
-                                X += 50;
-                        })
-                    )
+
+                SNew<SCenterBox>(
+                    SNew<SSlider>().OnValueChange([](float Alpha)
+                    {
+                        FShokoRenderer::SetShaderUniform1f(ShaderID, "uTest", Alpha);
+                    })
                 )
-                .SetPadding(FPadding(128))
             )
         )
-        .SetPadding(FPadding(24)),
-
-        SNew<SWidgetPoolView<SCheckBox>>()
-            .Bind(Pool)
+        .SetPadding(FPadding(24))
     )
-    .SetSize(FSize(1200, 700));
+    .SetSize(FSize(700, 1024));
 
 const char* Shader = R"(
 #version 330 core
@@ -53,11 +36,13 @@ out vec4 FragColor;
 
 uniform float uTime;
 
+uniform float uTest;
+
 void main()
 {         
     vec3 Col = 0.5 + 0.5 * cos(uTime + vUV.xyx + vec3(0, 2, 4));
 
-    FragColor = vec4(Col, 1.0);
+    FragColor = vec4(Col, 1.0) * uTest;
 }
 )";
 
@@ -66,14 +51,15 @@ int main()
     Experimental::hexDump(RootWidget);
     
     auto Window = SWindow()
-        .SetSize(FSize(1200, 700))
+        .SetSize(FSize(700, 1024))
         .SetTitle("Shoko - Compile-time UI Framework");
     Window.ActivateRenderContext();
     
     FShokoRenderer::Initialize();
     FShokoInput::Initialize();
     
-    // RootWidget.Get<1>().ChildWidget.SetShaderProgram(FShokoRenderer::CompileShader(Shader));
+    ShaderID = FShokoRenderer::CompileShader(Shader);
+    RootWidget.Get<0>().SetShaderProgram(ShaderID);
     
     while(true)
     {

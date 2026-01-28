@@ -1,29 +1,29 @@
 ﻿#pragma once
 
-#include "WidgetContainer.h"
+#include "Widgets/Base/WidgetContainer.h"
 #include "Core/Meta.h"
 #include "Core/Macros.h"
 
 namespace Shoko
 {
     template<typename... TChildWidgets>
-    class SRootContainer : public SWidgetContainer<TChildWidgets...>
+    class SRootBox : public SWidgetContainer<TChildWidgets...>
     {
         SHOKO_GENERATED_TEMPLATE_BODY()
         
         using Super = SWidgetContainer<TChildWidgets...>;
         
     public:
-        explicit constexpr SRootContainer(TChildWidgets&&... InChildren) : Super(Meta::Move(InChildren)...) { CalculateLayout(); }
+        explicit constexpr SRootBox(TChildWidgets&&... InChildren) : Super(Meta::Move(InChildren)...) { CalculateLayout(); }
         
-        constexpr SRootContainer& SetSize(FSize InSize)
+        constexpr SRootBox& SetSize(FSize InSize)
         {
             Super::SetSize(InSize);
             CalculateLayout();
             return *this;
         }
 
-        constexpr SRootContainer& SetLocation(FLocation InLocation)
+        constexpr SRootBox& SetLocation(FLocation InLocation)
         {
             Super::SetLocation(InLocation);
             CalculateLayout();

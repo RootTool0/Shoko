@@ -3,6 +3,9 @@
 #include "Types/StringBuffer/StringBuffer.h"
 #include "Types/StringBuffer/StringBufferBase.h"
 
+#include "Types/StaticPool/StaticPool.h"
+#include "Types/StaticPool/StaticPoolBase.h"
+
 #include "Types/Angle.h"
 #include "Types/Color.h"
 #include "Types/Geometry.h"

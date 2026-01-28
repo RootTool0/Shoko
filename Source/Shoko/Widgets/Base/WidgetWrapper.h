@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "Widget.h"
 #include "Core/Meta.h"
+#include "Widget.h"
 
 namespace Shoko
 {

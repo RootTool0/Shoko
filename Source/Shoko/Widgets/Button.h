@@ -1,8 +1,7 @@
 ﻿#pragma once
 
 #include "Style.h"
-#include "Widget.h"
-#include "Types/Color.h"
+#include "Base/Widget.h"
 
 namespace Shoko
 {

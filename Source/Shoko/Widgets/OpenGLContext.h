@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Widget.h"
+#include "Base/Widget.h"
 
 namespace Shoko
 {
